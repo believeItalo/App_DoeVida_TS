@@ -1,10 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
-
-export default function EnderecoScreen() {
-
-
+interface CadastroEnderecoScreenProps {
+  navigation: any; // 
+}
+function EnderecoScreen({ navigation }: CadastroEnderecoScreenProps) {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -75,12 +78,14 @@ export default function EnderecoScreen() {
               styles.button,
               { width: 170, height: 50, backgroundColor: 'white', borderColor: '#7395F7', borderWidth: 2 },
             ]}
+            onPress={() => navigation.navigate('CadastroTipoSanguineo')}
             >
             <Text style={{ fontSize: 20 }}>Voltar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, { width: 170, height: 50,backgroundColor: '#7395F7' }]}
+            onPress={() => navigation.navigate('CadastroSenha')}
            >
             <Text style={{ fontSize: 20, color: 'white' }}>Continuar</Text>
           </TouchableOpacity>
@@ -121,3 +126,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#7395F7',
   },
 });
+export default EnderecoScreen

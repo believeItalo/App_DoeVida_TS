@@ -1,9 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
-
-export default function HomeScreen() {
-
+interface HomeScreenProps {
+  navigation: any; // 
+}
+function HomeScreen({ navigation }: HomeScreenProps) {
 
   return (
     <View style={styles.container}>
@@ -25,14 +29,14 @@ export default function HomeScreen() {
       <View style={styles.boxButtons}>
         <TouchableOpacity
           style={[styles.button, { width: 220, height: 50, backgroundColor: 'white', borderColor: '#7395F7', borderWidth: 2 }]}
-          
+          onPress={() => navigation.navigate('CadastroInformacoesPessoais')}
         >
           <Text style={{ fontSize: 20 }}>Cadastre-se</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
         style={[styles.button, { width: 220, height: 50, backgroundColor: '#7395F7' }]}
-       
+        onPress={() => navigation.navigate('Login')}
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -84,3 +88,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+export default HomeScreen;

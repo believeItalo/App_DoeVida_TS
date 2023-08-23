@@ -1,8 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
+interface CadastroScreenProps {
+  navigation: any; // 
+}
 
-export default function CadastroScreen() {
+function CadastroScreen({ navigation }: CadastroScreenProps) {
  
 
   return (
@@ -75,13 +81,14 @@ export default function CadastroScreen() {
     <View style={{paddingTop:30,paddingBottom:30, width:`100%`, display: 'flex', flexDirection: `row`, justifyContent:'center', gap: 30}}>
     <TouchableOpacity
         style={[styles.button, { width: 170, height: 50, backgroundColor: "white", borderColor: "#7395F7", borderWidth: 2}]}
-       
+        onPress={() => navigation.navigate('Home')}
       >
         <Text style={{fontSize: 20}}>Voltar</Text> 
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.button, { width: 170, height: 50,backgroundColor: "#7395F7" }]}
+        onPress={() => navigation.navigate('CadastroTipoSanguineo')}
       >
         <Text 
           style={{fontSize: 20, color:'white'}}
@@ -126,3 +133,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#7395F7'
   }
 });
+export default CadastroScreen;

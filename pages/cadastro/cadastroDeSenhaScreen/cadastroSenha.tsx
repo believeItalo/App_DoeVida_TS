@@ -1,8 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
+interface CadastroSenhaScreenProps {
+  navigation: any; // 
+}
 
-export default function CadastroSenhaScreen() {
+function CadastroSenhaScreen({ navigation }: CadastroSenhaScreenProps) {
 
 
   return (
@@ -84,3 +90,4 @@ const styles = StyleSheet.create({
     paddingTop: 70,
   },
 });
+export default CadastroSenhaScreen
