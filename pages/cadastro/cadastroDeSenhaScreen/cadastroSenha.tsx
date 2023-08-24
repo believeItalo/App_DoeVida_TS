@@ -25,12 +25,14 @@ function CadastroSenhaScreen({ navigation }: CadastroSenhaScreenProps) {
       <View style={{ paddingTop: 30, paddingBottom: 30, width: `100%`, display: 'flex', flexDirection: `row`, justifyContent: 'center', gap: 30 }}>
         <TouchableOpacity
           style={[styles.button, { width: 170, height: 50, backgroundColor: "white", borderColor: "#7395F7", borderWidth: 2 }]}
+          onPress={() => navigation.navigate('CadastroEndereco')}
           >
           <Text style={{ fontSize: 20 }}>Voltar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.button, { width: 170, height: 50, backgroundColor: "#7395F7" }]}
+          onPress={() => navigation.navigate('MainUserScreen')}
           >
           <Text style={{ fontSize: 20, color: 'white' }}>Continuar</Text>
         </TouchableOpacity>

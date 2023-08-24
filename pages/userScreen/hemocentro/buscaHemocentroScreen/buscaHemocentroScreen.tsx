@@ -1,8 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ImageBackground } from 'react-native';
+const Stack = createNativeStackNavigator();
 
-export default function BuscaHemocentroScreen() {
+interface BuscaHemocentroScreenProps {
+  navigation: any; // 
+}
+export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProps) {
 
     return (
         <View style={styles.container}>
@@ -18,7 +25,7 @@ export default function BuscaHemocentroScreen() {
 
             <ScrollView>
                 <View style={styles.columnCardsHemocentros}>
-                    <TouchableOpacity style={styles.cardHemocentros} >
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
@@ -30,7 +37,8 @@ export default function BuscaHemocentroScreen() {
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cardHemocentros} >
+                    
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
@@ -42,7 +50,7 @@ export default function BuscaHemocentroScreen() {
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cardHemocentros} >
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
@@ -54,7 +62,19 @@ export default function BuscaHemocentroScreen() {
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cardHemocentros} >
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
+                        <View style={styles.contentCardHemocentro}>
+                            <View>
+                                <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
+                            </View>
+                            <View>
+                                <Text style={styles.titleCardHemocentro}>Hospital Nova Vida</Text>
+                                <Text style={styles.descriptionHemocentro}>Jardim Marilu</Text>
+                                <Text>SP - CARAPICUÍBA</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />

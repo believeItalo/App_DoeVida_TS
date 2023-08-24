@@ -1,8 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ImageBackground } from 'react-native';
+const Stack = createNativeStackNavigator();
 
+interface MeuPerfilScreen {
+  navigation: any; // 
+}
 
-export default function MeuPerfilScreen() {
+export default function MeuPerfilScreen({ navigation }: MeuPerfilScreen) {
 
 
     return (
@@ -12,6 +19,7 @@ export default function MeuPerfilScreen() {
                 <View style={styles.header}>
                     <View style={{ paddingRight: 60, paddingLeft: 20 }}>
                         <TouchableOpacity
+                        onPress={() => navigation.navigate('MainUserScreen')}
                            >
                             <Image source={require('../perfilScreen/imgs/setaVoltar.png')} style={{ width: 50, height: 50 }} />
                         </TouchableOpacity>
@@ -28,7 +36,7 @@ export default function MeuPerfilScreen() {
 
                 <TouchableOpacity
                     style={[styles.buttonEditarPerfil]}
-                    
+                    onPress={() => navigation.navigate('EditarPerfil')}
                 >
                     <Text style={{ fontSize: 20, color: 'white' }}>Editar Perfil</Text>
                 </TouchableOpacity>

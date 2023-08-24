@@ -1,13 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
+const Stack = createNativeStackNavigator();
 
-export default function MainUserScreen() {
+interface MainUserScreenProps {
+  navigation: any; // 
+}
+export default function MainUserScreen({ navigation }: MainUserScreenProps)  {
   
 
   return (
-    <ScrollView>
+
     <View style={styles.container}>
       <View style={{ height: 130, width: '100%', display: 'flex', flexDirection: 'row', gap: 120, paddingLeft: 40, paddingTop: 30 }}>
         <View style={{ paddingTop: 50 }}>
@@ -19,11 +24,11 @@ export default function MainUserScreen() {
         </View>
       </View>
 
-      <View style={{ display: 'flex', flexDirection: 'row', paddingTop: 90 }}>
+      <View style={{ display: 'flex', flexDirection: 'row', paddingTop: 40 }}>
         <View style={{ display: 'flex', gap: 35, padding: 10 }}>
           <TouchableOpacity
             style={[styles.cardUserScreen]}
-           
+            onPress={() => navigation.navigate('BuscaHemocentro')}
           >
             <Image source={require('../mainScreen/imgs/imgCardHemocentro.png')} style={styles.imgCards} />
             <Text style={styles.textCards}>
@@ -33,6 +38,7 @@ export default function MainUserScreen() {
 
           <TouchableOpacity
             style={[styles.cardUserScreen]}
+            onPress={() => navigation.navigate('AjudaScreen')}
           >
             <Image source={require('../mainScreen/imgs/imgCardAjuda.png')} style={styles.imgCards} />
             <Text style={styles.textCards}>
@@ -44,7 +50,7 @@ export default function MainUserScreen() {
         <View style={{ display: 'flex', gap: 35, padding: 10 }}>
           <TouchableOpacity
             style={[styles.cardUserScreen]}
-      
+            onPress={() => navigation.navigate('MeuPerfil')}
           >
             <Image source={require('../mainScreen/imgs/imgCardMeuPerfil.png')} style={styles.imgCards} />
             <Text style={styles.textCards}>
@@ -76,7 +82,7 @@ export default function MainUserScreen() {
         </View>
       </View>
     </View>
-    </ScrollView>
+   
   );
 }
 

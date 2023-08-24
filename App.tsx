@@ -11,8 +11,7 @@ import EditarPerfilScreen from './pages/userScreen/perfil/editarPerfilScreen/edi
 import BuscaHemocentroScreen from './pages/userScreen/hemocentro/buscaHemocentroScreen/buscaHemocentroScreen'
 import RedefinirSenhaScreen from './pages/userScreen/perfil/redefinirSenhaScreen/redefinirSenhaScreen'
 import MainUserScreen from './pages/userScreen/mainScreen/mainScreen';
-
-
+import AjudaScreen from './pages/userScreen/ajuda/ajudaScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -32,6 +31,7 @@ export default function App() {
         <Stack.Screen name="BuscaHemocentro" component={BuscaHemocentroScreen} options={{ headerShown: false }} />
         <Stack.Screen name="RedefinirSenha" component={RedefinirSenhaScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainUserScreen" component={MainUserScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="AjudaScreen" component={AjudaScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

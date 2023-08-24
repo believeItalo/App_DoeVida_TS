@@ -1,48 +1,56 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'
-export default function RedefinirSenhaScreen() {
-  
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ImageBackground } from 'react-native';
+const Stack = createNativeStackNavigator();
+
+interface RedefinirSenhaScreen {
+    navigation: any; // 
+}
+export default function RedefinirSenhaScreen({ navigation }: RedefinirSenhaScreen) {
+
     return (
         <ScrollView>
-        <View style={styles.container}>
-            <View style={{ height: 170, width: '100%', display: 'flex', flexDirection: 'row', gap: 30, paddingLeft: 15, paddingTop: 70 }}>
-                <FontAwesome5 name="bars" size={40} color="black" ></FontAwesome5>
-                <Text style={styles.title}>Redefinir Senha</Text>
-                <Image source={require('../redefinirSenhaScreen/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }}></Image>
-            </View>
-            <View style={{}}>
-                <Image source={require('../redefinirSenhaScreen/imgs/imageRedefinirSenha.png')} style={{ height: 200, width: 200 }}></Image>
-            </View>
-            <View style={{}}>
-                <Text style={styles.titleInput}>Senha: </Text>
-                <TextInput
-                    style={styles.input}   
-                />
-                <Text style={styles.titleInput}>Confirmar senha</Text>
-                <TextInput
-                    style={styles.input}
-                />
-            </View>
+            <View style={styles.container}>
+                <View style={{ height: 170, width: '100%', display: 'flex', flexDirection: 'row', gap: 30, paddingLeft: 15, paddingTop: 70 }}>
+                    <FontAwesome5 name="bars" size={40} color="black" ></FontAwesome5>
+                    <Text style={styles.title}>Redefinir Senha</Text>
+                    <Image source={require('../redefinirSenhaScreen/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }}></Image>
+                </View>
+                <View style={{}}>
+                    <Image source={require('../redefinirSenhaScreen/imgs/imageRedefinirSenha.png')} style={{ height: 200, width: 200 }}></Image>
+                </View>
+                <View style={{}}>
+                    <Text style={styles.titleInput}>Senha: </Text>
+                    <TextInput
+                        style={styles.input}
+                    />
+                    <Text style={styles.titleInput}>Confirmar senha</Text>
+                    <TextInput
+                        style={styles.input}
+                    />
+                </View>
 
-            <View style={{ paddingTop: 30, paddingBottom: 30, width: `100%`, display: 'flex', flexDirection: `row`, justifyContent: 'center', gap: 30 }}>
-                <TouchableOpacity
-                    style={[styles.button, { width: 170, height: 50, backgroundColor: "white", borderColor: "#7395F7", borderWidth: 2 }]}
+                <View style={{ paddingTop: 30, paddingBottom: 30, width: `100%`, display: 'flex', flexDirection: `row`, justifyContent: 'center', gap: 30 }}>
+                    <TouchableOpacity
+                        style={[styles.button, { width: 170, height: 50, backgroundColor: "white", borderColor: "#7395F7", borderWidth: 2 }]}
+                        onPress={() => navigation.navigate('EditarPerfil')}
+                    >
+                        <Text style={{ fontSize: 20 }}>Voltar</Text>
+                    </TouchableOpacity>
 
-                >
-                    <Text style={{ fontSize: 20 }}>Voltar</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.button, { width: 170, height: 50, backgroundColor: "#7395F7" }]}
+                    >
+                        <Text
+                            style={{ fontSize: 20, color: 'white' }}
 
-                <TouchableOpacity
-                    style={[styles.button, { width: 170, height: 50,backgroundColor: "#7395F7" }]}
-                >
-                    <Text
-                        style={{ fontSize: 20, color: 'white' }}
-
-                    >Continuar</Text>
-                </TouchableOpacity>
+                        >Continuar</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
         </ScrollView>)
 }
 
