@@ -25,7 +25,7 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
 
             <ScrollView>
                 <View style={styles.columnCardsHemocentros}>
-                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentro')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
@@ -38,7 +38,7 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
                         </View>
                     </TouchableOpacity>
                     
-                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentro')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
@@ -50,7 +50,7 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentro')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
@@ -62,7 +62,7 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentro')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
@@ -74,7 +74,7 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentroScreen')} >
+                    <TouchableOpacity style={styles.cardHemocentros} onPress={() => navigation.navigate('PerfilHemocentro')} >
                         <View style={styles.contentCardHemocentro}>
                             <View>
                                 <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />

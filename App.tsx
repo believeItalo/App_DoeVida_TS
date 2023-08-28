@@ -12,8 +12,10 @@ import BuscaHemocentroScreen from './pages/userScreen/hemocentro/buscaHemocentro
 import RedefinirSenhaScreen from './pages/userScreen/perfil/redefinirSenhaScreen/redefinirSenhaScreen'
 import MainUserScreen from './pages/userScreen/mainScreen/mainScreen';
 import AjudaScreen from './pages/userScreen/ajuda/ajudaScreen';
+import PerfilHemocentroScreen from './pages/userScreen/hemocentro/perfilHemocentro/perfilHemocentro';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Carousel from 'react-native-snap-carousel';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -32,6 +34,7 @@ export default function App() {
         <Stack.Screen name="RedefinirSenha" component={RedefinirSenhaScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainUserScreen" component={MainUserScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AjudaScreen" component={AjudaScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="PerfilHemocentro" component={PerfilHemocentroScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
