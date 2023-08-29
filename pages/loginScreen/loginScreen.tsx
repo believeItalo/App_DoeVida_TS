@@ -1,71 +1,97 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView } from 'react-native';
 
-export default function LoginScreen() {
+const LoginScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.titleLoginScreen}>Login</Text>
+      <Text style={styles.title}>Login</Text>
       <Image source={require('../loginScreen/imgs/loginImage.png')} />
 
-      <SafeAreaView>
-        <Text style={styles.titleInput}>Email</Text>
-        <TextInput
-          style={styles.input}
-        />
-        <Text style={styles.titleInput}>Senha</Text>
-        <TextInput
-          style={styles.input}
-        />
-        <View style={styles.viewEsqueceuASenha}>
-          <Text style={styles.textEsqueceuASenha}>Esqueceu sua senha?</Text>
+      <SafeAreaView style={styles.inputContainer}>
+        <View>
+          <Text style={styles.inputTitle}>Email</Text>
+          <TextInput style={styles.input} />
+        </View>
+
+        <View>
+          <Text style={styles.inputTitle}>Senha</Text>
+          <TextInput style={styles.input} />
+        </View>
+
+
+        <View style={styles.forgotPasswordContainer}>
+          <Text style={styles.forgotPasswordText}>Esqueceu sua senha?</Text>
         </View>
       </SafeAreaView>
-      <TouchableOpacity
-        style={[styles.buttonEntrar, { width: 270, height: 50, backgroundColor: '#7395F7' }]}
-      >
-        <Text style={{ fontSize: 20, color: 'white' }}>Entrar</Text>
+
+      <TouchableOpacity style={[styles.button, styles.loginButton]}>
+        <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
-      <Text style={{ color: '#7395F7' }}>Não possui uma conta?</Text>
+
+      <Text style={styles.signupText}>Não possui uma conta?</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 30,
     backgroundColor: 'white',
+    paddingHorizontal: 20,
   },
-  titleLoginScreen: {
+  title: {
     fontSize: 30,
     fontWeight: '300',
+    paddingBottom:50
+  },
+  inputContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop:30,
+    paddingBottom:30
+  },
+  inputTitle: {
+    fontSize: 24,
+    fontWeight: '300',
+    color: 'black',
   },
   input: {
     height: 40,
-    width: 270,
-    margin: 12,
+    width: 300,
+    marginVertical: 6,
     borderWidth: 1,
     padding: 10,
     borderColor: '#7395F7',
     borderRadius: 5,
   },
-  titleInput: {
-    fontSize: 24,
-    fontWeight: '300',
-    color: 'black',
-  },
-  viewEsqueceuASenha: {
+  forgotPasswordContainer: {
     alignItems: 'flex-end',
+    width:300
   },
-  textEsqueceuASenha: {
+  forgotPasswordText: {
     color: '#7395F7',
   },
-  buttonEntrar: {
+  button: {
+    width: 300,
+    height: 50,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 10,
+  },
+  loginButton: {
+    backgroundColor: '#7395F7',
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white',
+  },
+  signupText: {
+    color: '#7395F7',
   },
 });
+
+export default LoginScreen;
