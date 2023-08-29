@@ -1,105 +1,81 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createStackNavigator } from '@react-navigation/stack';
 
 interface CadastroScreenProps {
-  navigation: any; // 
+  navigation: any;
 }
 
-function CadastroScreen({ navigation }: CadastroScreenProps) {
- 
-
+const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-    <Text style={styles.titleCadastroScreen}>CADASTRO</Text>
-    <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/cadastroImage.png')} />
+      <Text style={styles.title}>CADASTRO</Text>
+      <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/cadastroImage.png')} />
 
-    <View style={{ width: '100%', justifyContent: 'center' }}>
-      <Text style={{ fontSize: 20, paddingLeft: 70 }}>Foto</Text>
+      <View style={styles.section}>
+        <View style={styles.viewTextPhoto}>
+          <Text style={styles.label}>Foto</Text>
+        </View>
 
-      <View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center', paddingBottom:140, paddingTop:100}}>
-        <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/inputFoto.png')} style={{ width: 135, height: 135,}} />
+        <View style={styles.imageContainer}>
+          <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/inputFoto.png')} style={styles.image} />
+        </View>
       </View>
-    </View>
 
-    <View style={{alignItems:'flex-start',width:300,}}>
-    <Text style={{fontSize:20, paddingLeft:14}}>Nome Completo <Text style={{color:'red'}}>*</Text> </Text>
-    <TextInput style={styles.input} />
-    </View>
+      <View style={{ alignItems: 'center' }}>
 
-    <View style={{alignItems:'flex-start',width:300}}>
-    <Text style={{fontSize:20, paddingLeft:14}}>Email <Text style={{color:'red'}}>*</Text> </Text>
-    <TextInput style={styles.input} keyboardType = 'email-address' />
-    </View>
 
-    <View style={{alignItems:'flex-start',width:300}}>
-    <Text style={{fontSize:20, paddingLeft:14}}>Telefone <Text style={{color:'red'}}>*</Text> </Text>
-    <TextInput style={styles.input} keyboardType = 'phone-pad' />
-    </View>
+        <View style={styles.section}>
+          <Text style={styles.label}>Nome Completo <Text style={styles.required}>*</Text></Text>
+          <TextInput style={styles.input} />
+        </View>
 
-    <View style={{alignItems:'flex-start',width:300}}>
-    <Text style={{fontSize:20, paddingLeft:14}}>CPF <Text style={{color:'red'}}>*</Text> </Text>
-    <TextInput style={styles.input} keyboardType = 'numeric' />
-    </View>
+        <View style={styles.section}>
+          <Text style={styles.label}>Email <Text style={styles.required}>*</Text></Text>
+          <TextInput style={styles.input} keyboardType="email-address" />
+        </View>
 
-    <View style={{alignItems:'flex-start',width:300}}>
-    <Text style={{fontSize:20, paddingLeft:14}}>Data de Nascimento <Text style={{color:'red'}}>*</Text> </Text>
-    <TextInput style={styles.input} keyboardType = 'phone-pad' />
-    </View>
+        <View style={styles.section}>
+          <Text style={styles.label}>Telefone <Text style={styles.required}>*</Text></Text>
+          <TextInput style={styles.input} keyboardType="phone-pad" />
+        </View>
 
-    <View style={{display:'flex', flexDirection:'row',width:300,gap:-150}}>
+        <View style={styles.section}>
+          <Text style={styles.label}>CPF <Text style={styles.required}>*</Text></Text>
+          <TextInput style={styles.input} keyboardType="numeric" />
+        </View>
 
-    <View style={{alignItems:'flex-start',width:300}}>
-    <Text style={{fontSize:20, paddingLeft:14}}>Peso<Text style={{color:'red'}}>*</Text> </Text>
-    <TextInput style={{
-         height: 40,
-         width: 100,
-         margin: 12,
-         borderWidth: 1,
-         padding: 10,
-         borderColor: '#7395F7',
-         borderRadius: 5,
-    }} keyboardType = 'phone-pad' />
-    </View>
+        <View style={styles.section}>
+          <Text style={styles.label}>Data de Nascimento <Text style={styles.required}>*</Text></Text>
+          <TextInput style={styles.input} keyboardType="phone-pad" />
+        </View>
 
-    <View style={{alignItems:'flex-start',width:300}}>
-    <Text style={{fontSize:20, paddingLeft:14}}>Sexo <Text style={{color:'red'}}>*</Text> </Text>
-    <TextInput style={{
-         height: 40,
-         width: 100,
-         margin: 12,
-         borderWidth: 1,
-         padding: 10,
-         borderColor: '#7395F7',
-         borderRadius: 5,
-    }} keyboardType = 'phone-pad' />
-    </View>
+        <View style={styles.doubleSection}>
+          <View style={styles.halfSection}>
+            <Text style={styles.label}>Peso <Text style={styles.required}>*</Text></Text>
+            <TextInput style={styles.smallInput} keyboardType="phone-pad" />
+          </View>
+          <View style={styles.halfSection}>
+            <Text style={styles.label}>Sexo <Text style={styles.required}>*</Text></Text>
+            <TextInput style={styles.smallInput} keyboardType="phone-pad" />
+          </View>
+        </View>
+      </View>
 
-    </View>
-    <View style={{paddingTop:30,paddingBottom:30, width:`100%`, display: 'flex', flexDirection: `row`, justifyContent:'center', gap: 30}}>
-    <TouchableOpacity
-        style={[styles.button, { width: 170, height: 50, backgroundColor: "white", borderColor: "#7395F7", borderWidth: 2}]}
-        onPress={() => navigation.navigate('Home')}
-      >
-        <Text style={{fontSize: 20}}>Voltar</Text> 
-      </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.button, { width: 170, height: 50,backgroundColor: "#7395F7" }]}
-        onPress={() => navigation.navigate('CadastroTipoSanguineo')}
-      >
-        <Text 
-          style={{fontSize: 20, color:'white'}}
-        
-          >Continuar</Text>
-      </TouchableOpacity>
-    </View>
- 
-  </ScrollView>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.buttonTextComeBack}>Voltar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.primaryButton]}
+          onPress={() => navigation.navigate('CadastroTipoSanguineo')}
+        >
+          <Text style={styles.buttonText}>Continuar</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -107,30 +83,101 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white'
   },
-  titleCadastroScreen: {
+  viewTextPhoto: {
+    width: '100%',
+    paddingLeft: 50
+  },
+  title: {
     fontSize: 30,
     fontWeight: '300',
     paddingTop: 70,
     paddingBottom: 50
   },
+  section: {
+    width: '100%',
+    alignItems: 'flex-start',
+    marginBottom: 20
+  },
+  label: {
+    fontSize: 24,
+    fontWeight: '300',
+    marginBottom: 6
+  },
+  required: {
+    color: 'red'
+  },
+  imageContainer: {
+    width: '100%',
+    height: 120,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 140,
+    paddingTop: 100
+  },
+  image: {
+    width: 135,
+    height: 135
+  },
   input: {
     height: 40,
     width: 270,
-    margin: 12,
+    marginVertical: 6,
     borderWidth: 1,
     padding: 10,
     borderColor: '#7395F7',
-    borderRadius: 5,
+    borderRadius: 5
   },
-  textFieldCadastroScreen: {
-    fontSize: 20,
+  smallInput: {
+    height: 40,
+    width: 100,
+    marginVertical: 6,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: '#7395F7',
+    borderRadius: 5
   },
-  button: {
+  doubleSection: {
+    flexDirection: 'row',
+    alignItems:'center',
+    justifyContent:'center',
+    paddingLeft:60,
+    width: '100%',
+  },
+  halfSection: {
+    width: '48%'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    gap: 30,
+    width: '100%',
+    paddingVertical: 30,
+   
+  },
+  button: {
+    width: 170,
+    height: 50,
     borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  primaryButton: {
     backgroundColor: '#7395F7'
+  },
+  secondaryButton: {
+    backgroundColor: 'white',
+    borderColor: '#7395F7',
+    borderWidth: 2
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white'
+  },
+  buttonTextComeBack:{
+    fontSize: 20,
+    color: 'black'
   }
 });
+
 export default CadastroScreen;

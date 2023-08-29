@@ -67,7 +67,7 @@ export default function AgendaDisponivelHemocentro({ navigation }: AgendaDisponi
                             </View>
 
 
-                            <View style={{alignItems: 'center', justifyContent: 'center', paddingBottom:30 }}>
+                            <View style={{alignItems: 'center', justifyContent: 'center', paddingBottom:30, paddingRight:20}}>
 
 
                                 <TouchableOpacity style={{
@@ -75,7 +75,7 @@ export default function AgendaDisponivelHemocentro({ navigation }: AgendaDisponi
                                     alignItems: 'center',
                                     padding: 10,
                                     borderRadius: 5,
-                                    width: 200,
+                                    width: 90,
                                     height: 50,
                                     backgroundColor: "#7395F7"
                                 }}>
