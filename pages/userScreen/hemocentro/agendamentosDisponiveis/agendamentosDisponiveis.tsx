@@ -38,40 +38,53 @@ export default function AgendaDisponivelHemocentro({ navigation }: AgendaDisponi
                         Agenda Disponível
                     </Text>
                 </View>
+                <View style={{paddingBottom:40, paddingTop:50 }}>
+                    <View style={{
+                        borderWidth: 2,
+                        borderRadius: 10,
+                        borderColor: '#7395F7',
+                        height: 200,
+                        width: 300,
+                    }}>
 
-                <View>
-                    <TouchableOpacity>
-                        <View style={{ flexDirection: 'row', gap: 10, alignItems:'center' }}>
-                            <Text  style={{fontSize:20}}>
-                                Data:
-                            </Text>
-                            <Text>
-                                18/09/2023 às 13:30
-                            </Text>
+                        <TouchableOpacity style={{ flexDirection: 'column', justifyContent: 'center', gap: 10, paddingTop: 40, paddingLeft:20}}>
+                            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                                <Text style={{ fontSize: 18 }}>
+                                    Data:
+                                </Text>
+                                <Text >
+                                    18/09/2023 às 13:30
+                                </Text>
 
-                        </View>
-                        <View style={{ flexDirection: 'row', gap: 10 }}>
-                            <Text style={{fontSize:20}}>
-                                Local de doação:
-                            </Text>
-                            <Text>
-                                Descricao de local de doacao 1
-                            </Text>
-                        </View>
+                            </View>
+                            <View style={{ flexDirection: 'column', gap: 10 }}>
+                                <Text style={{ fontSize: 18 }}>
+                                    Local de doação:
+                                </Text>
+                                <Text style={{ width: '100%' }}>
+                                    Descricao de local de doacao 1
+                                </Text>
+                            </View>
 
-                        <TouchableOpacity style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: 10,
-                            borderRadius: 5,
-                            width: 200,
-                            height: 50,
-                            backgroundColor: "#7395F7"
-                        }}>
+
+                            <View style={{alignItems: 'center', justifyContent: 'center', paddingBottom:30 }}>
+
+
+                                <TouchableOpacity style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 10,
+                                    borderRadius: 5,
+                                    width: 200,
+                                    height: 50,
+                                    backgroundColor: "#7395F7"
+                                }}>
+                                        <Text style={{color:'white'}}>AGENDAR</Text>
+                                </TouchableOpacity>
+                            </View>
 
                         </TouchableOpacity>
-
-                    </TouchableOpacity>
+                    </View>
                 </View>
 
             </View>
