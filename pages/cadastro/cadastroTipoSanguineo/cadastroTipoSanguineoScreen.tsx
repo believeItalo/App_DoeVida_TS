@@ -22,45 +22,45 @@ function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreen
 <TouchableOpacity
           style={[styles.buttonSangue]}
         >
-          <Image source={require('../cadastroTipoSanguineo/imgs/Onegative.png')}></Image>
+          <Image source={require('../cadastroTipoSanguineo/imgs/oNegativo.png')} style={styles.bottonBloodImage}></Image>
        
 </TouchableOpacity>
 <TouchableOpacity
           style={[styles.buttonSangue]}
         >
-          <Image source={require('../cadastroTipoSanguineo/imgs/Onegative.png')}></Image>
+          <Image source={require('../cadastroTipoSanguineo/imgs/bNegativo.png')} style={styles.bottonBloodImage}></Image>
 </TouchableOpacity>
 <TouchableOpacity
           style={[styles.buttonSangue]}
         >
-            <Image source={require('../cadastroTipoSanguineo/imgs/Onegative.png')}></Image>
+            <Image source={require('../cadastroTipoSanguineo/imgs/bPositivo.png')} style={styles.bottonBloodImage}></Image>
 </TouchableOpacity>
 <TouchableOpacity
           style={[styles.buttonSangue]}
         >
-          <Image source={require('../cadastroTipoSanguineo/imgs/Onegative.png')}></Image>
+          <Image source={require('../cadastroTipoSanguineo/imgs/aNegativo.png')} style={styles.bottonBloodImage}></Image>
 </TouchableOpacity>
 </View>
 <View style={{display:'flex', gap:20, padding:10}}>
 <TouchableOpacity
           style={[styles.buttonSangue]}
         >
-            <Image source={require('../cadastroTipoSanguineo/imgs/Onegative.png')}></Image>
+            <Image source={require('../cadastroTipoSanguineo/imgs/abPositivo.png')} style={styles.bottonBloodImage}></Image>
 </TouchableOpacity>
 <TouchableOpacity
           style={[styles.buttonSangue]}
         >
-           <Image source={require('../cadastroTipoSanguineo/imgs/Onegative.png')}></Image>
+           <Image source={require('../cadastroTipoSanguineo/imgs/abNegativo.png')} style={styles.bottonBloodImage}></Image>
 </TouchableOpacity>
 <TouchableOpacity
           style={[styles.buttonSangue]}
         >
-            <Image source={require('../cadastroTipoSanguineo/imgs/Onegative.png')}></Image>
+            <Image source={require('../cadastroTipoSanguineo/imgs/oPositivo.png')} style={styles.bottonBloodImage}></Image>
 </TouchableOpacity>
 <TouchableOpacity
           style={[styles.buttonSangue]}
         >
-        <Image source={require('../cadastroTipoSanguineo/imgs/Onegative.png')}></Image>
+        <Image source={require('../cadastroTipoSanguineo/imgs/aPositivo.png')} style={styles.bottonBloodImage}></Image>
 </TouchableOpacity>
 </View>
 </View>
@@ -118,6 +118,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     backgroundColor: '#7395F7'
+  },
+  bottonBloodImage:{
+    height:100, 
+    width:80
   }
 });
 export default CadastroTipoSanguineoScreen

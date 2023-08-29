@@ -15,13 +15,13 @@ function EnderecoScreen({ navigation }: CadastroEnderecoScreenProps) {
         <Image source={require('../cadastroEnderecoScreen/imgs/cadastroImage.png')} />
 
         <View style={{ alignItems: 'flex-start', width: 300, paddingTop: 50 }}>
-          <Text style={{ fontSize: 20, paddingLeft: 14 }}>CEP <Text style={{ color: 'red' }}>*</Text> </Text>
+          <Text style={styles.titleInput}>CEP <Text style={{ color: 'red' }}>*</Text> </Text>
           <TextInput style={styles.input} />
         </View>
 
         <View style={{ display: 'flex', flexDirection: 'row', paddingLeft: 55, width: '100%', gap: -180 }}>
           <View style={{ alignItems: 'flex-start', width: 300 }}>
-            <Text style={{ fontSize: 20, paddingLeft: 14 }}>Estado</Text>
+            <Text style={styles.titleInput}>Estado</Text>
             <TextInput
               style={{
                 height: 40,
@@ -37,7 +37,7 @@ function EnderecoScreen({ navigation }: CadastroEnderecoScreenProps) {
           </View>
 
           <View style={{ alignItems: 'flex-start', width: 300 }}>
-            <Text style={{ fontSize: 20, paddingLeft: 14 }}>Cidade </Text>
+            <Text style={styles.titleInput}>Cidade </Text>
             <TextInput
               style={{
                 height: 40,
@@ -54,13 +54,24 @@ function EnderecoScreen({ navigation }: CadastroEnderecoScreenProps) {
         </View>
 
         <View style={{ alignItems: 'flex-start', width: 300 }}>
-          <Text style={{ fontSize: 20, paddingLeft: 14 }}>Bairro</Text>
+          <Text style={styles.titleInput}>Bairro</Text>
           <TextInput style={styles.input} />
         </View>
 
-        <View style={{ alignItems: 'flex-start', width: 300 }}>
-          <Text style={{ fontSize: 20, paddingLeft: 14 }}>Complemento </Text>
-          <TextInput style={styles.input} />
+        <View style={{ alignItems: 'flex-start', width: 300, flexDirection:'row' }}>
+
+        <View style={{flexDirection:'column'}}>
+         <Text style={styles.titleInput}>Número </Text>
+          <TextInput style={{ height: 40, width: 70, margin: 12, borderWidth: 1, padding: 10, borderColor: '#7395F7', borderRadius: 5,}} />
+         </View>
+
+          <View style={{flexDirection:'column'}}>
+          <Text style={styles.titleInput}>Complemento </Text>
+          <TextInput style={{height: 40, width: 175, margin: 12, borderWidth: 1, padding: 10, borderColor: '#7395F7', borderRadius: 5}} />
+          </View>
+
+       
+
         </View>
 
         <View
@@ -125,5 +136,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#7395F7',
   },
+  titleInput:{
+    fontSize: 20, 
+    paddingLeft: 14,
+    fontWeight:'300'
+  }
 });
 export default EnderecoScreen

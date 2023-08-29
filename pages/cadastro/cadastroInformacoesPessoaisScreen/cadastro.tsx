@@ -19,8 +19,8 @@ function CadastroScreen({ navigation }: CadastroScreenProps) {
     <View style={{ width: '100%', justifyContent: 'center' }}>
       <Text style={{ fontSize: 20, paddingLeft: 70 }}>Foto</Text>
 
-      <View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center', paddingBottom:20}}>
-        <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/inputFoto.png')} style={{ width: 135, height: 135}} />
+      <View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center', paddingBottom:140, paddingTop:100}}>
+        <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/inputFoto.png')} style={{ width: 135, height: 135,}} />
       </View>
     </View>
 

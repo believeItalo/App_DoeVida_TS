@@ -13,6 +13,7 @@ import RedefinirSenhaScreen from './pages/userScreen/perfil/redefinirSenhaScreen
 import MainUserScreen from './pages/userScreen/mainScreen/mainScreen';
 import AjudaScreen from './pages/userScreen/ajuda/ajudaScreen';
 import PerfilHemocentroScreen from './pages/userScreen/hemocentro/perfilHemocentro/perfilHemocentro';
+import AgendaDisponivelHemocentroScreen from './pages/userScreen/hemocentro/agendamentosDisponiveis/agendamentosDisponiveis';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Carousel from 'react-native-snap-carousel';
@@ -35,6 +36,7 @@ export default function App() {
         <Stack.Screen name="MainUserScreen" component={MainUserScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AjudaScreen" component={AjudaScreen} options={{ headerShown: false }} />
         <Stack.Screen name="PerfilHemocentro" component={PerfilHemocentroScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="AgendaDisponivelHemocentro" component={AgendaDisponivelHemocentroScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

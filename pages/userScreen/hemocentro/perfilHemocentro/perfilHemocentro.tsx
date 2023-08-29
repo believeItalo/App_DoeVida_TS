@@ -91,7 +91,8 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
 
                 </View>
 
-                <TouchableOpacity style={[styles.button]}>
+                <TouchableOpacity style={[styles.button]}
+                onPress={() => navigation.navigate('AgendaDisponivelHemocentro')}>
                     <Text
 
                         style={{ fontSize: 20, color: 'white' }}
@@ -114,7 +115,7 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
                                 <View>
 
                                     <Text style={styles.descriptionAvaliacao}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus a urna a scelerisque. Morbi accumsan odio sit amet nulla eleifend molestie. Nullam pretium tortor est.</Text>
-                                    <Text>SP - CARAPICUÍBA</Text>
+                                    
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -131,7 +132,7 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
                                 <View>
 
                                     <Text style={styles.descriptionAvaliacao}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus a urna a scelerisque. Morbi accumsan odio sit amet nulla eleifend molestie. Nullam pretium tortor est.</Text>
-                                    <Text>SP - CARAPICUÍBA</Text>
+                                  
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -148,7 +149,7 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
                                 <View>
 
                                     <Text style={styles.descriptionAvaliacao}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus a urna a scelerisque. Morbi accumsan odio sit amet nulla eleifend molestie. Nullam pretium tortor est.</Text>
-                                    <Text>SP - CARAPICUÍBA</Text>
+                                    
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         gap: 50,
-        paddingLeft: 30,
+        paddingLeft: 10,
         paddingTop: 20,
     },
     title: {
