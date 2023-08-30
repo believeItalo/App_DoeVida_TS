@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   viewTextPhoto: {
     width: '100%',
-    paddingLeft: 50
+    paddingLeft: 70
   },
   title: {
     fontSize: 30,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     height: 120,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 140,
+    paddingBottom: 100,
     paddingTop: 100
   },
   image: {
