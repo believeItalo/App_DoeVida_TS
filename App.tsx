@@ -16,7 +16,6 @@ import PerfilHemocentroScreen from './pages/userScreen/hemocentro/perfilHemocent
 import AgendaDisponivelHemocentroScreen from './pages/userScreen/hemocentro/agendamentosDisponiveis/agendamentosDisponiveis';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Carousel from 'react-native-snap-carousel';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
