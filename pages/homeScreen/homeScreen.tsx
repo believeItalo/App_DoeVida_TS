@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 interface HomeScreenProps {
   navigation: any;
 }
-
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>

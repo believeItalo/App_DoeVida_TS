@@ -4,8 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
-
-
+import Modal from 'react-native-modal';
 const Stack = createNativeStackNavigator();
 
 interface AgendaDisponivelHemocentroScreenProps {
@@ -38,36 +37,32 @@ export default function AgendaDisponivelHemocentro({ navigation }: AgendaDisponi
                         Agenda Disponível
                     </Text>
                 </View>
-                <View style={{paddingBottom:40, paddingTop:20 }}>
-                    <View style={{
-                        borderWidth: 2,
-                        borderRadius: 10,
-                        borderColor: '#7395F7',
-                        height: 250,
-                        width: 370,
-                    }}>
+                <View style={{ paddingBottom: 40, paddingTop: 20,gap:15 }}>
 
-                        <TouchableOpacity style={{ flexDirection: 'column', justifyContent: 'center', gap: 10, paddingTop: 30, paddingLeft:20,}}>
+                    <View style={styles.cardAgenda}>
+
+                        <TouchableOpacity style={styles.contentCardAgenda}>
+
                             <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-                                <Text style={{ fontSize: 24, paddingBottom:2 }}>
+                                <Text style={styles.titleCardAgenda}>
                                     Data:
                                 </Text>
-                                <Text style={{fontSize:24, fontWeight:'300'}} >
+                                <Text style={styles.descriptionCardAgenda} >
                                     18/09/2023 às 13:30
                                 </Text>
 
                             </View>
                             <View style={{ flexDirection: 'column', gap: 10 }}>
-                                <Text style={{ fontSize: 24 }}>
+                                <Text style={styles.titleCardAgenda}>
                                     Local de doação:
                                 </Text>
-                                <Text style={{ width: '100%', fontSize:16, fontWeight:'300' }}>
+                                <Text style={styles.descriptionCardAgenda}>
                                     Descricao de local de doacao 1
                                 </Text>
                             </View>
 
 
-                            <View style={{alignItems: 'center', justifyContent: 'center',paddingTop:20, paddingRight:20}}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 20, paddingRight: 20 }}>
 
                                 <TouchableOpacity style={{
                                     justifyContent: 'center',
@@ -78,13 +73,142 @@ export default function AgendaDisponivelHemocentro({ navigation }: AgendaDisponi
                                     height: 50,
                                     backgroundColor: "#7395F7"
                                 }}>
-                                        <Text style={{color:'white'}}>AGENDAR</Text>
+                                    <Text style={{ color: 'white' }}>AGENDAR</Text>
                                 </TouchableOpacity>
                             </View>
 
                         </TouchableOpacity>
 
-                        
+
+                    </View>
+
+                    <View style={styles.cardAgenda}>
+
+                        <TouchableOpacity style={styles.contentCardAgenda}>
+
+                            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                                <Text style={styles.titleCardAgenda}>
+                                    Data:
+                                </Text>
+                                <Text style={styles.descriptionCardAgenda} >
+                                    18/09/2023 às 13:30
+                                </Text>
+
+                            </View>
+                            <View style={{ flexDirection: 'column', gap: 10 }}>
+                                <Text style={styles.titleCardAgenda}>
+                                    Local de doação:
+                                </Text>
+                                <Text style={styles.descriptionCardAgenda}>
+                                    Descricao de local de doacao 1
+                                </Text>
+                            </View>
+
+
+                            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 20, paddingRight: 20 }}>
+
+                                <TouchableOpacity style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 10,
+                                    borderRadius: 5,
+                                    width: 90,
+                                    height: 50,
+                                    backgroundColor: "#7395F7"
+                                }}>
+                                    <Text style={{ color: 'white' }}>AGENDAR</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                        </TouchableOpacity>
+
+
+                    </View>
+
+                    <View style={styles.cardAgenda}>
+
+                        <TouchableOpacity style={styles.contentCardAgenda}>
+
+                            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                                <Text style={styles.titleCardAgenda}>
+                                    Data:
+                                </Text>
+                                <Text style={styles.descriptionCardAgenda} >
+                                    18/09/2023 às 13:30
+                                </Text>
+
+                            </View>
+                            <View style={{ flexDirection: 'column', gap: 10 }}>
+                                <Text style={styles.titleCardAgenda}>
+                                    Local de doação:
+                                </Text>
+                                <Text style={styles.descriptionCardAgenda}>
+                                    Descricao de local de doacao 1
+                                </Text>
+                            </View>
+
+
+                            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 20, paddingRight: 20 }}>
+
+                                <TouchableOpacity style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 10,
+                                    borderRadius: 5,
+                                    width: 90,
+                                    height: 50,
+                                    backgroundColor: "#7395F7"
+                                }}>
+                                    <Text style={{ color: 'white' }}>AGENDAR</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                        </TouchableOpacity>
+
+
+                    </View>
+
+                    <View style={styles.cardAgenda}>
+
+                        <TouchableOpacity style={styles.contentCardAgenda}>
+
+                            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                                <Text style={styles.titleCardAgenda}>
+                                    Data:
+                                </Text>
+                                <Text style={styles.descriptionCardAgenda} >
+                                    18/09/2023 às 13:30
+                                </Text>
+
+                            </View>
+                            <View style={{ flexDirection: 'column', gap: 10 }}>
+                                <Text style={styles.titleCardAgenda}>
+                                    Local de doação:
+                                </Text>
+                                <Text style={styles.descriptionCardAgenda}>
+                                    Descricao de local de doacao 1
+                                </Text>
+                            </View>
+
+
+                            <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 20, paddingRight: 20 }}>
+
+                                <TouchableOpacity style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 10,
+                                    borderRadius: 5,
+                                    width: 90,
+                                    height: 50,
+                                    backgroundColor: "#7395F7"
+                                }}>
+                                    <Text style={{ color: 'white' }}>AGENDAR</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                        </TouchableOpacity>
+
+
                     </View>
                 </View>
 
@@ -178,6 +302,28 @@ const styles = StyleSheet.create({
         gap: 30,
         paddingTop: 30,
         paddingBottom: 30,
+    },
+    titleCardAgenda: {
+        fontSize: 18,
+    },
+    descriptionCardAgenda: {
+        fontSize: 16,
+        fontWeight: '300'
+    },
+    contentCardAgenda: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        gap: 10,
+        paddingTop: 30,
+        paddingLeft: 20
+    },
+    cardAgenda: {
+        borderWidth: 2,
+        borderRadius: 10,
+        borderColor: '#7395F7',
+        height: 230,
+        width: 300,
     }
 
 });
+

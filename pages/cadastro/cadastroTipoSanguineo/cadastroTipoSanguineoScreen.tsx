@@ -69,7 +69,7 @@ function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreen
             style={[styles.buttonComeBack]}
             onPress={() => navigation.navigate('CadastroInformacoesPessoais')}
           >
-            <Text style={{ fontSize: 20 }}>Voltar</Text>
+            <Text style={styles.comeBackText}>Voltar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -77,7 +77,7 @@ function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreen
             onPress={() => navigation.navigate('CadastroEndereco')}
           >
             <Text
-              style={{ fontSize: 20, color: 'white' }}
+              style={styles.continueText}
 
             >Continuar</Text>
           </TouchableOpacity>
@@ -157,6 +157,13 @@ const styles = StyleSheet.create({
     flexDirection: `row`, 
     justifyContent: 'center', 
     gap: 30 
+  },
+  comeBackText:{
+    fontSize:18
+  },
+  continueText:{
+    fontSize:18,
+    color:'white'
   }
 });
 export default CadastroTipoSanguineoScreen

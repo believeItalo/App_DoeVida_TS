@@ -1,40 +1,48 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  SafeAreaView,
+} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
 
 interface CadastroSenhaScreenProps {
-  navigation: any; // 
+  navigation: any;
 }
 
 function CadastroSenhaScreen({ navigation }: CadastroSenhaScreenProps) {
-
-
   return (
     <View style={styles.container}>
       <Text style={styles.titleCadastroScreen}>Cadastro</Text>
-      <Image source={require('../cadastroDeSenhaScreen/imgs/imageCadastroSenha.png')} />
-      <Text style={{ fontSize: 20, fontWeight: '300' }}>Defina uma senha </Text>
+      <Image
+        source={require('../cadastroDeSenhaScreen/imgs/imageCadastroSenha.png')}
+      />
+      <Text style={styles.subtitle}>Defina uma senha</Text>
       <SafeAreaView>
-        <Text style={styles.titleInput}>Senha: </Text>
+        <Text style={styles.titleInput}>Senha:</Text>
         <TextInput style={styles.input} />
         <Text style={styles.titleInput}>Confirmar senha</Text>
         <TextInput style={styles.input} />
       </SafeAreaView>
-      <View style={{ paddingTop: 30, paddingBottom: 30, width: `100%`, display: 'flex', flexDirection: `row`, justifyContent: 'center', gap: 30 }}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[styles.button, { width: 170, height: 50, backgroundColor: "white", borderColor: "#7395F7", borderWidth: 2 }]}
-          onPress={() => navigation.navigate('CadastroEndereco')}
-          >
-          <Text style={{ fontSize: 20 }}>Voltar</Text>
+          style={[styles.button, styles.secondaryButton]}
+          onPress={() => navigation.navigate('CadastroEndereco')}>
+          <Text style={styles.buttonText}>Voltar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.button, { width: 170, height: 50, backgroundColor: "#7395F7" }]}
-          onPress={() => navigation.navigate('MainUserScreen')}
-          >
-          <Text style={{ fontSize: 20, color: 'white' }}>Continuar</Text>
+          style={[styles.button, styles.primaryButton]}
+          onPress={() => navigation.navigate('MainUserScreen')}>
+          <Text style={[styles.buttonText, styles.buttonTextWhite]}>
+            Continuar
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -43,16 +51,20 @@ function CadastroSenhaScreen({ navigation }: CadastroSenhaScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 30,
-    backgroundColor: 'white'
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
   },
-  titleLoginScreen: {
+  titleCadastroScreen: {
     fontSize: 30,
     fontWeight: '300',
+    paddingTop: 70,
+  },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: '300',
+    marginBottom: 10,
   },
   input: {
     height: 40,
@@ -66,30 +78,37 @@ const styles = StyleSheet.create({
   titleInput: {
     fontSize: 24,
     fontWeight: '300',
-    color: 'black'
+    color: 'black',
   },
-  viewEsqueceuASenha: {
-    alignItems: 'flex-end',
-  },
-  textEsqueceuASenha: {
-    color: '#7395F7'
-  },
-  buttonEntrar: {
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center'
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 30,
+    paddingTop: 30,
+    paddingBottom: 30,
   },
   button: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
     borderRadius: 5,
-    backgroundColor: "#7395F7"
+    width: 170,
+    height: 50,
   },
-  titleCadastroScreen: {
-    fontSize: 30,
-    fontWeight: '300',
-    paddingTop: 70,
+  primaryButton: {
+    backgroundColor: '#7395F7',
+  },
+  secondaryButton: {
+    backgroundColor: 'white',
+    borderColor: '#7395F7',
+    borderWidth: 2,
+  },
+  buttonText: {
+    fontSize: 20,
+  },
+  buttonTextWhite: {
+    color: 'white',
   },
 });
-export default CadastroSenhaScreen
+
+export default CadastroSenhaScreen;
