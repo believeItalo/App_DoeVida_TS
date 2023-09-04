@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   loginButton: {
-    backgroundColor: '#7395F7',
+    backgroundColor: '#2C62F1',
   },
   buttonText: {
     fontSize: 20,

@@ -182,7 +182,7 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
                    
                     </View>
                     <View style={{paddingTop:20}}>
-                    <TextInput style={{width:300,height:230,borderRadius:5,borderColor:'#6D6868',borderWidth:1, paddingBottom:130,paddingLeft:20,paddingRight:20, paddingTop:30}} multiline={true}></TextInput>
+                     
                     </View>
                     <View style={styles.ratingContainer}>
                         {[1, 2, 3, 4, 5].map((star) => (
