@@ -9,7 +9,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>CADASTRO</Text>
-      <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/cadastroImage.png')} />
+      <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/imgCadastroPessoal.png')} />
 
       <View style={styles.section}>
         <View style={styles.viewTextPhoto}>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'rgba(211, 223, 255, 0.5)'
   },
   viewTextPhoto: {
     width: '100%',
@@ -163,10 +163,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   primaryButton: {
-    backgroundColor: '#7395F7'
+    backgroundColor: '#2C62F1'
   },
   secondaryButton: {
-    backgroundColor: 'white',
     borderColor: '#7395F7',
     borderWidth: 2
   },

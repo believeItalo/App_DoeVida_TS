@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'rea
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { Platform } from 'react-native'; 
 interface CadastroTipoSanguineoScreenProps {
   navigation: any; // 
 }
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(211, 223, 255, 0.5)',
     width: '100%',
     height: '100%'
   },
@@ -116,9 +116,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 170,
     height: 170,
-    backgroundColor: 'white',
-    borderColor: '#7395F7',
-    borderWidth: 2
+    ...Platform.select({
+      android: {
+        elevation: 8,
+        backgroundColor:'white',
+      },
+    }),
   },
   viewAlignColumnBloodCards:{
     display: 'flex', 
@@ -146,8 +149,8 @@ const styles = StyleSheet.create({
     borderWidth: 2
   },
   bottonBloodImage: {
-    height: 100,
-    width: 80
+    height: 60,
+    width: 50
   },
   viewAlignBottons:{
     paddingTop: 30, 
