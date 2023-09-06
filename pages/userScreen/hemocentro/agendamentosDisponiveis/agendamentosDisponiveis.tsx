@@ -1,13 +1,12 @@
-import React, {useState} from 'react';
-import {StyleSheet,Text,View,TouchableOpacity,Image,ScrollView,} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, } from 'react-native';
 import Modal from 'react-native-modal';
 import { FontAwesome5 } from '@expo/vector-icons';
-
 interface AgendaDisponivelHemocentroScreenProps {
   navigation: any;
 }
 
-export default function AgendaDisponivelHemocentro({navigation,}: AgendaDisponivelHemocentroScreenProps) {
+export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDisponivelHemocentroScreenProps) {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <ScrollView>
@@ -60,21 +59,23 @@ export default function AgendaDisponivelHemocentro({navigation,}: AgendaDisponiv
         </View>
       </View>
 
-      <Modal isVisible={modalVisible} style={{justifyContent:'center', alignItems:'center'}}>
-        <View style={{width:300, height:250, backgroundColor:'white', borderRadius:10, alignItems:'center',justifyContent:'center', gap:40}}>
-          <View style={{alignItems:'center', gap:40}}>
-        <Text style={{fontSize:20}}>AGENDAR?</Text>
-        <Text style={{fontSize:16, color:'#6D6868'}}> Confirme seu agendamento</Text>
-        </View>
-          <View style={{display:'flex',flexDirection:'row', alignItems:'center',gap:50, justifyContent:'center'}}>
-          <TouchableOpacity style={{width:100, height:50, backgroundColor:'#83DE4C', alignItems:'center', justifyContent:'center', borderRadius:5}}>
-            <Text>SIM</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{width:100, height:50, backgroundColor:'#EE5353', alignItems:'center', justifyContent:'center', borderRadius:5}} onPress={()=> setModalVisible(false)}>
-            <Text>Não</Text>
-          </TouchableOpacity>
+      <Modal isVisible={modalVisible} style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ width: 300, height: 250, backgroundColor: 'white', borderRadius: 10, alignItems: 'center', justifyContent: 'center', gap: 40 }}>
+          <View style={{ alignItems: 'center', gap: 40 }}>
+            <Text style={{ fontSize: 20 }}>AGENDAR?</Text>
+            <Text style={{ fontSize: 16, color: '#6D6868' }}> Confirme seu agendamento</Text>
           </View>
-         
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 50, justifyContent: 'center' }}>
+            <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#98E768', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection:'row', gap:20 }}>
+              <Text style={{ color: 'white', marginLeft: 5, fontSize:16  }}>Sim</Text>
+              <FontAwesome5 name="check" size={20} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#EE5353', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection:'row', gap:20  }} onPress={() => setModalVisible(false)}>
+              <Text style={{ color: 'white', marginLeft: 5, fontSize:16 }}>Não</Text>
+              <FontAwesome5 name="times" size={20} color="white" />
+            </TouchableOpacity>
+          </View>
+
         </View>
       </Modal>
     </ScrollView>
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 100,
     height: 50,
-    backgroundColor: '#7395F7',
+    backgroundColor: '#2C62F1',
   },
   agendarButtonText: {
     color: 'white',

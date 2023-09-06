@@ -12,7 +12,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
       <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/imgCadastroPessoal.png')} />
 
       <View style={styles.section}>
-        <View style={styles.viewTextPhoto}>
+        <View style={styles.viewTextPhoto}> 
           <Text style={styles.label}>Foto</Text>
         </View>
 
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(211, 223, 255, 0.5)'
+    backgroundColor: 'white',
   },
   viewTextPhoto: {
     width: '100%',

@@ -20,6 +20,7 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
         setRating(selectedRating);
     };
     return (
+      
         <ScrollView>
             <View style={styles.container}>
 
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: 350,
         height: 50,
-        backgroundColor: "#7395F7"
+        backgroundColor: "#2C62F1"
     },
     cardAvaliacao: {
         borderWidth: 2,
