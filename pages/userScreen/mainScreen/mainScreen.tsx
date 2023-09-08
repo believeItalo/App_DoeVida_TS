@@ -6,127 +6,127 @@ import { ImageBackground } from 'react-native';
 const Stack = createNativeStackNavigator();
 
 interface MainUserScreenProps {
-  navigation: any; // 
+  navigation: any;
 }
-export default function MainUserScreen({ navigation }: MainUserScreenProps)  {
-  
 
+export default function MainUserScreen({ navigation }: MainUserScreenProps) {
   return (
-
     <View style={styles.container}>
-      <View style={{ height: 130, width: '100%', display: 'flex', flexDirection: 'row', gap: 120, paddingLeft: 40, paddingTop: 30 }}>
-        <View style={{ paddingTop: 50 }}>
-          <Text style={{ fontSize: 20, fontWeight: '300' }}>Seja bem vindo,</Text>
-          <Text style={{ fontSize: 24, fontWeight: '400' }}>João Pedro</Text>
+      <View style={styles.header}>
+        <View style={styles.userInfo}>
+          <Text style={styles.userInfoText}>Seja bem vindo,</Text>
+          <Text style={[styles.userInfoText, { fontSize: 26, fontWeight:'400' }]}>João Pedro</Text>
+
         </View>
-        <View style={{ paddingTop: 50 }} >
-          <Image source={require('../mainScreen/imgs/profilePic.png')} style={{ height: 70, width: 70 }} />
+        <View style={styles.userImage}>
+          <Image source={require('../mainScreen/imgs/profilePic.png')} style={styles.profileImage} />
         </View>
       </View>
-
-      <View style={{ display: 'flex', flexDirection: 'row', paddingTop: 40 }}>
-        <View style={{ display: 'flex', gap: 35, padding: 10 }}>
-          <TouchableOpacity
-            style={[styles.cardUserScreen]}
-            onPress={() => navigation.navigate('BuscaHemocentro')}
-          >
-            <Image source={require('../mainScreen/imgs/imgCardHemocentro.png')} style={styles.imgCards} />
-            <Text style={styles.textCards}>
-              Hemocentros
-            </Text>
+      <View style={styles.containerCardContainer}>
+        <View style={styles.cardContainer}>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('BuscaHemocentro')}>
+            <Image source={require('../mainScreen/imgs/imgCardHemocentro.png')} style={styles.cardImage} />
+            <Text style={styles.cardText}>Hemocentros</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.cardUserScreen]}
-            onPress={() => navigation.navigate('AjudaScreen')}
-          >
-            <Image source={require('../mainScreen/imgs/imgCardAjuda.png')} style={styles.imgCards} />
-            <Text style={styles.textCards}>
-              Ajuda
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ display: 'flex', gap: 35, padding: 10 }}>
-          <TouchableOpacity
-            style={[styles.cardUserScreen]}
-            onPress={() => navigation.navigate('MeuPerfil')}
-          >
-            <Image source={require('../mainScreen/imgs/imgCardMeuPerfil.png')} style={styles.imgCards} />
-            <Text style={styles.textCards}>
-              Meu Perfil
-            </Text>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('MeuPerfil')}>
+            <Image source={require('../mainScreen/imgs/imgCardMeuPerfil.png')} style={styles.cardImage} />
+            <Text style={styles.cardText}>Meu Perfil</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.cardUserScreen]}
-          >
-            <Image source={require('../mainScreen/imgs/imgCardQuemPodeDoar.png')} style={styles.imgCards} />
-            <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingBottom: 10 }}>
-              <Text style={{
-                fontSize: 20,
-                color: 'white',
-                fontWeight: '300'
-              }}>
-                Quem Pode
-              </Text>
-              <Text style={{
-                fontSize: 20,
-                color: 'white',
-                fontWeight: '300'
-              }}>
-                Doar?
-              </Text>
+          </View>
+          <View style={styles.cardContainer}>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AjudaScreen')}>
+            <Image source={require('../mainScreen/imgs/imgCardAjuda.png')} style={styles.cardImage} />
+            <Text style={styles.cardText}>Ajuda</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.card]}>
+            <Image source={require('../mainScreen/imgs/imgCardQuemPodeDoar.png')} style={styles.cardImage} />
+            <View style={styles.quemPodeDoarTextContainer}>
+              <Text style={styles.quemPodeDoarText}>Quem Pode</Text>
+              <Text style={styles.quemPodeDoarText}>Doar?</Text>
             </View>
           </TouchableOpacity>
-        </View>
+          </View>
+        
       </View>
     </View>
-   
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     backgroundColor: 'white',
-    width: '100%',
-    height: '100%',
-    paddingBottom:100
   },
-  titleCadastroScreen: {
-    fontSize: 30,
+  header: {
+    height:'25%',
+    width: '80%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
+   
+  },
+  userInfo: {
+    height:'60%',
+    alignItems:'center',
+    justifyContent:'flex-end'
+
+  },
+  userInfoText: {
+    fontSize: 20,
     fontWeight: '300',
-    paddingTop: 70,
-    paddingBottom: 50
   },
-  cardUserScreen: {
+  userImage: {
+    paddingTop: 50,
+  },
+  profileImage: {
+    height: 70,
+    width: 70,
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    gap:20
+  },
+  card: {
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingTop: 20,
     borderRadius: 5,
-    width: 180,
-    height: 220,
+    width: 170,
+    height: 210,
     borderColor: "#7395F7",
     borderWidth: 2,
   },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
+  cardImage: {
+    height: '110%',
+    width: '100%',
     borderRadius: 5,
-    backgroundColor: "#7395F7"
+    position: 'absolute',
   },
-  textCards: {
+  cardText: {
     fontSize: 20,
     color: 'white',
     fontWeight: '300',
-    paddingBottom: 30
+    paddingBottom: 30,
   },
-  imgCards: {
-    height: 210,
-    width: 177,
-    borderRadius: 5,
-    position: 'absolute'
+  quemPodeDoarTextContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 10,
+  },
+  quemPodeDoarText: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: '300',
+  },
+  containerCardContainer:{
+    height:'65%',
+    width:'100%',
+    alignItems:'center',
+    justifyContent:'space-evenly',
   }
 });

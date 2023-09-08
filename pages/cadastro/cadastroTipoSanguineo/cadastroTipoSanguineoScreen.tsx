@@ -64,22 +64,15 @@ function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreen
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.viewAlignBottons}>
-          <TouchableOpacity
-            style={[styles.buttonComeBack]}
-            onPress={() => navigation.navigate('CadastroInformacoesPessoais')}
-          >
-            <Text style={styles.comeBackText}>Voltar</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={() => navigation.navigate('CadastroInformacoesPessoais')}>
+            <Text style={styles.buttonTextComeBack}>Voltar</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
-            style={[styles.buttonContinue]}
+            style={[styles.button, styles.primaryButton]}
             onPress={() => navigation.navigate('CadastroEndereco')}
           >
-            <Text
-              style={styles.continueText}
-
-            >Continuar</Text>
+            <Text style={styles.buttonText}>Continuar</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -164,6 +157,37 @@ const styles = StyleSheet.create({
   continueText: {
     fontSize: 20,
     color: 'white'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 30,
+    width: '100%',
+    paddingVertical: 30,
+
+  },
+  button: {
+    width: 170,
+    height: 50,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  primaryButton: {
+    backgroundColor: '#2C62F1'
+  },
+  secondaryButton: {
+    borderColor: '#7395F7',
+    borderWidth: 2
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white'
+  },
+  buttonTextComeBack: {
+    fontSize: 20,
+    color: 'black'
   }
 });
 export default CadastroTipoSanguineoScreen

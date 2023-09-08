@@ -55,18 +55,17 @@ function EnderecoScreen({ navigation }: CadastroEnderecoScreenProps) {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.secondaryButton]}
-            onPress={() => navigation.navigate('CadastroTipoSanguineo')}>
-            <Text style={styles.buttonText}>Voltar</Text>
+          <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={() => navigation.navigate('CadastroTipoSanguineo')}>
+            <Text style={styles.buttonTextComeBack}>Voltar</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
             style={[styles.button, styles.primaryButton]}
             onPress={() => navigation.navigate('CadastroSenha')}>
-            <Text style={[styles.buttonText, styles.buttonTextWhite]}>Continuar</Text>
+          
+            <Text style={styles.buttonTextWhite}>Continuar</Text>
           </TouchableOpacity>
         </View>
+
       </View>
     </ScrollView>
   );
@@ -160,7 +159,13 @@ const styles = StyleSheet.create({
   },
   buttonTextWhite: {
     color: 'white',
+    fontSize:20
   },
+  buttonTextComeBack: {
+    fontSize: 20,
+    color: 'black'
+  }
+  
 });
 
 export default EnderecoScreen;

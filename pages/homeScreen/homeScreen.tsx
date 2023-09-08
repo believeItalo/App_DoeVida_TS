@@ -51,16 +51,17 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   logoContainer: {
     justifyContent: 'flex-end',
     alignItems: 'center',
-    height:230
   },
   textContainer: {
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent:'center',
+    height:'50%'
   },
   companyName: {
     fontSize: 36,
@@ -69,24 +70,23 @@ const styles = StyleSheet.create({
   },
   sloganContainer: {
     alignItems: 'center',
-    paddingTop: 10,
-    width: 300,
-  },
+    width: '100%',
+   
+    },
   slogan: {
     fontSize: 24,
     fontWeight: '300',
   },
   buttonContainer: {
     alignItems: 'center',
-    height:250,
-    justifyContent:'flex-end'
+    height:'20%',
+    justifyContent:'center',
   },
   button: {
     width: 220,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
     borderRadius: 5,
   },
   signupButton: {
@@ -106,8 +106,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
   },
-  logoInomax: {
-    paddingTop:100
+  logoInomax: { 
+    alignSelf:'center',
+    justifyContent:'flex-end',
+    height:'10%'
   }
 });
 
