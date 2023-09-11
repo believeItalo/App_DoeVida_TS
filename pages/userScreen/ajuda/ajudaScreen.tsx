@@ -25,35 +25,30 @@ export default function AjudaScreen({ navigation }: AjudaScreenProps) {
       <Image source={require('./imgs/imgAjuda.png')}></Image>
     </View>
     <ReadMoreText
-      initialText={`Tiver idade inferior a 16 anos ou superior a 69 anos.
-        Obs.: o limite superior para a primeira doação é 60 anos. Quem tem 61 anos ou mais e nunca doou está inapto.
-        Tiver peso inferior a 50 quilos.
-        Estiver com anemia no teste realizado imediatamente antes da doação.
-        Estiver com hipertensão ou hipotensão arterial no momento da doação.
-        Estiver com aumento ou diminuição dos batimentos cardíacos no momento da doação.
-        Estiver com febre no dia da doação.
-        Estiver grávida.
-        Estiver amamentando, a menos que o parto tenha ocorrido há mais de 12 meses.
-        Obs.: o doador não poderá doar se vier acompanhado de crianças menores de 13 anos sem a presença de um outro adulto para cuidar delas.`}
+      initialText={`Disponibilizamos uma lista completa de postos de coleta próximos a você, juntamente com seus endereços e informações de contato. Verifique o posto mais conveniente para agendar sua doação.`}
       maxLength={200}
-      titleWhenClosed="Clique para ler mais"
-      titleWhenOpen="Clique para fechar"
+      titleWhenClosed="Pontos de Coleta"
+      titleWhenOpen="Pontos de Coleta"
     />
      <ReadMoreText
-      initialText={`Tiver idade inferior a 16 anos ou superior a 69 anos.
-        Obs.: o limite superior para a primeira doação é 60 anos. Quem tem 61 anos ou mais e nunca doou está inapto.
-        Tiver peso inferior a 50 quilos.
-        Estiver com anemia no teste realizado imediatamente antes da doação.
-        Estiver com hipertensão ou hipotensão arterial no momento da doação.
-        Estiver com aumento ou diminuição dos batimentos cardíacos no momento da doação.
-        Estiver com febre no dia da doação.
-        Estiver grávida.
-        Estiver amamentando, a menos que o parto tenha ocorrido há mais de 12 meses.
-        Obs.: o doador não poderá doar se vier acompanhado de crianças menores de 13 anos sem a presença de um outro adulto para cuidar delas.`}
+      initialText={`Confira os horários de atendimento de cada posto de coleta para planejar sua visita com antecedência. Trabalhamos para oferecer horários flexíveis, tornando mais fácil para você encontrar um momento adequado para doar sangue.`}
       maxLength={200}
-      titleWhenClosed="Clique para ler mais"
-      titleWhenOpen="Clique para fechar"
+      titleWhenClosed="Horários De Atendimento"
+      titleWhenOpen="Horários De Atendimento"
     />
+       <ReadMoreText
+      initialText={`Sua segurança e bem-estar são nossa prioridade. Antes de doar, nossa equipe qualificada realizará uma triagem para garantir que você esteja apto e saudável para doar sangue. Além disso, forneceremos todas as informações necessárias para o pós-doação, garantindo que você se recupere plenamente após o procedimento.`}
+      maxLength={200}
+      titleWhenClosed="Segurança e Cuidado"
+      titleWhenOpen="Segurança e Cuidado"
+    />
+      <ReadMoreText
+      initialText={`Se você tiver alguma dúvida, preocupação ou precisar de assistência, nossa equipe de atendimento ao doador está disponível para ajudá-lo. Entre em contato conosco através do telefone e e-mail,teremos o prazer de atendê-lo.`}
+      maxLength={200}
+      titleWhenClosed="Entre em Contato"
+      titleWhenOpen="Entre em Contato"
+    />
+
   </View>
   </ScrollView>
   );
