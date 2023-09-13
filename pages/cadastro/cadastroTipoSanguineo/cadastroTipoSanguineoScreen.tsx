@@ -4,22 +4,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
-interface CadastroTipoSanguineoScreenProps {
-  navigation: any; // 
-}
+import {getStrings} from '../../../strings/arquivoDeStrings'
 
+interface CadastroTipoSanguineoScreenProps {
+  navigation: any;
+}
 
 function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreenProps) {
   return (
     <ScrollView>
-
-
       <View style={styles.container}>
-        <Text style={styles.titleCadastroScreen}>CADASTRO</Text>
-        <Text style={styles.titleCadastroSangueScreen}>Escolha seu tipo sanguíneo (Opcional)</Text>
+        <Text style={styles.titleCadastroScreen}>{getStrings().cadastroScreenTitle}</Text>
+        <Text style={styles.titleCadastroSangueScreen}>{getStrings().tipoSanguineoTitle}</Text>
         <View style={styles.viewAlignBloodsCards}>
           <View style={styles.viewAlignColumnBloodCards}>
-            <TouchableOpacity
+          <TouchableOpacity
               style={[styles.buttonSangue]}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/oNegativo.png')} style={styles.bottonBloodImage}></Image>
@@ -42,7 +41,7 @@ function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreen
             </TouchableOpacity>
           </View>
           <View style={styles.viewAlignColumnBloodCards}>
-            <TouchableOpacity
+          <TouchableOpacity
               style={[styles.buttonSangue]}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/abPositivo.png')} style={styles.bottonBloodImage}></Image>
@@ -66,19 +65,20 @@ function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreen
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={() => navigation.navigate('CadastroInformacoesPessoais')}>
-            <Text style={styles.buttonTextComeBack}>Voltar</Text>
+            <Text style={styles.buttonTextComeBack}>{getStrings().voltarButtonLabel}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.primaryButton]}
             onPress={() => navigation.navigate('CadastroEndereco')}
           >
-            <Text style={styles.buttonText}>Continuar</Text>
+            <Text style={styles.buttonText}>{getStrings().continuarButtonLabel}</Text>
           </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

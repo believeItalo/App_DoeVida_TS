@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, } from 'react-native';
 import Modal from 'react-native-modal';
 import { FontAwesome5 } from '@expo/vector-icons';
+import {getStrings} from '../../../../strings/arquivoDeStrings'
+
 interface AgendaDisponivelHemocentroScreenProps {
   navigation: any;
 }
 
 export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDisponivelHemocentroScreenProps) {
   const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
           <FontAwesome5 name="bars" size={40} color="black" />
-          <Text style={styles.title}>Hemocentro</Text>
+          <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
           <Image
             source={require('../perfilHemocentro/imgs/profilePicUser.png')}
             style={styles.profileImage}
@@ -29,10 +32,10 @@ export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDispon
           />
         </View>
         <View style={styles.nomeHemocentroContainer}>
-          <Text style={styles.nomeHemocentro}>Hospital Nova Vida</Text>
+          <Text style={styles.nomeHemocentro}>{getStrings().hospitalName}</Text>
         </View>
         <View style={styles.agendaTitleContainer}>
-          <Text style={styles.agendaTitle}>Agenda Disponível</Text>
+          <Text style={styles.agendaTitle}>{getStrings().agendaTitle}</Text>
         </View>
         <View style={styles.cardsContainer}>
           <View style={styles.cardAgenda}>
@@ -51,7 +54,7 @@ export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDispon
               </View>
               <View style={styles.agendarButtonContainer}>
                 <TouchableOpacity style={styles.agendarButton} onPress={() => setModalVisible(true)}>
-                  <Text style={styles.agendarButtonText}>AGENDAR</Text>
+                  <Text style={styles.agendarButtonText}>{getStrings().agendaTitle}</Text>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -62,25 +65,25 @@ export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDispon
       <Modal isVisible={modalVisible} style={{ justifyContent: 'center', alignItems: 'center' }}>
         <View style={{ width: 300, height: 250, backgroundColor: 'white', borderRadius: 10, alignItems: 'center', justifyContent: 'center', gap: 40 }}>
           <View style={{ alignItems: 'center', gap: 40 }}>
-            <Text style={{ fontSize: 20 }}>AGENDAR?</Text>
-            <Text style={{ fontSize: 16, color: '#6D6868' }}> Confirme seu agendamento</Text>
+            <Text style={{ fontSize: 20 }}>{getStrings().confirmAgendaText}</Text>
+            <Text style={{ fontSize: 16, color: '#6D6868' }}>{getStrings().confirmAgendaDescription}</Text>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 50, justifyContent: 'center' }}>
             <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#98E768', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection:'row', gap:20 }}>
-              <Text style={{ color: 'white', marginLeft: 5, fontSize:16  }}>Sim</Text>
+              <Text style={{ color: 'white', marginLeft: 5, fontSize:16  }}>{getStrings().yesButtonText}</Text>
               <FontAwesome5 name="check" size={20} color="white" />
             </TouchableOpacity>
             <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#EE5353', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection:'row', gap:20  }} onPress={() => setModalVisible(false)}>
-              <Text style={{ color: 'white', marginLeft: 5, fontSize:16 }}>Não</Text>
+              <Text style={{ color: 'white', marginLeft: 5, fontSize:16 }}>{getStrings().noButtonText}</Text>
               <FontAwesome5 name="times" size={20} color="white" />
             </TouchableOpacity>
           </View>
-
         </View>
       </Modal>
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
-import { Portal,  Button, PaperProvider } from 'react-native-paper';
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {

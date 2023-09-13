@@ -1,5 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
+import {getStrings} from '../../../strings/arquivoDeStrings'
+
+// Strings
 
 interface CadastroScreenProps {
   navigation: any;
@@ -8,12 +11,12 @@ interface CadastroScreenProps {
 const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>CADASTRO</Text>
+      <Text style={styles.title}>{getStrings().cadastroScreenTitle}</Text>
       <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/imgCadastroPessoal.png')} />
 
       <View style={styles.section}>
         <View style={styles.viewTextPhoto}> 
-          <Text style={styles.label}>Foto</Text>
+          <Text style={styles.label}>{getStrings().fotoLabel}</Text>
         </View>
 
         <View style={styles.imageContainer}>
@@ -22,55 +25,66 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
       </View>
 
       <View style={{ alignItems: 'center' }}>
-
-
         <View style={styles.section}>
-          <Text style={styles.label}>Nome Completo <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>
+            {getStrings().nomeCompletoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
+          </Text>
           <TextInput style={styles.input} />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>Email <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>
+            {getStrings().emailLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
+          </Text>
           <TextInput style={styles.input} keyboardType="email-address" />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>Telefone <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>
+            {getStrings().telefoneLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
+          </Text>
           <TextInput style={styles.input} keyboardType="phone-pad" />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>CPF <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>
+            {getStrings().cpfLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
+          </Text>
           <TextInput style={styles.input} keyboardType="numeric" />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.label}>Data de Nascimento <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>
+            {getStrings().dataNascimentoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
+          </Text>
           <TextInput style={styles.input} keyboardType="phone-pad" />
         </View>
 
         <View style={styles.doubleSection}>
           <View style={styles.halfSection}>
-            <Text style={styles.label}>Peso <Text style={styles.required}>*</Text></Text>
+            <Text style={styles.label}>
+              {getStrings().pesoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
+            </Text>
             <TextInput style={styles.smallInput} keyboardType="phone-pad" />
           </View>
           <View style={styles.halfSection}>
-            <Text style={styles.label}>Sexo <Text style={styles.required}>*</Text></Text>
+            <Text style={styles.label}>
+              {getStrings().sexoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
+            </Text>
             <TextInput style={styles.smallInput} keyboardType="phone-pad" />
           </View>
         </View>
       </View>
 
-
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonTextComeBack}>Voltar</Text>
+          <Text style={styles.buttonTextComeBack}>{getStrings().voltarButtonLabel}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.primaryButton]}
           onPress={() => navigation.navigate('CadastroTipoSanguineo')}
         >
-          <Text style={styles.buttonText}>Continuar</Text>
+          <Text style={styles.buttonText}>{getStrings().continuarButtonLabel}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

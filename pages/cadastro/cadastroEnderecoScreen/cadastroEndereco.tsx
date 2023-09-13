@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { getStrings } from '../../../strings/arquivoDeStrings';
 
 interface CadastroEnderecoScreenProps {
   navigation: any;
@@ -9,19 +10,19 @@ function EnderecoScreen({ navigation }: CadastroEnderecoScreenProps) {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.titleCadastroScreen}>CADASTRO</Text>
+        <Text style={styles.titleCadastroScreen}>{getStrings().cadastroScreenTitle}</Text>
         <Image source={require('../cadastroEnderecoScreen/imgs/cadastroImage.png')} />
 
         <View style={styles.inputContainer}>
           <Text style={styles.titleInput}>
-            CEP <Text style={styles.required}>*</Text>
+            {getStrings().cepLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
           <TextInput style={styles.input} />
         </View>
 
         <View style={styles.rowContainer}>
           <View style={styles.inputContainer}>
-            <Text style={styles.titleInput}>Estado</Text>
+            <Text style={styles.titleInput}>{getStrings().estadoLabel}</Text>
             <TextInput
               style={[styles.input, styles.shortInput]}
               keyboardType='phone-pad'
@@ -29,7 +30,7 @@ function EnderecoScreen({ navigation }: CadastroEnderecoScreenProps) {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.titleInput}>Cidade</Text>
+            <Text style={styles.titleInput}>{getStrings().cidadeLabel}</Text>
             <TextInput
               style={[styles.input, styles.mediumInput]}
               keyboardType='phone-pad'
@@ -38,34 +39,32 @@ function EnderecoScreen({ navigation }: CadastroEnderecoScreenProps) {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.titleInput}>Bairro</Text>
+          <Text style={styles.titleInput}>{getStrings().bairroLabel}</Text>
           <TextInput style={styles.input} />
         </View>
 
         <View style={styles.rowContainer2}>
           <View style={styles.columnContainer}>
-            <Text style={styles.titleInput}>Número</Text>
+            <Text style={styles.titleInput}>{getStrings().numeroLabel}</Text>
             <TextInput style={[styles.input, styles.shortInput]} />
           </View>
 
           <View style={styles.columnContainer}>
-            <Text style={styles.titleInput}>Complemento</Text>
+            <Text style={styles.titleInput}>{getStrings().complementoLabel}</Text>
             <TextInput style={[styles.input, styles.longInput]} />
           </View>
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={() => navigation.navigate('CadastroTipoSanguineo')}>
-            <Text style={styles.buttonTextComeBack}>Voltar</Text>
+            <Text style={styles.buttonTextComeBack}>{getStrings().voltarButtonLabel}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.primaryButton]}
             onPress={() => navigation.navigate('CadastroSenha')}>
-          
-            <Text style={styles.buttonTextWhite}>Continuar</Text>
+            <Text style={styles.buttonTextWhite}>{getStrings().continuarButtonLabel}</Text>
           </TouchableOpacity>
         </View>
-
       </View>
     </ScrollView>
   );

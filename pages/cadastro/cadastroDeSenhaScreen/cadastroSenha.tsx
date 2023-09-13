@@ -1,17 +1,9 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  SafeAreaView,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView,} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { getStrings } from '../../../strings/arquivoDeStrings';
 interface CadastroSenhaScreenProps {
   navigation: any;
 }
@@ -19,35 +11,36 @@ interface CadastroSenhaScreenProps {
 function CadastroSenhaScreen({ navigation }: CadastroSenhaScreenProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.titleCadastroScreen}>Cadastro</Text>
+      <Text style={styles.titleCadastroScreen}>{getStrings().cadastroScreenTitle}</Text>
       <Image
         source={require('../cadastroDeSenhaScreen/imgs/imageCadastroSenha.png')}
       />
-      <Text style={styles.subtitle}>Defina uma senha</Text>
+      <Text style={styles.subtitle}>{getStrings().subtitleText}</Text>
       <SafeAreaView>
-        <Text style={styles.titleInput}>Senha:</Text>
+        <Text style={styles.titleInput}>{getStrings().senhaLabelCadastro}</Text>
         <TextInput style={styles.input} />
-        <Text style={styles.titleInput}>Confirmar senha</Text>
+        <Text style={styles.titleInput}>{getStrings().confirmarSenhaLabel}</Text>
         <TextInput style={styles.input} />
       </SafeAreaView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.secondaryButton]}
           onPress={() => navigation.navigate('CadastroEndereco')}>
-          <Text style={styles.buttonText}>Voltar</Text>
+          <Text style={styles.buttonText}>{getStrings().voltarButtonLabel}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.button, styles.primaryButton]}
           onPress={() => navigation.navigate('MainUserScreen')}>
           <Text style={[styles.buttonText, styles.buttonTextWhite]}>
-            Continuar
+            {getStrings().continuarButtonLabel}
           </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

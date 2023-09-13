@@ -1,34 +1,35 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView } from 'react-native';
+import { getStrings } from '../../strings/arquivoDeStrings';
+
 
 const LoginScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>{getStrings().loginTitle}</Text>
       <Image source={require('../loginScreen/imgs/loginImage.png')} />
 
       <SafeAreaView style={styles.inputContainer}>
         <View>
-          <Text style={styles.inputTitle}>Email</Text>
+          <Text style={styles.inputTitle}>{getStrings().emailLabel}</Text>
           <TextInput style={styles.input} />
         </View>
 
         <View>
-          <Text style={styles.inputTitle}>Senha</Text>
+          <Text style={styles.inputTitle}>{getStrings().senhaLabel}</Text>
           <TextInput style={styles.input} />
         </View>
 
-
         <View style={styles.forgotPasswordContainer}>
-          <Text style={styles.forgotPasswordText}>Esqueceu sua senha?</Text>
+          <Text style={styles.forgotPasswordText}>{getStrings().forgotPasswordLabel}</Text>
         </View>
       </SafeAreaView>
 
       <TouchableOpacity style={[styles.button, styles.loginButton]}>
-        <Text style={styles.buttonText}>Entrar</Text>
+        <Text style={styles.buttonText}>{getStrings().entrarButtonLabel}</Text>
       </TouchableOpacity>
 
-      <Text style={styles.signupText}>Não possui uma conta?</Text>
+      <Text style={styles.signupText}>{getStrings().noAccountLabel}</Text>
     </View>
   );
 };

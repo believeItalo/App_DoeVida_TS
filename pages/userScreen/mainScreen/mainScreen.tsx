@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollVi
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
+import { getStrings } from '../../../strings/arquivoDeStrings';
+
 const Stack = createNativeStackNavigator();
 
 interface MainUserScreenProps {
@@ -14,9 +16,8 @@ export default function MainUserScreen({ navigation }: MainUserScreenProps) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.userInfo}>
-          <Text style={styles.userInfoText}>Seja bem vindo,</Text>
-          <Text style={[styles.userInfoText, { fontSize: 26, fontWeight:'400' }]}>João Pedro</Text>
-
+          <Text style={styles.userInfoText}>{getStrings().welcomeText}</Text>
+          <Text style={[styles.userInfoText, { fontSize: 26, fontWeight: '400' }]}>{getStrings().userName}</Text>
         </View>
         <View style={styles.userImage}>
           <Image source={require('../mainScreen/imgs/profilePic.png')} style={styles.profileImage} />
@@ -26,30 +27,27 @@ export default function MainUserScreen({ navigation }: MainUserScreenProps) {
         <View style={styles.cardContainer}>
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('BuscaHemocentro')}>
             <Image source={require('../mainScreen/imgs/imgCardHemocentro.png')} style={styles.cardImage} />
-            <Text style={styles.cardText}>Hemocentros</Text>
+            <Text style={styles.cardText}>{getStrings().hemocentrosText}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('MeuPerfil')}>
             <Image source={require('../mainScreen/imgs/imgCardMeuPerfil.png')} style={styles.cardImage} />
-            <Text style={styles.cardText}>Meu Perfil</Text>
+            <Text style={styles.cardText}>{getStrings().meuPerfilText}</Text>
           </TouchableOpacity>
-
-          </View>
-          <View style={styles.cardContainer}>
+        </View>
+        <View style={styles.cardContainer}>
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AjudaScreen')}>
             <Image source={require('../mainScreen/imgs/imgCardAjuda.png')} style={styles.cardImage} />
-            <Text style={styles.cardText}>Ajuda</Text>
+            <Text style={styles.cardText}>{getStrings().ajudaText}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.card]} onPress={() => navigation.navigate('QuemPodeDoar')}>
             <Image source={require('../mainScreen/imgs/imgCardQuemPodeDoar.png')} style={styles.cardImage} />
             <View style={styles.quemPodeDoarTextContainer}>
-              <Text style={styles.quemPodeDoarText}>Quem Pode</Text>
-              <Text style={styles.quemPodeDoarText}>Doar?</Text>
+              <Text style={styles.quemPodeDoarText}>{getStrings().quemPodeDoarText}</Text>
             </View>
           </TouchableOpacity>
-          </View>
-        
+        </View>
       </View>
     </View>
   );
