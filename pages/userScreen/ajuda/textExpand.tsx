@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-
 interface ReadMoreTextProps {
   initialText: string;
   maxLength: number;
   titleWhenClosed: string;
   titleWhenOpen: string;
 }
+
 
 const ReadMoreText: React.FC<ReadMoreTextProps> = ({
   initialText,
@@ -29,9 +29,9 @@ const ReadMoreText: React.FC<ReadMoreTextProps> = ({
         <Text style={styles.titleWhenClosed}>
           {expanded ? titleWhenOpen : titleWhenClosed}
         </Text>
-        <FontAwesome5
-          name={expanded ? 'arrow-up' : 'arrow-down'}
-          size={18}
+        <Image
+          source={expanded ? require('./imgs/arrowUp.png') : require('./imgs/arrowDown.png')}
+          style={{ width: 18, height: 18 }}
         />
       </TouchableOpacity>
 
