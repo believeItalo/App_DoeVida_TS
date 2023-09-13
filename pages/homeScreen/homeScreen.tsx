@@ -1,27 +1,35 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { getStrings } from '../../strings/arquivoDeStrings';
+
 interface HomeScreenProps {
   navigation: any;
 }
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+  
   return (
+
+    
     <LinearGradient
       style={{
         height: '100%',
         width: '100%',
       }}
-
-      colors={['white', '#D3DFFF']}>
+      colors={['white', '#D3DFFF']}
+    >
       <View style={styles.container}>
         <View style={styles.textContainer}>
           <View style={styles.logoContainer}>
-            <Image source={require('../homeScreen/imgs/logoHomeScreen.png')} style={{ width: 150, height: 150 }} />
-            <Text style={styles.companyName}>DOE VIDA</Text>
+            <Image
+              source={require('../homeScreen/imgs/logoHomeScreen.png')}
+              style={{ width: 150, height: 150 }}
+            />
+            <Text style={styles.companyName}>{getStrings().companyNameText}</Text>
           </View>
           <View style={styles.sloganContainer}>
-            <Text style={styles.slogan}>Doando vida e</Text>
-            <Text style={styles.slogan}>mudando histórias</Text>
+            <Text style={styles.slogan}>{getStrings().sloganLine1}</Text>
+            <Text style={styles.slogan}>{getStrings().sloganLine2}</Text>
           </View>
         </View>
         <View style={styles.buttonContainer}>
@@ -29,14 +37,14 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             style={[styles.button, styles.signupButton]}
             onPress={() => navigation.navigate('CadastroInformacoesPessoais')}
           >
-            <Text style={styles.buttonTextCadastreSe}>Cadastre-se</Text>
+            <Text style={styles.buttonTextCadastreSe}>{getStrings().buttonTextCadastreSe}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.loginButton]}
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate('TesteDrawer')}
           >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>{getStrings().buttonTextLogin}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.logoInomax}>
@@ -44,7 +52,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         </View>
       </View>
     </LinearGradient>
-
   );
 };
 

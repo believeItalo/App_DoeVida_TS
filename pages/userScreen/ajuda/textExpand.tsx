@@ -36,7 +36,7 @@ const ReadMoreText: React.FC<ReadMoreTextProps> = ({
       </TouchableOpacity>
 
       {expanded && (
-        <Text>{displayText}</Text>
+        <Text style ={styles.textExpandedText}>{displayText}</Text>
       )}
     </View>
   );
@@ -45,20 +45,26 @@ const ReadMoreText: React.FC<ReadMoreTextProps> = ({
 const styles = StyleSheet.create({
   component: {
     flexDirection: 'column',
-    width: '80%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
+    paddingTop:50
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   titleWhenClosed: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: '200',
     marginRight: 10,
   },
+  textExpandedText:{
+    fontSize:20,
+    paddingTop:30,
+    fontWeight:'300'
+  }
 });
 
 export default ReadMoreText;

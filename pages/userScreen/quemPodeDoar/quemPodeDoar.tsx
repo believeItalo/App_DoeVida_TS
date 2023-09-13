@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { ImageBackground } from 'react-native';
-import ReadMoreText from './textExpand';
+import ReadMoreText from '../ajuda/textExpand';
 const Stack = createNativeStackNavigator();
 
 interface AjudaScreenProps {
@@ -22,19 +22,19 @@ export default function AjudaScreen({ navigation }: AjudaScreenProps) {
       <Image source={require('../ajuda/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }} />
     </View>
     <View style={styles.viewImgAjuda}>
-      <Image source={require('./imgs/imgAjuda.png')}></Image>
-    </View>
-    <View style={styles.viewBloodText}>
-      <Text style={styles.bloodText}>
-      A doação de sangue é um ato de solidariedade e generosidade que pode salvar vidas, e estamos aqui para apoiá-lo em todo o processo.
-      </Text>
+      <Image source={require('./imgs/imgQuemPodeDoar.png')}></Image>
     </View>
     <View style={styles.alignReadMoreText}>
     <ReadMoreText
-      initialText={`Disponibilizamos uma lista completa de postos de coleta próximos a você, juntamente com seus endereços e informações de contato. Verifique o posto mais conveniente para agendar sua doação.`}
+      initialText={`Espera por 48 horas:
+      
+      Após o término do tratamento de infecções bacterianas (uso de antibióticos).
+      Após a cura de rubéola.
+      Após a cura de erisipela.
+      Espera por quatro semanas:`}
       maxLength={200}
-      titleWhenClosed="Pontos de Coleta"
-      titleWhenOpen="Pontos de Coleta"
+      titleWhenClosed="Você não poderá doar se"
+      titleWhenOpen="Você não poderá doar se"
     />
     <View style={styles.lineBetweenTextBox}></View>
      <ReadMoreText
@@ -42,20 +42,6 @@ export default function AjudaScreen({ navigation }: AjudaScreenProps) {
       maxLength={200}
       titleWhenClosed="Horários De Atendimento"
       titleWhenOpen="Horários De Atendimento"
-    />
-    <View style={styles.lineBetweenTextBox}></View>
-       <ReadMoreText
-      initialText={`Sua segurança e bem-estar são nossa prioridade. Antes de doar, nossa equipe qualificada realizará uma triagem para garantir que você esteja apto e saudável para doar sangue. Além disso, forneceremos todas as informações necessárias para o pós-doação, garantindo que você se recupere plenamente após o procedimento.`}
-      maxLength={200}
-      titleWhenClosed="Segurança e Cuidado"
-      titleWhenOpen="Segurança e Cuidado"
-    />
-    <View style={styles.lineBetweenTextBox}></View>
-      <ReadMoreText
-      initialText={`Se você tiver alguma dúvida, preocupação ou precisar de assistência, nossa equipe de atendimento ao doador está disponível para ajudá-lo. Entre em contato conosco através do telefone e e-mail,teremos o prazer de atendê-lo.`}
-      maxLength={200}
-      titleWhenClosed="Entre em Contato"
-      titleWhenOpen="Entre em Contato"
     />
     <View style={styles.lineBetweenTextBox}></View>
 

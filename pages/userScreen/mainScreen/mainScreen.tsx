@@ -41,7 +41,7 @@ export default function MainUserScreen({ navigation }: MainUserScreenProps) {
             <Text style={styles.cardText}>Ajuda</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.card]}>
+          <TouchableOpacity style={[styles.card]} onPress={() => navigation.navigate('QuemPodeDoar')}>
             <Image source={require('../mainScreen/imgs/imgCardQuemPodeDoar.png')} style={styles.cardImage} />
             <View style={styles.quemPodeDoarTextContainer}>
               <Text style={styles.quemPodeDoarText}>Quem Pode</Text>
