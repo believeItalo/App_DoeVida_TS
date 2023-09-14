@@ -1,9 +1,14 @@
+
+//IMPORT BIBLIOTECAS (DRAWER e NAVIGATOR)
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+//import de componenetes
+import CustomDrawerHeader from './drawerEstilo';
+//IMPORT DAS TELAS
 import HomeScreen from './pages/homeScreen/homeScreen';
 import LoginScreen from './pages/loginScreen/loginScreen';
 import CadastroScreen from './pages/cadastro/cadastroInformacoesPessoaisScreen/cadastro';
@@ -20,21 +25,31 @@ import PerfilHemocentroScreen from './pages/userScreen/hemocentro/perfilHemocent
 import AgendaDisponivelHemocentroScreen from './pages/userScreen/hemocentro/agendamentosDisponiveis/agendamentosDisponiveis';
 import QuemPodeDoarScreen from './pages/userScreen/quemPodeDoar/quemPodeDoar';
 
+//Iniciando o drawer e o stack navigator
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
+
+//ESTILO DRAWER
+
+//DRAWER NAVIGATION
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={StackScreen} />
+      <Drawer.Navigator initialRouteName="BuscaHemocentro">
+        <Drawer.Screen name="BuscaHemocentro" component={BuscaHemocentroScreen} options={{}}></Drawer.Screen>
         <Drawer.Screen name="MeuPerfil" component={MeuPerfilScreen} />
-        <Drawer.Screen name="AjudaScreen" component={AjudaScreen} />
+        <Drawer.Screen name="EditarPerfil" component={EditarPerfilScreen}/>
+        <Drawer.Screen name="RedefinirSenha" component={RedefinirSenhaScreen} />
+        <Drawer.Screen name="AgendaDisponivelHemocentro" component={AgendaDisponivelHemocentroScreen} />
+        <Drawer.Screen name="QuemPodeDoar" component={QuemPodeDoarScreen} />     
       </Drawer.Navigator>
     </NavigationContainer>
+    
   );
 }
 
+//NAVIGATOR STACK
 function StackScreen() {
   return (
     <Stack.Navigator initialRouteName="Home">
