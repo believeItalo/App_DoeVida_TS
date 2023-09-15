@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-
+import { Card, IconButton } from 'react-native-paper';
+import { Avatar } from 'react-native-paper';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 interface BuscaHemocentroScreenProps {
   navigation: any;
+}
+type MainUserScreenProps = {
+  navigation: DrawerNavigationProp<{}>;
 }
 
 export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProps) {
@@ -26,9 +31,11 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <FontAwesome5 name="bars" size={40} color="black" />
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <FontAwesome5 name="bars" size={40} color="black" />
+        </TouchableOpacity>
         <Text style={styles.title}>Hemocentros</Text>
-        <Image source={require('../buscaHemocentroScreen/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }} />
+        <Avatar.Image size={50} source={require('../perfilHemocentro/imgs/profilePicUser.png')} />
       </View>
       <View style={styles.searchContainer}>
         <FontAwesome5 name="search" size={18} color="#7395F7" />

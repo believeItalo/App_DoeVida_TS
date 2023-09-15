@@ -50,18 +50,20 @@ function HomeStack() {
   );
 }
 
+//DRAWER
 export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={HomeStack} />
-        <Drawer.Screen name="BuscaHemocentro" component={BuscaHemocentroScreen}/>
+        <Drawer.Screen name="Home" component={HomeStack} options={{ headerShown: false }} />
+        <Drawer.Screen name="BuscaHemocentro" component={BuscaHemocentroScreen} />
         <Drawer.Screen name="MeuPerfil" component={MeuPerfilScreen} />
         <Drawer.Screen name="EditarPerfil" component={EditarPerfilScreen} />
         <Drawer.Screen name="RedefinirSenha" component={RedefinirSenhaScreen} />
         <Drawer.Screen name="AgendaDisponivelHemocentro" component={AgendaDisponivelHemocentroScreen} />
         <Drawer.Screen name="QuemPodeDoar" component={QuemPodeDoarScreen} />
         <Drawer.Screen name="Ajuda" component={AjudaScreen} />
+
       </Drawer.Navigator>
     </NavigationContainer>
   );
