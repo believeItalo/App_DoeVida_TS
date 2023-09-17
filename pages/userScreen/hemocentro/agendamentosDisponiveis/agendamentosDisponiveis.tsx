@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, } from 'react-native';
 import Modal from 'react-native-modal';
 import { FontAwesome5 } from '@expo/vector-icons';
-import {getStrings} from '../../../../strings/arquivoDeStrings'
+import { getStrings } from '../../../../strings/arquivoDeStrings'
 
 interface AgendaDisponivelHemocentroScreenProps {
   navigation: any;
@@ -15,7 +15,9 @@ export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDispon
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <FontAwesome5 name="bars" size={40} color="black" />
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <FontAwesome5 name="bars" size={40} color="black" />
+          </TouchableOpacity>
           <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
           <Image
             source={require('../perfilHemocentro/imgs/profilePicUser.png')}
@@ -69,12 +71,12 @@ export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDispon
             <Text style={{ fontSize: 16, color: '#6D6868' }}>{getStrings().confirmAgendaDescription}</Text>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 50, justifyContent: 'center' }}>
-            <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#98E768', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection:'row', gap:20 }}>
-              <Text style={{ color: 'white', marginLeft: 5, fontSize:16  }}>{getStrings().yesButtonText}</Text>
+            <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#98E768', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection: 'row', gap: 20 }}>
+              <Text style={{ color: 'white', marginLeft: 5, fontSize: 16 }}>{getStrings().yesButtonText}</Text>
               <FontAwesome5 name="check" size={20} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#EE5353', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection:'row', gap:20  }} onPress={() => setModalVisible(false)}>
-              <Text style={{ color: 'white', marginLeft: 5, fontSize:16 }}>{getStrings().noButtonText}</Text>
+            <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#EE5353', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection: 'row', gap: 20 }} onPress={() => setModalVisible(false)}>
+              <Text style={{ color: 'white', marginLeft: 5, fontSize: 16 }}>{getStrings().noButtonText}</Text>
               <FontAwesome5 name="times" size={20} color="white" />
             </TouchableOpacity>
           </View>
@@ -187,7 +189,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     width: 100,
-    height: 50,
+    height: 60,
     backgroundColor: '#2C62F1',
   },
   agendarButtonText: {

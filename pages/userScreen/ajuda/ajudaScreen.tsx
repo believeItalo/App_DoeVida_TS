@@ -17,7 +17,9 @@ export default function AjudaScreen({ navigation }: AjudaScreenProps) {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image source={require('./imgs/menu.png')}></Image>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <FontAwesome5 name="bars" size={40} color="black" />
+          </TouchableOpacity>
           <Text style={styles.title}>{getStrings().helpTitle}</Text>
           <Image source={require('../ajuda/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }} />
         </View>
@@ -56,6 +58,8 @@ export default function AjudaScreen({ navigation }: AjudaScreenProps) {
             maxLength={200}
             titleWhenClosed={getStrings().contactTitle}
             titleWhenOpen={getStrings().contactTitle}
+            phoneNumber="(11) 92765-2364" // Adicione o número de telefone aqui
+            email="doevida@gmail.com" // Adicione o endereço de email aqui
           />
           <View style={styles.lineBetweenTextBox}></View>
         </View>
@@ -71,6 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     height: '200%',
+    paddingBottom:500
   },
   bloodText:{
     fontSize:20,

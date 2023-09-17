@@ -6,14 +6,17 @@ interface ReadMoreTextProps {
   maxLength: number;
   titleWhenClosed: string;
   titleWhenOpen: string;
+  phoneNumber?: string; // Adicione estas duas propriedades
+  email?: string;
 }
-
 
 const ReadMoreText: React.FC<ReadMoreTextProps> = ({
   initialText,
   maxLength,
   titleWhenClosed,
   titleWhenOpen,
+  phoneNumber,
+  email,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -22,6 +25,20 @@ const ReadMoreText: React.FC<ReadMoreTextProps> = ({
   };
 
   const displayText = expanded ? initialText : initialText.slice(0, maxLength);
+
+  // Condicionar a renderização dos campos de telefone e email apenas se as propriedades estiverem definidas
+  const extraInfo = [];
+  if (phoneNumber) {
+    extraInfo.push(`Telefone: ${phoneNumber}`);
+  }
+  if (email) {
+    extraInfo.push(`Email: ${email}`);
+  }
+
+  const extraInfoText = extraInfo.join('\n');
+
+  // Combine o texto expandido com as informações extras
+  const expandedText = `${displayText}${extraInfoText ? `\n\n${extraInfoText}` : ''}`;
 
   return (
     <View style={styles.component}>
@@ -36,7 +53,7 @@ const ReadMoreText: React.FC<ReadMoreTextProps> = ({
       </TouchableOpacity>
 
       {expanded && (
-        <Text style ={styles.textExpandedText}>{displayText}</Text>
+        <Text style={styles.textExpandedText}>{expandedText}</Text>
       )}
     </View>
   );

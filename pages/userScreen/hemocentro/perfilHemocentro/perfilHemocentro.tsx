@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -19,12 +20,14 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
         setRating(selectedRating);
     };
     return (
-      
+
         <ScrollView>
             <View style={styles.container}>
 
                 <View style={styles.header}>
-                    <FontAwesome5 name="bars" size={40} color="black" />
+                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                        <FontAwesome5 name="bars" size={40} color="black" />
+                    </TouchableOpacity>
                     <Text style={styles.title}>Hemocentro</Text>
                     <Image source={require('../perfilHemocentro/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }} />
                 </View>
@@ -173,16 +176,16 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
             </View>
             <Modal isVisible={modalVisible}>
                 <View style={styles.modalContainer}>
-                    <View style={{alignItems:'center', justifyContent:'center'}}>
-                    <Text style={{fontSize:26, fontWeight:'300'}}>Avaliar?</Text>
-                    <View style={{width:300, alignItems:'center', paddingTop:20}} >
-                    <Text style={{fontSize:16, fontWeight:'300'}}>Digite a sua opinião sobre o </Text>
-                    <Text style={{fontSize:16, fontWeight:'300'}}>hospital e deixe uma avaliação</Text>
+                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 26, fontWeight: '300' }}>Avaliar?</Text>
+                        <View style={{ width: 300, alignItems: 'center', paddingTop: 20 }} >
+                            <Text style={{ fontSize: 16, fontWeight: '300' }}>Digite a sua opinião sobre o </Text>
+                            <Text style={{ fontSize: 16, fontWeight: '300' }}>hospital e deixe uma avaliação</Text>
+                        </View>
+
                     </View>
-                   
-                    </View>
-                    <View style={{paddingTop:20}}>
-                     
+                    <View style={{ paddingTop: 20 }}>
+
                     </View>
                     <View style={styles.ratingContainer}>
                         {[1, 2, 3, 4, 5].map((star) => (
@@ -195,7 +198,7 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
                             </TouchableOpacity>
                         ))}
                     </View>
-        
+
                     <View style={styles.modalButtonsContainer}>
                         <Pressable style={styles.modalButton} onPress={() => setModalVisible(false)}>
                             <Text style={styles.modalButtonText}>Fechar</Text>
@@ -300,8 +303,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         alignItems: 'center',
-        width:370,
-        height:500
+        width: 370,
+        height: 500
     },
     modalButtonsContainer: {
         flexDirection: 'row',

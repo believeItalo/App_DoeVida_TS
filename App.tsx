@@ -22,6 +22,8 @@ import AjudaScreen from './pages/userScreen/ajuda/ajudaScreen';
 import PerfilHemocentroScreen from './pages/userScreen/hemocentro/perfilHemocentro/perfilHemocentro';
 import AgendaDisponivelHemocentroScreen from './pages/userScreen/hemocentro/agendamentosDisponiveis/agendamentosDisponiveis';
 import QuemPodeDoarScreen from './pages/userScreen/quemPodeDoar/quemPodeDoar';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { View, Image } from 'react-native';
 
 //Iniciando o drawer e o stack navigator
 const Drawer = createDrawerNavigator();
@@ -46,24 +48,85 @@ function HomeStack() {
       <Stack.Screen name="PerfilHemocentro" component={PerfilHemocentroScreen} options={{ headerShown: false }} />
       <Stack.Screen name="AgendaDisponivelHemocentro" component={AgendaDisponivelHemocentroScreen} options={{ headerShown: false }} />
       <Stack.Screen name="QuemPodeDoar" component={QuemPodeDoarScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="AjudaScreen" component={AjudaScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
 
 //DRAWER
+
+//ESTILIZACAO DRAWER
+
 export default function App() {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={HomeStack} options={{ headerShown: false }} />
-        <Drawer.Screen name="BuscaHemocentro" component={BuscaHemocentroScreen} />
-        <Drawer.Screen name="MeuPerfil" component={MeuPerfilScreen} />
-        <Drawer.Screen name="EditarPerfil" component={EditarPerfilScreen} />
-        <Drawer.Screen name="RedefinirSenha" component={RedefinirSenhaScreen} />
-        <Drawer.Screen name="AgendaDisponivelHemocentro" component={AgendaDisponivelHemocentroScreen} />
-        <Drawer.Screen name="QuemPodeDoar" component={QuemPodeDoarScreen} />
-        <Drawer.Screen name="Ajuda" component={AjudaScreen} />
-
+    <NavigationContainer >
+      <Drawer.Navigator initialRouteName="Home" >
+        <Drawer.Screen
+          name=" "
+          component={HomeStack}
+          options={{
+            headerShown:false,
+            drawerStyle: {
+              backgroundColor: 'white',
+            },
+            drawerIcon: ({ color, size }) => (
+              <Image
+                source={require('./pages/homeScreen/imgs/logoHomeScreen.png')}
+                style={{ width: 60, height: 60 }}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Hemocentros"
+          component={BuscaHemocentroScreen}
+          options={{
+            headerShown: false,
+            drawerIcon: ({ color, size }) => (
+              <FontAwesome5 name="hospital" size={24} color="black" /> 
+            ),
+          }}
+        />
+         <Drawer.Screen
+          name="Perfil"
+          component={MeuPerfilScreen}
+          options={{
+            headerShown: false,
+            drawerIcon: ({ color, size }) => (
+              <FontAwesome5 name="user" size={24} color="black" /> 
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Agendamentos"
+          component={AgendaDisponivelHemocentroScreen}
+          options={{
+            headerShown: false,
+            drawerIcon: ({ color, size }) => (
+              <FontAwesome5 name="calendar" size={24} color="black" /> 
+            ),
+          }}
+        />
+      <Drawer.Screen
+          name="Quem pode doar?"
+          component={AgendaDisponivelHemocentroScreen}
+          options={{
+            headerShown: false,
+            drawerIcon: ({ color, size }) => (
+              <FontAwesome5 name="droplet" size={24} color="black" /> 
+            ),
+          }}
+        />
+         <Drawer.Screen
+          name="Ajuda"
+          component={AjudaScreen}
+          options={{
+            headerShown: false,
+            drawerIcon: ({ color, size }) => (
+              <FontAwesome5 name="info" size={24} color="black" /> 
+            ),
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
