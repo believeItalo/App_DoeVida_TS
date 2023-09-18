@@ -73,12 +73,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleWhenClosed: {
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: '200',
     marginRight: 10,
   },
   textExpandedText:{
-    fontSize:20,
+    fontSize:14,
     paddingTop:30,
     fontWeight:'300'
   }

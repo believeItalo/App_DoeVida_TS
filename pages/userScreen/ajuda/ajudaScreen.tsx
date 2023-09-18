@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     height: '200%',
-    paddingBottom:500
+    paddingBottom:120
   },
   bloodText:{
     fontSize:20,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     },
     viewImgAjuda:{
       width:'100%',
-      height:'15%',
+      height:'10%',
       alignItems:'center',
       justifyContent:'center'
     }

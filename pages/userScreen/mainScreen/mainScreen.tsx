@@ -17,7 +17,7 @@ export default function MainUserScreen({ navigation }: MainUserScreenProps) {
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Text style={styles.userInfoText}>{getStrings().welcomeText}</Text>
-          <Text style={[styles.userInfoText, { fontSize: 26, fontWeight: '400' }]}>{getStrings().userName}</Text>
+          <Text style={[styles.userInfoText, { fontSize: 18, fontWeight: '400' }]}>{getStrings().userName}</Text>
         </View>
         <View style={styles.userImage}>
           <Image source={require('../mainScreen/imgs/profilePic.png')} style={styles.profileImage} />
@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingTop: 20,
     borderRadius: 5,
-    width: 170,
-    height: 210,
+    width: 165,
+    height: 190,
     borderColor: "#7395F7",
     borderWidth: 2,
   },

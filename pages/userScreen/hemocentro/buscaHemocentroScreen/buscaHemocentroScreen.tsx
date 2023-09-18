@@ -4,6 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Card, IconButton } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import {getStrings} from '../../../../strings/arquivoDeStrings'
 interface BuscaHemocentroScreenProps {
   navigation: any;
 }
@@ -30,13 +31,13 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <FontAwesome5 name="bars" size={40} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.title}>Hemocentros</Text>
-        <Avatar.Image size={50} source={require('../perfilHemocentro/imgs/profilePicUser.png')} />
-      </View>
+        <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <FontAwesome5 name="bars" size={40} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
+          <Image source={require('../buscaHemocentroScreen/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }} />
+        </View>
       <View style={styles.searchContainer}>
         <FontAwesome5 name="search" size={18} color="#7395F7" />
         <TextInput
@@ -84,9 +85,10 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    gap: 30,
+    alignItems: `center`,
+    gap: 40,
     paddingLeft: 30,
-    paddingTop: 70,
+    paddingTop: 20,
   },
   title: {
     fontSize: 30,

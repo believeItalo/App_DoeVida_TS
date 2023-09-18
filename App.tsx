@@ -49,6 +49,7 @@ function HomeStack() {
       <Stack.Screen name="AgendaDisponivelHemocentro" component={AgendaDisponivelHemocentroScreen} options={{ headerShown: false }} />
       <Stack.Screen name="QuemPodeDoar" component={QuemPodeDoarScreen} options={{ headerShown: false }} />
       <Stack.Screen name="AjudaScreen" component={AjudaScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="MeuPerfil" component={MeuPerfilScreen} options={{headerShown:false}}></Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -109,7 +110,7 @@ export default function App() {
         />
       <Drawer.Screen
           name="Quem pode doar?"
-          component={AgendaDisponivelHemocentroScreen}
+          component={QuemPodeDoarScreen}
           options={{
             headerShown: false,
             drawerIcon: ({ color, size }) => (
