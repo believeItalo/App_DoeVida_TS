@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState}from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -11,6 +11,8 @@ interface CadastroTipoSanguineoScreenProps {
 }
 
 function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreenProps) {
+  const [selectedBloodType, setSelectedBloodType] = useState<string | null>(null);
+
   return (
     <ScrollView>
       <View style={styles.container}>
