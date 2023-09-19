@@ -114,7 +114,7 @@ export default function App() {
           options={{
             headerShown: false,
             drawerIcon: ({ color, size }) => (
-              <FontAwesome5 name="droplet" size={24} color="black" /> 
+              <FontAwesome5 name="calendar" size={24} color="black" /> 
             ),
           }}
         />

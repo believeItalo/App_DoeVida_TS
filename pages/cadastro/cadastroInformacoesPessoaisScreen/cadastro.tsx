@@ -1,28 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
-import {getStrings} from '../../../strings/arquivoDeStrings'
-
+import { getStrings } from '../../../strings/arquivoDeStrings'
+import * as ImagePicker from 'expo-image-picker';
 // Strings
 
 interface CadastroScreenProps {
   navigation: any;
 }
-
 const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{getStrings().cadastroScreenTitle}</Text>
-      <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/imgCadastroPessoal.png')} />
+   // Definindo estado da imagem
+   const [image, setImage] = useState<string | null>(null);
 
-      <View style={styles.section}>
-        <View style={styles.viewTextPhoto}> 
-          <Text style={styles.label}>{getStrings().fotoLabel}</Text>
-        </View>
-
-        <View style={styles.imageContainer}>
-          <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/inputFoto.png')} style={styles.image} />
-        </View>
-      </View>
+   // Função responsável por fazer o carregamento da imagem
+   const pickImage = async () => {
+     let result = await ImagePicker.launchImageLibraryAsync({
+       mediaTypes: ImagePicker.MediaTypeOptions.All,
+       allowsEditing: true,
+       aspect: [4, 3],
+       quality: 1,
+     });
+ 
+     console.log(result);
+     if (!result.canceled && result.assets.length > 0) {
+      setImage(result.assets[0].uri);
+    }
+   }
+ 
+   return (
+     <ScrollView contentContainerStyle={styles.container}>
+       <Text style={styles.title}>{getStrings().cadastroScreenTitle}</Text>
+       <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/imgCadastroPessoal.png')} />
+ 
+       <View style={styles.section}>
+         <View style={styles.viewTextPhoto}>
+           <Text style={styles.label}>{getStrings().fotoLabel}</Text>
+         </View>
+ 
+         <View style={styles.imageContainer}>
+           {image ? (
+             <Image
+               source={{ uri: image }}
+               style={styles.imageUser}
+             />
+           ) : (
+             <TouchableOpacity onPress={pickImage}>
+               <Image
+                 source={require('../cadastroInformacoesPessoaisScreen/imgs/inputFoto.png')}
+                 style={styles.image}
+               />
+             </TouchableOpacity>
+           )}
+         </View>
+       </View>
 
       <View style={{ alignItems: 'center' }}>
         <View style={styles.section}>
@@ -125,12 +154,15 @@ const styles = StyleSheet.create({
     height: 120,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 100,
-    paddingTop: 100
   },
   image: {
     width: 135,
     height: 135
+  },
+  imageUser:{
+    width: 135,
+    height: 135,
+    borderRadius:100
   },
   input: {
     height: 40,
@@ -152,9 +184,9 @@ const styles = StyleSheet.create({
   },
   doubleSection: {
     flexDirection: 'row',
-    alignItems:'center',
-    justifyContent:'center',
-    paddingLeft:60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 60,
     width: '100%',
   },
   halfSection: {
@@ -167,7 +199,7 @@ const styles = StyleSheet.create({
     gap: 30,
     width: '100%',
     paddingVertical: 30,
-   
+
   },
   button: {
     width: 170,
@@ -187,7 +219,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white'
   },
-  buttonTextComeBack:{
+  buttonTextComeBack: {
     fontSize: 20,
     color: 'black'
   }
