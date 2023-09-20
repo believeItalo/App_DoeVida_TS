@@ -9,8 +9,6 @@ interface HomeScreenProps {
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   
   return (
-
-    
     <LinearGradient
       style={{
         height: '100%',

@@ -13,9 +13,9 @@ interface PerfilHemocentroScreenProps {
 }
 
 export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenProps) {
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(true);
     const [rating, setRating] = useState(0);
-
+    const [selectButton, setSelectButton] = useState(false)
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
     };

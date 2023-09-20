@@ -8,57 +8,65 @@ interface CadastroScreenProps {
   navigation: any;
 }
 const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
-   // Definindo estado da imagem
-   const [image, setImage] = useState<string | null>(null);
 
-   // Função responsável por fazer o carregamento da imagem
-   const pickImage = async () => {
-     let result = await ImagePicker.launchImageLibraryAsync({
-       mediaTypes: ImagePicker.MediaTypeOptions.All,
-       allowsEditing: true,
-       aspect: [1, 1],
-       quality: 1,
-     });
- 
-     console.log(result);
-     if (!result.canceled && result.assets.length > 0) {
+  //definindo estado dos inputs
+  //Nome Completo
+  const [textInputName, setTextInputName] = useState(" ")
+  const handleTextInputName = (text: string) => {
+    setTextInputName(text)
+  }
+  // Definindo estado da imagem
+  const [image, setImage] = useState<string | null>(null);
+
+  // Função responsável por fazer o carregamento da imagem
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log(result);
+    if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }
-   }
- 
-   return (
-     <ScrollView contentContainerStyle={styles.container}>
-       <Text style={styles.title}>{getStrings().cadastroScreenTitle}</Text>
-       <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/imgCadastroPessoal.png')} />
- 
-       <View style={styles.section}>
-         <View style={styles.viewTextPhoto}>
-           <Text style={styles.label}>{getStrings().fotoLabel}</Text>
-         </View>
- 
-         <View style={styles.imageContainer}>
-           {image ? (
-             <Image
-               source={{ uri: image }}
-               style={styles.imageUser}
-             />
-           ) : (
-             <TouchableOpacity onPress={pickImage}>
-               <Image
-                 source={require('../cadastroInformacoesPessoaisScreen/imgs/inputFoto.png')}
-                 style={styles.image}
-               />
-             </TouchableOpacity>
-           )}
-         </View>
-       </View>
+  }
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>{getStrings().cadastroScreenTitle}</Text>
+      <Image source={require('../cadastroInformacoesPessoaisScreen/imgs/imgCadastroPessoal.png')} />
+
+      <View style={styles.section}>
+        <View style={styles.viewTextPhoto}>
+          <Text style={styles.label}>{getStrings().fotoLabel}</Text>
+        </View>
+
+        <View style={styles.imageContainer}>
+          {image ? (
+            <Image
+              source={{ uri: image }}
+              style={styles.imageUser}
+            />
+          ) : (
+            <TouchableOpacity onPress={pickImage}>
+              <Image
+                source={require('../cadastroInformacoesPessoaisScreen/imgs/inputFoto.png')}
+                style={styles.image}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
 
       <View style={{ alignItems: 'center' }}>
         <View style={styles.section}>
           <Text style={styles.label}>
             {getStrings().nomeCompletoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput style={styles.input} />
+          <TextInput style={styles.input} value={textInputName}
+            onChangeText={handleTextInputName} />
         </View>
 
         <View style={styles.section}>
@@ -159,10 +167,10 @@ const styles = StyleSheet.create({
     width: 135,
     height: 135
   },
-  imageUser:{
+  imageUser: {
     width: 135,
     height: 135,
-    borderRadius:100
+    borderRadius: 100
   },
   input: {
     height: 40,

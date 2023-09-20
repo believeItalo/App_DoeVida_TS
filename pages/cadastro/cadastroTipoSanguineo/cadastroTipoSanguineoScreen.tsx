@@ -1,18 +1,25 @@
-import React, {useState}from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
-import {getStrings} from '../../../strings/arquivoDeStrings'
+import { getStrings } from '../../../strings/arquivoDeStrings'
 
 interface CadastroTipoSanguineoScreenProps {
   navigation: any;
 }
 
 function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreenProps) {
-  const [selectedBloodType, setSelectedBloodType] = useState<string | null>(null);
+  const [selectedButtons, setSelectedButtons] = useState(Array(8).fill(false));
 
+  
+  //verifica se o índice atual é igual ao índice passado como parâmetro. Se for igual, o elemento é definido como true, caso contrário, é definido como false.
+  const handleClick = (index: number) => {
+    const newSelectedButtons = selectedButtons.map((selected, i) => i === index);
+    setSelectedButtons(newSelectedButtons);
+  }
+  
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -20,46 +27,56 @@ function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreen
         <Text style={styles.titleCadastroSangueScreen}>{getStrings().tipoSanguineoTitle}</Text>
         <View style={styles.viewAlignBloodsCards}>
           <View style={styles.viewAlignColumnBloodCards}>
-          <TouchableOpacity
-              style={[styles.buttonSangue]}
-            >
-              <Image source={require('../cadastroTipoSanguineo/imgs/oNegativo.png')} style={styles.bottonBloodImage}></Image>
-
-            </TouchableOpacity>
+  
             <TouchableOpacity
-              style={[styles.buttonSangue]}
+              style={[styles.buttonSangue, selectedButtons[0] && styles.selectedButton]}
+              onPress={() => handleClick(0)}
+            >
+              <Image source={require('../cadastroTipoSanguineo/imgs/oNegativo.png')} style={styles.bottonBloodImage} />
+            </TouchableOpacity>
+  
+  
+            <TouchableOpacity
+              style={[styles.buttonSangue, selectedButtons[1] && styles.selectedButton]}
+              onPress={() => handleClick(1)}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/bNegativo.png')} style={styles.bottonBloodImage}></Image>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.buttonSangue]}
+              style={[styles.buttonSangue, selectedButtons[2] && styles.selectedButton]}
+              onPress={() => handleClick(2)}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/bPositivo.png')} style={styles.bottonBloodImage}></Image>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.buttonSangue]}
+               style={[styles.buttonSangue, selectedButtons[3] && styles.selectedButton]}
+               onPress={() => handleClick(3)}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/aNegativo.png')} style={styles.bottonBloodImage}></Image>
             </TouchableOpacity>
           </View>
           <View style={styles.viewAlignColumnBloodCards}>
-          <TouchableOpacity
-              style={[styles.buttonSangue]}
+            <TouchableOpacity
+               style={[styles.buttonSangue, selectedButtons[4] && styles.selectedButton]}
+               onPress={() => handleClick(4)}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/abPositivo.png')} style={styles.bottonBloodImage}></Image>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.buttonSangue]}
+                style={[styles.buttonSangue, selectedButtons[5] && styles.selectedButton]}
+                onPress={() => handleClick(5)}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/abNegativo.png')} style={styles.bottonBloodImage}></Image>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.buttonSangue]}
+                style={[styles.buttonSangue, selectedButtons[6] && styles.selectedButton]}
+                onPress={() => handleClick(6)}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/oPositivo.png')} style={styles.bottonBloodImage}></Image>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.buttonSangue]}
+               style={[styles.buttonSangue, selectedButtons[7] && styles.selectedButton]}
+               onPress={() => handleClick(7)}
             >
               <Image source={require('../cadastroTipoSanguineo/imgs/aPositivo.png')} style={styles.bottonBloodImage}></Image>
             </TouchableOpacity>
@@ -114,6 +131,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#7395F7',
     borderWidth: 2
+  },
+  selectedButton: {
+    borderColor: 'red'
+  },
+  buttonSangueSelected: {
+    backgroundColor: 'red'
   },
   viewAlignColumnBloodCards: {
     display: 'flex',
