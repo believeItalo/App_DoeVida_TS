@@ -5,6 +5,7 @@ import { Card, IconButton } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import {getStrings} from '../../../../strings/arquivoDeStrings'
+import axios from 'axios';
 interface BuscaHemocentroScreenProps {
   navigation: any;
 }
@@ -14,6 +15,8 @@ type MainUserScreenProps = {
 
 export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProps) {
   const [searchText, setSearchText] = useState('');
+  const [hospitals, setHospitals] = useState([]);
+  
 
   const hemocentros = [ 
     { id: 1, title: 'Hospital Nova Vida', location: 'Jardim Marilu, SP - CARAPICUÍBA' },
