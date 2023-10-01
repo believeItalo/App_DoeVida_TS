@@ -2,22 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
 import { getStrings } from '../../../strings/arquivoDeStrings'
 import * as ImagePicker from 'expo-image-picker';
-// Strings
 
 interface CadastroScreenProps {
   navigation: any;
 }
 const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
-
-  //definindo estado dos inputs
-  //Nome Completo
-  const [textInputName, setTextInputName] = useState(" ")
-  const handleTextInputName = (text: string) => {
-    setTextInputName(text)
-  }
-  // Definindo estado da imagem
+  const [nome, setNome] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [telefone, setTelefone] = useState<string>('');
+  const [cpf, setCpf] = useState<string>('');
+  const [dataNascimento, setDataNascimento] = useState<string>('');
+  const [peso, setPeso] = useState<string>('');
+  const [sexo, setSexo] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
 
+
+  //Montando o objeto json que sera responsável por enviar os dados de cadastro para a próxima tela
+  const montarObjetoJSON = () => {
+    const formData = {
+      nome,
+      email,
+      telefone,
+      cpf,
+      dataNascimento,
+      peso,
+      sexo,
+      foto: image, 
+    };
+
+    return formData;
+  };
+
+  //Função responsável por enviar o json para a próxima tela
+  const navigateToCadastroTipoSanguineo = () => {
+    const formDataJSON = montarObjetoJSON();
+    navigation.navigate('CadastroTipoSanguineo', { formDataJSON });
+  };
+  
   // Função responsável por fazer o carregamento da imagem
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,36 +86,35 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
           <Text style={styles.label}>
             {getStrings().nomeCompletoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput style={styles.input} value={textInputName}
-            onChangeText={handleTextInputName} />
+          <TextInput maxLength={100} style={styles.input} value={nome} onChangeText={novoNome => setNome(novoNome)} />
         </View>
 
         <View style={styles.section}>
           <Text style={styles.label}>
             {getStrings().emailLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput style={styles.input} keyboardType="email-address" />
+          <TextInput maxLength={256}  style={styles.input} keyboardType="email-address" value={email} onChangeText={novoEmail => setEmail(novoEmail)} />
         </View>
 
         <View style={styles.section}>
           <Text style={styles.label}>
             {getStrings().telefoneLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput style={styles.input} keyboardType="phone-pad" />
+          <TextInput maxLength={15} style={styles.input} keyboardType="phone-pad" value={telefone} onChangeText={novoTelefone => setTelefone(novoTelefone)} />
         </View>
 
         <View style={styles.section}>
           <Text style={styles.label}>
             {getStrings().cpfLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput style={styles.input} keyboardType="numeric" />
+          <TextInput maxLength={14} style={styles.input} keyboardType="numeric" value={cpf} onChangeText={novoCpf => setCpf(novoCpf)} />
         </View>
 
         <View style={styles.section}>
           <Text style={styles.label}>
             {getStrings().dataNascimentoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput style={styles.input} keyboardType="phone-pad" />
+          <TextInput maxLength={10} style={styles.input} value={dataNascimento} onChangeText={novoDataNascimento => setDataNascimento(novoDataNascimento)}/>
         </View>
 
         <View style={styles.doubleSection}>
@@ -102,13 +122,13 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
             <Text style={styles.label}>
               {getStrings().pesoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
             </Text>
-            <TextInput style={styles.smallInput} keyboardType="phone-pad" />
+            <TextInput maxLength={5} style={styles.smallInput} keyboardType="phone-pad" value={peso} onChangeText={novoPeso => setPeso(novoPeso)} />
           </View>
           <View style={styles.halfSection}>
             <Text style={styles.label}>
               {getStrings().sexoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
             </Text>
-            <TextInput style={styles.smallInput} keyboardType="phone-pad" />
+            <TextInput style={styles.smallInput} value={sexo} onChangeText={novoSexo => setSexo(novoSexo)}/>
           </View>
         </View>
       </View>
@@ -119,7 +139,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.primaryButton]}
-          onPress={() => navigation.navigate('CadastroTipoSanguineo')}
+          onPress={navigateToCadastroTipoSanguineo}
         >
           <Text style={styles.buttonText}>{getStrings().continuarButtonLabel}</Text>
         </TouchableOpacity>

@@ -30,7 +30,7 @@ export function getStrings() {
         cidadeLabel: 'Cidade',
         bairroLabel: 'Bairro',
         numeroLabel: 'Número',
-        complementoLabel: 'Complemento',
+        ruaLabel: 'Rua',
         requiredFieldIndicator: '*',
 
         //CADASTRO DE INFORMACÇÔES PESSOAIS

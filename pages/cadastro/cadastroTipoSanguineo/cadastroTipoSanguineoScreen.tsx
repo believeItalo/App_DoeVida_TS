@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,14 +8,29 @@ import { getStrings } from '../../../strings/arquivoDeStrings'
 
 interface CadastroTipoSanguineoScreenProps {
   navigation: any;
+  route: any
 }
 
-function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreenProps) {
+function CadastroTipoSanguineoScreen({ navigation, route }: CadastroTipoSanguineoScreenProps) {
   const [selectedButtons, setSelectedButtons] = useState(Array(8).fill(false));
-
+  const [formData, setFormData] = useState(route.params ? route.params.formDataJSON : {});
+  useEffect(() => {
+    if (route.params && route.params.formDataJSON) {
+      const formData = route.params.formDataJSON;
+      console.log('Dados do formulário recebidos:', formData);
+    }
+  }, [route.params]);
   
   //verifica se o índice atual é igual ao índice passado como parâmetro. Se for igual, o elemento é definido como true, caso contrário, é definido como false.
   const handleClick = (index: number) => {
+    // Lista de tipos sanguíneos correspondentes às imagens
+    const tiposSanguineos = ['O-', 'B-', 'B+', 'A-', 'AB+', 'AB-', 'O+', 'A+'];
+  
+    // Atualiza o JSON com o tipo sanguíneo selecionado
+    const tipoSanguineoSelecionado = tiposSanguineos[index];
+    setFormData({ ...formData, tipoSanguineo: tipoSanguineoSelecionado });
+  
+    // Atualiza a seleção das imagens
     const newSelectedButtons = selectedButtons.map((selected, i) => i === index);
     setSelectedButtons(newSelectedButtons);
   }
@@ -88,7 +103,7 @@ function CadastroTipoSanguineoScreen({ navigation }: CadastroTipoSanguineoScreen
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.primaryButton]}
-            onPress={() => navigation.navigate('CadastroEndereco')}
+            onPress={() => navigation.navigate('CadastroEndereco', { formDataJSON: formData })}
           >
             <Text style={styles.buttonText}>{getStrings().continuarButtonLabel}</Text>
           </TouchableOpacity>
