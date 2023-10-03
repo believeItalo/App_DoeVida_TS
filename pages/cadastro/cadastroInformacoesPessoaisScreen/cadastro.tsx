@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
-import { getStrings } from '../../../strings/arquivoDeStrings'
+import { getStrings } from '../../../strings/arquivoDeStrings';
 import * as ImagePicker from 'expo-image-picker';
 
 interface CadastroScreenProps {
   navigation: any;
 }
+
 const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
   const [nome, setNome] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -15,31 +16,36 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
   const [peso, setPeso] = useState<string>('');
   const [sexo, setSexo] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
+  const [senha, setSenha] = useState<string>('');
 
-
-  //Montando o objeto json que sera responsável por enviar os dados de cadastro para a próxima tela
   const montarObjetoJSON = () => {
     const formData = {
-      nome,
-      email,
-      telefone,
-      cpf,
-      dataNascimento,
-      peso,
-      sexo,
-      foto: image, 
+      user: {
+        name: nome,
+        cpf: cpf,
+        email: email,
+        phone: telefone,
+        dateOfBirth: dataNascimento,
+        weight: parseFloat(peso),
+        photo: image || '',
+        password: senha,
+        sex: sexo,
+        bloodType: '', // O tipo sanguíneo será definido posteriormente
+      },
+      address: {
+        cep: '', // O CEP será definido posteriormente
+        uf: '', // O estado será definido posteriormente
+        city: '', // A cidade será definida posteriormente
+        neighborhood: '', // O bairro será definido posteriormente
+        street: '', // A rua será definida posteriormente
+        number: '', // O número será definido posteriormente
+        complement: '', // O complemento será definido posteriormente
+      },
     };
 
     return formData;
   };
 
-  //Função responsável por enviar o json para a próxima tela
-  const navigateToCadastroTipoSanguineo = () => {
-    const formDataJSON = montarObjetoJSON();
-    navigation.navigate('CadastroTipoSanguineo', { formDataJSON });
-  };
-  
-  // Função responsável por fazer o carregamento da imagem
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -52,7 +58,12 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
     if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }
-  }
+  };
+
+  const navigateToCadastroTipoSanguineo = () => {
+    const formDataJSON = montarObjetoJSON();
+    navigation.navigate('CadastroTipoSanguineo', { formDataJSON });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

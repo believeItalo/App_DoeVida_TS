@@ -6,7 +6,7 @@ import { ImageBackground } from 'react-native';
 const Stack = createNativeStackNavigator();
 
 interface MeuPerfilScreen {
-  navigation: any; // 
+    navigation: any; // 
 }
 
 export default function MeuPerfilScreen({ navigation }: MeuPerfilScreen) {
@@ -19,8 +19,8 @@ export default function MeuPerfilScreen({ navigation }: MeuPerfilScreen) {
                 <View style={styles.header}>
                     <View style={{ paddingRight: 60, paddingLeft: 20 }}>
                         <TouchableOpacity
-                        onPress={() => navigation.navigate('MainUserScreen')}
-                           >
+                            onPress={() => navigation.navigate('MainUserScreen')}
+                        >
                             <Image source={require('../perfilScreen/imgs/setaVoltar.png')} style={{ width: 50, height: 50 }} />
                         </TouchableOpacity>
                     </View>

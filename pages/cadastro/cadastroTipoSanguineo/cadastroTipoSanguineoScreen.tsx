@@ -1,39 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createStackNavigator } from '@react-navigation/stack';
-import { Platform } from 'react-native';
-import { getStrings } from '../../../strings/arquivoDeStrings'
+import { getStrings } from '../../../strings/arquivoDeStrings';
 
 interface CadastroTipoSanguineoScreenProps {
   navigation: any;
-  route: any
+  route: any;
 }
 
-function CadastroTipoSanguineoScreen({ navigation, route }: CadastroTipoSanguineoScreenProps) {
+const CadastroTipoSanguineoScreen: React.FC<CadastroTipoSanguineoScreenProps> = ({ navigation, route }) => {
   const [selectedButtons, setSelectedButtons] = useState(Array(8).fill(false));
   const [formData, setFormData] = useState(route.params ? route.params.formDataJSON : {});
+
+  const handleClick = (index: number) => {
+    const tiposSanguineos = ['O-', 'B-', 'B+', 'A-', 'AB+', 'AB-', 'O+', 'A+'];
+    const tipoSanguineoSelecionado = tiposSanguineos[index];
+    formData.user.bloodType = tipoSanguineoSelecionado;
+    setFormData({ ...formData });
+
+    const newSelectedButtons = selectedButtons.map((selected, i) => i === index);
+    setSelectedButtons(newSelectedButtons);
+  };
+
   useEffect(() => {
     if (route.params && route.params.formDataJSON) {
       const formData = route.params.formDataJSON;
       console.log('Dados do formulário recebidos:', formData);
     }
   }, [route.params]);
-  
-  //verifica se o índice atual é igual ao índice passado como parâmetro. Se for igual, o elemento é definido como true, caso contrário, é definido como false.
-  const handleClick = (index: number) => {
-    // Lista de tipos sanguíneos correspondentes às imagens
-    const tiposSanguineos = ['O-', 'B-', 'B+', 'A-', 'AB+', 'AB-', 'O+', 'A+'];
-  
-    // Atualiza o JSON com o tipo sanguíneo selecionado
-    const tipoSanguineoSelecionado = tiposSanguineos[index];
-    setFormData({ ...formData, tipoSanguineo: tipoSanguineoSelecionado });
-  
-    // Atualiza a seleção das imagens
-    const newSelectedButtons = selectedButtons.map((selected, i) => i === index);
-    setSelectedButtons(newSelectedButtons);
-  }
   
   return (
     <ScrollView>

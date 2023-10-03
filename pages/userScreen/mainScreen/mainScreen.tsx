@@ -12,6 +12,7 @@ interface MainUserScreenProps {
 }
 
 export default function MainUserScreen({ navigation }: MainUserScreenProps) {
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>

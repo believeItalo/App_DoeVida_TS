@@ -1,30 +1,36 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { getStrings } from '../../../strings/arquivoDeStrings';
+import axios from 'axios';
 
 interface CadastroEnderecoScreenProps {
   navigation: any;
   route: any;
 }
 
-function EnderecoScreen({ navigation, route }: CadastroEnderecoScreenProps) {
+const EnderecoScreen: React.FC<CadastroEnderecoScreenProps> = ({ navigation, route }) => {
   const [formData, setFormData] = useState(route.params ? route.params.formDataJSON : {});
-  const [cep, setCep] = useState("");
+  const [cep, setCep] = useState('');
   const [infoCep, setInfoCep] = useState({
-    estado: "",
-    cidade: "",
-    bairro: "",
-    numero: "",
-    rua: " "
+    estado: '',
+    cidade: '',
+    bairro: '',
+    numero: '',
+    rua: '',
   });
 
-  // Função para atualizar o formData com os dados dos campos de texto
   const updateFormData = () => {
     const updatedFormData = {
       ...formData,
-      cep,
-      infoCep,
+      address: {
+        cep,
+        uf: infoCep.estado,
+        city: infoCep.cidade,
+        neighborhood: infoCep.bairro,
+        street: infoCep.rua,
+        number: '', // O número será definido posteriormente
+        complement: '', // O complemento será definido posteriormente
+      },
     };
     setFormData(updatedFormData);
   };
@@ -32,10 +38,10 @@ function EnderecoScreen({ navigation, route }: CadastroEnderecoScreenProps) {
   useEffect(() => {
     if (route.params && route.params.formDataJSON) {
       const formData = route.params.formDataJSON;
-     
       console.log('Dados do formulário recebidos:', formData);
     }
   }, [route.params]);
+
 
   const getCep = async () => {
     try {

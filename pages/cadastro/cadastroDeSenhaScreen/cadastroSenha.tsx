@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createStackNavigator } from '@react-navigation/stack';
 import { getStrings } from '../../../strings/arquivoDeStrings';
 
 interface CadastroSenhaScreenProps {
@@ -13,39 +10,20 @@ interface CadastroSenhaScreenProps {
 function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [formDataJSON, setFormDataJSON] = useState<any>({ user: {} });
+
   useEffect(() => {
     if (route.params && route.params.formDataJSON) {
       const formData = route.params.formDataJSON;
+      setFormDataJSON(formData);
       console.log('Dados do formulário recebidos:', formData);
-      // Resto do seu código para lidar com os dados
     }
   }, [route.params]);
+
   const handleSubmit = () => {
     if (senha === confirmarSenha) {
-      // Construa o JSON no formato desejado
-      const formDataJSON = {
-        user: {
-          name: route.params.formData?.user?.name || '',
-          cpf: route.params.formData?.user?.cpf || '',
-          email: route.params.formData?.user?.email || '',
-          phone: route.params.formData?.user?.phone || '',
-          dateOfBirth: route.params.formData?.user?.dateOfBirth || '',
-          weight: route.params.formData?.user?.weight || 0,
-          photo: route.params.formData?.user?.photo || '',
-          password: senha,
-          sex: route.params.formData?.user?.sex || '',
-          bloodType: route.params.formData?.user?.bloodType || '',
-        },
-        address: {
-          cep: route.params.formData?.address?.cep || '',
-          uf: route.params.formData?.address?.uf || '',
-          city: route.params.formData?.address?.city || '',
-          neighborhood: route.params.formData?.address?.neighborhood || '',
-          street: route.params.formData?.address?.street || '',
-          number: "58",
-          complement: route.params.formData?.address?.complement || '',
-        }
-      };
+      // Atualize o JSON do formulário com a senha
+      formDataJSON.user.password = senha;
 
       // Realize a solicitação POST
       fetch('http://192.168.0.16:5050/api/v1/user-registration', {
@@ -65,12 +43,9 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
           // Trate o erro adequadamente
         });
     } else {
-      // Lógica para lidar com senhas que não coincidem
+      console.error('As senhas não coincidem.');
     }
   };
-
-
-
 
   return (
     <View style={styles.container}>
@@ -85,7 +60,7 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
           style={styles.input}
           secureTextEntry={true}
           value={senha}
-          onChangeText={(text) => setSenha(text)}
+          onChangeText={(text) => setSenha(text)} // Atualize o estado 'senha' quando o texto mudar
         />
         <Text style={styles.titleInput}>{getStrings().confirmarSenhaLabel}</Text>
         <TextInput
@@ -114,7 +89,7 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
   );
 }
 
-
+  
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -177,4 +152,10 @@ const styles = StyleSheet.create({
   },
 });
 
+
+
+
+
 export default CadastroSenhaScreen;
+
+
