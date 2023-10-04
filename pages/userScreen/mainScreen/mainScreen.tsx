@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView, BackHandler, Alert } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getStrings } from '../../../strings/arquivoDeStrings';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,12 +14,29 @@ interface MainUserScreenProps {
 export default function MainUserScreen({ navigation, route }: MainUserScreenProps) {
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      const backAction = () => {
+        Alert.alert('Sair do Aplicativo', 'Tem certeza que deseja sair do aplicativo?', [
+          {
+            text: 'Cancelar',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          {
+            text: 'Sair',
+            onPress: () => BackHandler.exitApp(),
+          },
+        ]);
+        return true;
+      };
 
-  useEffect(() => {
-    if (userData) {
-      // Atualize o estado de usuário aqui ou faça qualquer outra ação necessária com os dados do usuário.
-    }
-  }, [userData]);
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+      return () => backHandler.remove();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -28,7 +46,9 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
           <Text style={[styles.userInfoText, { fontSize: 18, fontWeight: '400' }]}>{userName}</Text>
         </View>
         <View style={styles.userImage}>
-          <Image source={require('../mainScreen/imgs/profilePic.png')} style={styles.profileImage} />
+          {userData && userData.photo && (
+            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+          )}
         </View>
       </View>
       <View style={styles.containerCardContainer}>
@@ -89,6 +109,7 @@ const styles = StyleSheet.create({
   profileImage: {
     height: 70,
     width: 70,
+    borderRadius:50
   },
   cardContainer: {
     flexDirection: 'row',

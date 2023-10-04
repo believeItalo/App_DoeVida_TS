@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView, Alert } from 'react-native';
 import axios from 'axios';
 import { getStrings } from '../../strings/arquivoDeStrings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,22 +26,24 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:5050/api/v1/user-login', {
+      const response = await axios.post('http://10.107.144.11:8080/api/v1/user-login', {
         email: email,
         password: password,
       });
 
       if (response.status === 200) {
         const userData = response.data.userData;
-
-        navigation.navigate('MainUserScreen', { userName: userData.name, userData: userData });
+      
+        // Armazena o token no AsyncStorage
+        await AsyncStorage.setItem('token', userData.token);
+      
+        // Usar navigation.replace em vez de navigation.navigate
+        navigation.replace('MainUserScreen', { userName: userData.name, userData: userData });
       } else {
         Alert.alert('Erro', 'Ocorreu um erro ao efetuar o login. Verifique suas credenciais e tente novamente.');
       }
     } catch (error) {
-      console.error('Erro ao efetuar login:', error);
-
-      Alert.alert('Erro', 'Ocorreu um erro ao efetuar o login. Verifique sua conexão com a internet e tente novamente.');
+      Alert.alert('Erro', 'Ocorreu um erro ao efetuar o login. Verifique suas credenciais e tente novamente.');
     }
   };
 
@@ -54,7 +57,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           <Text style={styles.inputTitle}>{getStrings().emailLabel}</Text>
           <TextInput
             style={styles.input}
-            placeholder={getStrings().emailLabel}
+ 
             value={email}
             onChangeText={handleEmailChange}
           />
@@ -64,7 +67,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           <Text style={styles.inputTitle}>{getStrings().senhaLabel}</Text>
           <TextInput
             style={styles.input}
-            placeholder={getStrings().senhaLabel}
+           
             secureTextEntry={true}
             value={password}
             onChangeText={handlePasswordChange}
@@ -80,7 +83,9 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         <Text style={styles.buttonText}>ENTRAR</Text>
       </TouchableOpacity>
 
-      <Text style={styles.signupText}>{getStrings().noAccountLabel}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('CadastroInformacoesPessoais')}>
+        <Text style={styles.signupText}>{getStrings().noAccountLabel}</Text>
+      </TouchableOpacity>
     </View>
   );
 }

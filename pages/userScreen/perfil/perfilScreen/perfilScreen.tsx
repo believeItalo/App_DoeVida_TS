@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,11 +7,14 @@ const Stack = createNativeStackNavigator();
 
 interface MeuPerfilScreen {
     navigation: any; // 
+    route: any;
 }
 
-export default function MeuPerfilScreen({ navigation }: MeuPerfilScreen) {
+export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) {
 
-
+    const [userDetails, setUserDetails] = useState(null);
+    const userName = route.params && route.params.userName ? route.params.userName : '';
+    const userData = route.params && route.params.userData ? route.params.userData : null;
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -29,11 +32,12 @@ export default function MeuPerfilScreen({ navigation }: MeuPerfilScreen) {
                     </Text>
                 </View>
 
-                <Image source={require('../perfilScreen/imgs/profilePic.png')} style={{ height: 100, width: 100 }} />
-                <Text style={styles.userName}>
-                    João Pedro
-                </Text>
-
+                <View style={styles.userImage}>
+                    {userData && userData.photo && (
+                        <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+                    )}
+                </View>
+                <Text style={[styles.userName]}>{userData.name}</Text>
                 <TouchableOpacity
                     style={[styles.buttonEditarPerfil]}
                     onPress={() => navigation.navigate('EditarPerfil')}
@@ -171,6 +175,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+    },
+    userImage: {
+        paddingTop: 0,
+    },
+    profileImage: {
+        height: 100,
+        width: 100,
+        borderRadius: 50
     },
     dadosResidenciasTextFields: {
         display: 'flex',
