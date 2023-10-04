@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView, Alert } from 'react-native';
-import axios from 'axios'; // Importe a biblioteca Axios
+import axios from 'axios';
 import { getStrings } from '../../strings/arquivoDeStrings';
 
 const Stack = createNativeStackNavigator();
@@ -11,42 +11,35 @@ interface LoginScreenProps {
 }
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
-  const [email, setEmail] = useState(''); // Estado para o email
-  const [password, setPassword] = useState(''); // Estado para a senha
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [user, setUser] = useState(null);
 
-  // Função para lidar com a alteração do campo de email
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
 
-  // Função para lidar com a alteração do campo de senha
   const handlePasswordChange = (text: string) => {
     setPassword(text);
   };
 
-  // Função para lidar com o envio do formulário de login
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://192.168.0.16:5050/api/v1/user-login', {
+      const response = await axios.post('http://localhost:5050/api/v1/user-login', {
         email: email,
         password: password,
       });
-  
+
       if (response.status === 200) {
         const userData = response.data.userData;
-  
-        // Aqui você pode fazer algo com os dados do usuário, como armazenar o token no AsyncStorage.
-  
-        // Navegue para a tela principal após o login bem-sucedido.
-        navigation.navigate('MainUserScreen');
+
+        navigation.navigate('MainUserScreen', { userName: userData.name, userData: userData });
       } else {
-        // Trate outros códigos de status da API, se necessário.
         Alert.alert('Erro', 'Ocorreu um erro ao efetuar o login. Verifique suas credenciais e tente novamente.');
       }
     } catch (error) {
       console.error('Erro ao efetuar login:', error);
-  
-      // Trate erros de requisição ou validações da API, se necessário.
+
       Alert.alert('Erro', 'Ocorreu um erro ao efetuar o login. Verifique sua conexão com a internet e tente novamente.');
     }
   };

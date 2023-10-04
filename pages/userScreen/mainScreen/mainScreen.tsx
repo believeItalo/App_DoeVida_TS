@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ImageBackground } from 'react-native';
 import { getStrings } from '../../../strings/arquivoDeStrings';
 
 const Stack = createNativeStackNavigator();
 
 interface MainUserScreenProps {
   navigation: any;
+  route: any;
 }
 
-export default function MainUserScreen({ navigation }: MainUserScreenProps) {
-  
+export default function MainUserScreen({ navigation, route }: MainUserScreenProps) {
+  const userName = route.params && route.params.userName ? route.params.userName : '';
+  const userData = route.params && route.params.userData ? route.params.userData : null;
+
+  useEffect(() => {
+    if (userData) {
+      // Atualize o estado de usuário aqui ou faça qualquer outra ação necessária com os dados do usuário.
+    }
+  }, [userData]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Text style={styles.userInfoText}>{getStrings().welcomeText}</Text>
-          <Text style={[styles.userInfoText, { fontSize: 18, fontWeight: '400' }]}>{getStrings().userName}</Text>
+          <Text style={[styles.userInfoText, { fontSize: 18, fontWeight: '400' }]}>{userName}</Text>
         </View>
         <View style={styles.userImage}>
           <Image source={require('../mainScreen/imgs/profilePic.png')} style={styles.profileImage} />
@@ -31,7 +38,7 @@ export default function MainUserScreen({ navigation }: MainUserScreenProps) {
             <Text style={styles.cardText}>{getStrings().hemocentrosText}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('MeuPerfil')}>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('MeuPerfil', { userData: userData })}>
             <Image source={require('../mainScreen/imgs/imgCardMeuPerfil.png')} style={styles.cardImage} />
             <Text style={styles.cardText}>{getStrings().meuPerfilText}</Text>
           </TouchableOpacity>
@@ -61,18 +68,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    height:'25%',
+    height: '25%',
     width: '80%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
-   
+    alignItems: 'center',
   },
   userInfo: {
-    height:'60%',
-    alignItems:'center',
-    justifyContent:'flex-end'
-
+    height: '60%',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   userInfoText: {
     fontSize: 20,
@@ -88,7 +93,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    gap:20
+    gap: 20,
   },
   card: {
     alignItems: 'center',
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 165,
     height: 190,
-    borderColor: "#7395F7",
+    borderColor: '#7395F7',
     borderWidth: 2,
   },
   cardImage: {
@@ -122,10 +127,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '300',
   },
-  containerCardContainer:{
-    height:'65%',
-    width:'100%',
-    alignItems:'center',
-    justifyContent:'space-evenly',
-  }
+  containerCardContainer: {
+    height: '65%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
 });
