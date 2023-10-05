@@ -1,54 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Card, IconButton } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import {getStrings} from '../../../../strings/arquivoDeStrings'
+import { getStrings } from '../../../../strings/arquivoDeStrings';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 
-
 interface BuscaHemocentroScreenProps {
   navigation: any;
-  route:any;
+  route: any;
+}
+interface Hospital {
+  hospitalId: number;
+  name: string;
 }
 
-export default function BuscaHemocentroScreen({ navigation,route }: BuscaHemocentroScreenProps) {
-  const [searchText, setSearchText] = useState('');
+interface Address {
+  uf: string;
+  city: string;
+  neighborhood: string;
+}
 
+interface Hemocentro {
+  hospital: Hospital;
+  address: Address;
+}
+export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemocentroScreenProps) {
+  const [searchText, setSearchText] = useState('');
   const [userDetails, setUserDetails] = useState(null);
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
-
-  const hemocentros = [ 
-    { id: 1, title: 'Hospital Nova Vida', location: 'Jardim Marilu, SP - CARAPICUÍBA' },
-    { id: 2, title: 'Outro Hemocentro', location: 'Outra Localização' },
-    { id: 3, title: 'Hospital NotreDame', location: 'SP - JANDIRA' },
-    { id: 4, title: 'Hospital Teste', location: 'SP - OSASCO' },
-    { id: 5, title: 'Hospital Ranca Sangue', location: 'SP - JANDIRA' },
-    { id: 6, title: 'Hospital Extrai Sangue', location: 'SP - BARUERI' },
-    { id: 7, title: 'Hospital Vermelho', location: 'SP - ITAPEVI' }
-  ];
+  const [hemocentros, setHemocentros] = useState<Hemocentro[]>([]);
+  useEffect(() => {
+    // Fetch data from the API when the component mounts
+    axios.get('http://10.107.144.11:8080/api/v1/hospitals')
+      .then(response => {
+        if (response.data && response.data.hospitals) {
+          setHemocentros(response.data.hospitals);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
 
   const filteredHemocentros = hemocentros.filter(hemocentro =>
-    hemocentro.title.toLowerCase().includes(searchText.toLowerCase())
+    hemocentro.hospital.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
     <View style={styles.container}>
-        <View style={styles.header}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <FontAwesome5 name="bars" size={40} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
-         
-        <View >
+          <FontAwesome5 name="bars" size={40} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
+
+        <View>
           {userData && userData.photo && (
             <Image source={{ uri: userData.photo }} style={styles.profileImage} />
           )}
         </View>
-        </View>
+      </View>
       <View style={styles.searchContainer}>
         <FontAwesome5 name="search" size={18} color="#7395F7" />
         <TextInput
@@ -65,15 +80,15 @@ export default function BuscaHemocentroScreen({ navigation,route }: BuscaHemocen
             <TouchableOpacity
               style={styles.cardHemocentros}
               onPress={() => navigation.navigate('PerfilHemocentro', { userData: userData })}
-              key={hemocentro.id}
+              key={hemocentro.hospital.hospitalId}
             >
               <View style={styles.contentCardHemocentro}>
                 <View>
                   <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
                 </View>
                 <View>
-                  <Text style={styles.titleCardHemocentro}>{hemocentro.title}</Text>
-                  <Text style={styles.descriptionHemocentro}>{hemocentro.location}</Text>
+                  <Text style={styles.titleCardHemocentro}>{hemocentro.hospital.name}</Text>
+                  <Text style={styles.descriptionHemocentro}>{`${hemocentro.address.uf} - ${hemocentro.address.city}`}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -127,7 +142,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#7395F7',
     height: 170,
-    width: 300,
+    width: 340,
   },
   contentCardHemocentro: {
     display: 'flex',

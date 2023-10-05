@@ -23,6 +23,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [userDetails, setUserDetails] = useState(null);
     const userName = route.params && route.params.userName ? route.params.userName : '';
     const userData = route.params && route.params.userData ? route.params.userData : null;
+    const hemocentroData = route.params && route.params.hemocentroData ? route.params.hemocentroData : null;
     return (
 
         <ScrollView>
@@ -39,36 +40,26 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         )}
                     </View>
                 </View>
-                <View style={{ width: 400, height: 300, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 20 }}>
+                <View style={styles.viewSlider}>
                     <Image source={require('../perfilHemocentro/imgs/hemocentroPic.png')} style={styles.image}></Image>
                     <Image source={require('../perfilHemocentro/imgs/sliderLength.png')}></Image>
                 </View>
-                <View style={{ paddingTop: 50 }}>
+                <View style={styles.viewNomeHemocentro}>
                     <Text style={styles.nomeHemocentro}>
-                        Hospital Nova Vida
+                        {hemocentroData && hemocentroData.hospital && hemocentroData.hospital.name}
                     </Text>
                 </View>
+
                 <View style={styles.informacoesHospital}>
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 28 }}>
-                        <View style={{ flexDirection: 'column', gap: 15 }}>
-                            <Text style={{ fontSize: 16 }}>
+                    <View style={styles.viewTextInputCpf}>
+                        <View style={styles.viewAlignEnderecoField}>
+                            <Text style={styles.textEndereco}>
                                 Endereco
                             </Text>
-                            <TextInput style={{
-                                width: 100, height: 40, borderWidth: 1,
-                                padding: 10,
-                                borderColor: '#F0F0F0',
-                                borderRadius: 5,
-                            }} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
+                            <TextInput style={styles.inputNomeCompleto} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
                         </View>
-                        <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end' }}>
-                            <TextInput style={{
-                                width: 50, height: 40, borderWidth: 1,
-                                padding: 10,
-                                borderColor: '#F0F0F0',
-                                borderRadius: 5,
-                                flexDirection: 'column',
-                            }} placeholder='CPF' placeholderTextColor={'black'} >
+                        <View style={styles.viewEmailInput}>
+                            <TextInput style={styles.inputEmail} placeholder='CPF' placeholderTextColor={'black'} >
                             </TextInput>
                         </View>
                         <View>
@@ -77,31 +68,11 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                     </View>
 
 
-                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 10 }}>
-                        <TextInput style={{
-                            width: 335, height: 40, borderWidth: 1,
-                            padding: 10,
-                            borderColor: '#F0F0F0',
-                            borderRadius: 5,
-                        }} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={{
-                            width: 335, height: 40, borderWidth: 1,
-                            padding: 10,
-                            borderColor: '#F0F0F0',
-                            borderRadius: 5,
-                        }} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={{
-                            width: 335, height: 40, borderWidth: 1,
-                            padding: 10,
-                            borderColor: '#F0F0F0',
-                            borderRadius: 5,
-                        }} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={{
-                            width: 335, height: 40, borderWidth: 1,
-                            padding: 10,
-                            borderColor: '#F0F0F0',
-                            borderRadius: 5,
-                        }} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
+                    <View style={styles.viewTextFields}>
+                        <TextInput style={styles.textField} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
+                        <TextInput style={styles.textField} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
+                        <TextInput style={styles.textField} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
+                        <TextInput style={styles.textField} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
 
                     </View>
 
@@ -150,7 +121,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                 </View>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.cardAvaliacao} onPress={() => navigation.navigate('PerfilHemocentro')} >
+                        <TouchableOpacity style={styles.cardAvaliacao} onPress={() => navigation.navigate('PerfilHemocentro', { userName: hemocentroData.hospital.name, userData: userData })}>
                             <View style={styles.contentCardAvaliacao}>
                                 <View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 30, paddingRight: 70 }}>
@@ -173,7 +144,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 <View style={{ width: '100%', paddingLeft: 20, paddingBottom: 30 }}>
                     <TouchableOpacity
                         style={[styles.button, { width: 170, height: 50, backgroundColor: "white", borderColor: "#7395F7", borderWidth: 2 }]}
-                        onPress={() => setModalVisible(true)} // Abre o modal ao pressionar o botão
+                        onPress={() => setModalVisible(true)}
                     >
                         <Text style={{ fontSize: 20 }}>Avaliar</Text>
                     </TouchableOpacity>
@@ -240,6 +211,14 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingTop: 20,
     },
+    viewSlider: {
+        width: 400,
+        height: 300,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        gap: 20
+    },
     title: {
         fontSize: 30,
         fontWeight: '300',
@@ -252,7 +231,8 @@ const styles = StyleSheet.create({
     },
     nomeHemocentro: {
         fontSize: 30,
-        fontWeight: '300'
+        fontWeight: '300',
+        color: 'black'
     },
     profileImage: {
         height: 70,
@@ -266,6 +246,57 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         paddingBottom: 40
+    },
+    viewNomeHemocentro: {
+        paddingTop: 50
+    },
+    viewTextFields: {
+        width: '100%',
+        alignItems: 'center',
+        ustifyContent: 'center',
+        flexDirection: 'column',
+        gap: 10
+    },
+    textField: {
+        width: 335,
+        height: 40,
+        borderWidth: 1,
+        padding: 10,
+        borderColor: '#F0F0F0',
+        borderRadius: 5,
+    },
+    inputEmail: {
+        width: 50,
+        height: 40,
+        borderWidth: 1,
+        padding: 10,
+        borderColor: '#F0F0F0',
+        borderRadius: 5,
+        flexDirection: 'column',
+    },
+    viewEmailInput: {
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end'
+    },
+    viewTextInputCpf: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        gap: 28
+    },
+    inputNomeCompleto: {
+        width: 100,
+        height: 40,
+        borderWidth: 1,
+        padding: 10,
+        borderColor: '#F0F0F0',
+        borderRadius: 5,
+    },
+    textEndereco: {
+        fontSize: 16
+    },
+    viewAlignEnderecoField: {
+        flexDirection: 'column',
+        gap: 15
     },
     button: {
         justifyContent: 'center',
