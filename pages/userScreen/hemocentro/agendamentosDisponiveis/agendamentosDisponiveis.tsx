@@ -6,11 +6,14 @@ import { getStrings } from '../../../../strings/arquivoDeStrings'
 
 interface AgendaDisponivelHemocentroScreenProps {
   navigation: any;
+  route:any;
 }
 
-export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDisponivelHemocentroScreenProps) {
+export default function AgendaDisponivelHemocentro({ navigation, route }: AgendaDisponivelHemocentroScreenProps) {
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [userDetails, setUserDetails] = useState(null);
+  const userName = route.params && route.params.userName ? route.params.userName : '';
+  const userData = route.params && route.params.userData ? route.params.userData : null;
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -19,10 +22,11 @@ export default function AgendaDisponivelHemocentro({ navigation, }: AgendaDispon
             <FontAwesome5 name="bars" size={40} color="black" />
           </TouchableOpacity>
           <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
-          <Image
-            source={require('../perfilHemocentro/imgs/profilePicUser.png')}
-            style={styles.profileImage}
-          />
+          <View >
+                        {userData && userData.photo && (
+                            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+                        )}
+                    </View>
         </View>
         <View style={styles.imageContainer}>
           <Image

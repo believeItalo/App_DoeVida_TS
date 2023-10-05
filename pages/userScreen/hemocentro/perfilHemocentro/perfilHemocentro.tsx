@@ -10,15 +10,19 @@ const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
     navigation: any; // 
+    route: any;
 }
 
-export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenProps) {
+export default function PerfilHemocentro({ navigation, route }: PerfilHemocentroScreenProps) {
     const [modalVisible, setModalVisible] = useState(true);
     const [rating, setRating] = useState(0);
     const [selectButton, setSelectButton] = useState(false)
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
     };
+    const [userDetails, setUserDetails] = useState(null);
+    const userName = route.params && route.params.userName ? route.params.userName : '';
+    const userData = route.params && route.params.userData ? route.params.userData : null;
     return (
 
         <ScrollView>
@@ -29,7 +33,11 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
                         <FontAwesome5 name="bars" size={40} color="black" />
                     </TouchableOpacity>
                     <Text style={styles.title}>Hemocentro</Text>
-                    <Image source={require('../perfilHemocentro/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }} />
+                    <View >
+                        {userData && userData.photo && (
+                            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+                        )}
+                    </View>
                 </View>
                 <View style={{ width: 400, height: 300, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 20 }}>
                     <Image source={require('../perfilHemocentro/imgs/hemocentroPic.png')} style={styles.image}></Image>
@@ -100,7 +108,7 @@ export default function PerfilHemocentro({ navigation }: PerfilHemocentroScreenP
                 </View>
 
                 <TouchableOpacity style={[styles.button]}
-                    onPress={() => navigation.navigate('AgendaDisponivelHemocentro')}>
+                    onPress={() => navigation.navigate('AgendaDisponivelHemocentro', { userData: userData })}>
                     <Text
 
                         style={{ fontSize: 20, color: 'white' }}
@@ -245,6 +253,11 @@ const styles = StyleSheet.create({
     nomeHemocentro: {
         fontSize: 30,
         fontWeight: '300'
+    },
+    profileImage: {
+        height: 70,
+        width: 70,
+        borderRadius: 50
     },
     informacoesHospital: {
         paddingTop: 30,

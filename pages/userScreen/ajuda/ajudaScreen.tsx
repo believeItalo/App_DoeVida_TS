@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -9,10 +9,13 @@ import { getStrings } from '../../../strings/arquivoDeStrings';
 const Stack = createNativeStackNavigator();
 interface AjudaScreenProps {
   navigation: any;
+  route:any; 
 }
 
-export default function AjudaScreen({ navigation }: AjudaScreenProps) {
-
+export default function AjudaScreen({ navigation,route }: AjudaScreenProps) {
+  const [userDetails, setUserDetails] = useState(null);
+  const userName = route.params && route.params.userName ? route.params.userName : '';
+  const userData = route.params && route.params.userData ? route.params.userData : null;
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -21,7 +24,11 @@ export default function AjudaScreen({ navigation }: AjudaScreenProps) {
             <FontAwesome5 name="bars" size={40} color="black" />
           </TouchableOpacity>
           <Text style={styles.title}>{getStrings().helpTitle}</Text>
-          <Image source={require('../ajuda/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }} />
+          <View >
+          {userData && userData.photo && (
+            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+          )}
+        </View>
         </View>
         <View style={styles.viewImgAjuda}>
           <Image source={require('./imgs/imgAjuda.png')}></Image>
@@ -97,6 +104,11 @@ const styles = StyleSheet.create({
     gap: 90,
     paddingLeft: 30,
     paddingTop: 20,
+  },
+  profileImage: {
+    height: 70,
+    width: 70,
+    borderRadius: 50
   },
   title: {
     fontSize: 30,

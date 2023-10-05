@@ -53,7 +53,7 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
       </View>
       <View style={styles.containerCardContainer}>
         <View style={styles.cardContainer}>
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('BuscaHemocentro')}>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('BuscaHemocentro', { userData: userData })}>
             <Image source={require('../mainScreen/imgs/imgCardHemocentro.png')} style={styles.cardImage} />
             <Text style={styles.cardText}>{getStrings().hemocentrosText}</Text>
           </TouchableOpacity>
@@ -64,12 +64,12 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
           </TouchableOpacity>
         </View>
         <View style={styles.cardContainer}>
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AjudaScreen')}>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AjudaScreen', { userData: userData })}>
             <Image source={require('../mainScreen/imgs/imgCardAjuda.png')} style={styles.cardImage} />
             <Text style={styles.cardText}>{getStrings().ajudaText}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.card]} onPress={() => navigation.navigate('QuemPodeDoar')}>
+          <TouchableOpacity style={[styles.card]} onPress={() => navigation.navigate('QuemPodeDoar', { userData: userData })}>
             <Image source={require('../mainScreen/imgs/imgCardQuemPodeDoar.png')} style={styles.cardImage} />
             <View style={styles.quemPodeDoarTextContainer}>
               <Text style={styles.quemPodeDoarText}>{getStrings().quemPodeDoarText}</Text>

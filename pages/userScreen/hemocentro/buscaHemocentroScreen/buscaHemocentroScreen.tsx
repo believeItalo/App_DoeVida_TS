@@ -6,17 +6,20 @@ import { Avatar } from 'react-native-paper';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import {getStrings} from '../../../../strings/arquivoDeStrings'
 import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
+
+
 interface BuscaHemocentroScreenProps {
   navigation: any;
-}
-type MainUserScreenProps = {
-  navigation: DrawerNavigationProp<{}>;
+  route:any;
 }
 
-export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProps) {
+export default function BuscaHemocentroScreen({ navigation,route }: BuscaHemocentroScreenProps) {
   const [searchText, setSearchText] = useState('');
-  const [hospitals, setHospitals] = useState([]);
-  
+
+  const [userDetails, setUserDetails] = useState(null);
+  const userName = route.params && route.params.userName ? route.params.userName : '';
+  const userData = route.params && route.params.userData ? route.params.userData : null;
 
   const hemocentros = [ 
     { id: 1, title: 'Hospital Nova Vida', location: 'Jardim Marilu, SP - CARAPICUÍBA' },
@@ -39,7 +42,12 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
             <FontAwesome5 name="bars" size={40} color="black" />
           </TouchableOpacity>
           <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
-          <Image source={require('../buscaHemocentroScreen/imgs/profilePicUser.png')} style={{ height: 70, width: 70 }} />
+         
+        <View >
+          {userData && userData.photo && (
+            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+          )}
+        </View>
         </View>
       <View style={styles.searchContainer}>
         <FontAwesome5 name="search" size={18} color="#7395F7" />
@@ -56,7 +64,7 @@ export default function MainUserScreen({ navigation }: BuscaHemocentroScreenProp
           {filteredHemocentros.map(hemocentro => (
             <TouchableOpacity
               style={styles.cardHemocentros}
-              onPress={() => navigation.navigate('PerfilHemocentro')}
+              onPress={() => navigation.navigate('PerfilHemocentro', { userData: userData })}
               key={hemocentro.id}
             >
               <View style={styles.contentCardHemocentro}>
@@ -92,6 +100,11 @@ const styles = StyleSheet.create({
     gap: 40,
     paddingLeft: 30,
     paddingTop: 20,
+  },
+  profileImage: {
+    height: 70,
+    width: 70,
+    borderRadius: 50
   },
   title: {
     fontSize: 30,
