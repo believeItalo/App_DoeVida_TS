@@ -79,7 +79,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
           {filteredHemocentros.map(hemocentro => (
             <TouchableOpacity
               style={styles.cardHemocentros}
-              onPress={() => navigation.navigate('PerfilHemocentro', { userData: userData })}
+              onPress={() => navigation.navigate('PerfilHemocentro', { hemocentroData: hemocentro, userName: userData.name, userData: userData})}
               key={hemocentro.hospital.hospitalId}
             >
               <View style={styles.contentCardHemocentro}>

@@ -12,20 +12,36 @@ interface PerfilHemocentroScreenProps {
     navigation: any; // 
     route: any;
 }
-
+interface Hospital {
+    hospitalId: number;
+    name: string;
+  }
+  
+  interface Address {
+    uf: string;
+    city: string;
+    neighborhood: string;
+  }
+  
+  interface Hemocentro {
+    hospital: Hospital;
+    address: Address;
+  }
 export default function PerfilHemocentro({ navigation, route }: PerfilHemocentroScreenProps) {
     const [modalVisible, setModalVisible] = useState(true);
     const [rating, setRating] = useState(0);
     const [selectButton, setSelectButton] = useState(false)
-    const handleRatingPress = (selectedRating: number) => {
-        setRating(selectedRating);
-    };
     const [userDetails, setUserDetails] = useState(null);
     const userName = route.params && route.params.userName ? route.params.userName : '';
     const userData = route.params && route.params.userData ? route.params.userData : null;
     const hemocentroData = route.params && route.params.hemocentroData ? route.params.hemocentroData : null;
-    return (
+    const [hemocentros, setHemocentros] = useState<Hemocentro[]>([]);
+    
+    const handleRatingPress = (selectedRating: number) => {
+        setRating(selectedRating);
+    };
 
+    return (
         <ScrollView>
             <View style={styles.container}>
 
@@ -42,11 +58,10 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 </View>
                 <View style={styles.viewSlider}>
                     <Image source={require('../perfilHemocentro/imgs/hemocentroPic.png')} style={styles.image}></Image>
-                    <Image source={require('../perfilHemocentro/imgs/sliderLength.png')}></Image>
                 </View>
                 <View style={styles.viewNomeHemocentro}>
                     <Text style={styles.nomeHemocentro}>
-                        {hemocentroData && hemocentroData.hospital && hemocentroData.hospital.name}
+                        {route.params && route.params.hemocentroData ? route.params.hemocentroData.hospital.name : ''}
                     </Text>
                 </View>
 
@@ -79,7 +94,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 </View>
 
                 <TouchableOpacity style={[styles.button]}
-                    onPress={() => navigation.navigate('AgendaDisponivelHemocentro', { userData: userData })}>
+                    onPress={() => navigation.navigate('AgendaDisponivelHemocentro', {hemocentroData: hemocentros, userName: userData.name, userData: userData })}>
                     <Text
 
                         style={{ fontSize: 20, color: 'white' }}

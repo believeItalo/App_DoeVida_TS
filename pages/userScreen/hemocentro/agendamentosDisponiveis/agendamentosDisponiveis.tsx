@@ -6,7 +6,7 @@ import { getStrings } from '../../../../strings/arquivoDeStrings'
 
 interface AgendaDisponivelHemocentroScreenProps {
   navigation: any;
-  route:any;
+  route: any;
 }
 
 export default function AgendaDisponivelHemocentro({ navigation, route }: AgendaDisponivelHemocentroScreenProps) {
@@ -23,10 +23,10 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
           </TouchableOpacity>
           <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
           <View >
-                        {userData && userData.photo && (
-                            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
-                        )}
-                    </View>
+            {userData && userData.photo && (
+              <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+            )}
+          </View>
         </View>
         <View style={styles.imageContainer}>
           <Image
@@ -100,12 +100,12 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 170,
-    width: '100%',
+    width: 400,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 10,
-    paddingTop: 20,
+   
   },
   title: {
     fontSize: 30,
@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
   profileImage: {
     height: 70,
     width: 70,
+    borderRadius: 50
   },
   imageContainer: {
     width: 400,
