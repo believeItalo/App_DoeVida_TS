@@ -12,8 +12,9 @@ interface AgendaDisponivelHemocentroScreenProps {
 export default function AgendaDisponivelHemocentro({ navigation, route }: AgendaDisponivelHemocentroScreenProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
-  const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
+  const hemocentroNome = route.params && route.params.hemocentroNome ? route.params.hemocentroNome : '';
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -38,7 +39,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
           />
         </View>
         <View style={styles.nomeHemocentroContainer}>
-          <Text style={styles.nomeHemocentro}>{getStrings().hospitalName}</Text>
+          <Text style={styles.nomeHemocentro}>{hemocentroNome}</Text>
         </View>
         <View style={styles.agendaTitleContainer}>
           <Text style={styles.agendaTitle}>{getStrings().agendaTitle}</Text>

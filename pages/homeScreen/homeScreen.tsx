@@ -21,7 +21,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           <View style={styles.logoContainer}>
             <Image
               source={require('../homeScreen/imgs/logoHomeScreen.png')}
-              style={{ width: 150, height: 150 }}
+              style={styles.logoHomeScreenImg}
             />
             <Text style={styles.companyName}>{getStrings().companyNameText}</Text>
           </View>
@@ -54,6 +54,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  logoHomeScreenImg: {
+    width: 150, 
+    height: 150
+  },
   container: {
     flex: 1,
     justifyContent: 'space-evenly',

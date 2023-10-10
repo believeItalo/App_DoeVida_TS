@@ -48,7 +48,7 @@ const ReadMoreText: React.FC<ReadMoreTextProps> = ({
         </Text>
         <Image
           source={expanded ? require('./imgs/arrowUp.png') : require('./imgs/arrowDown.png')}
-          style={{ width: 18, height: 18 }}
+          style={styles.arrow}
         />
       </TouchableOpacity>
 
@@ -60,6 +60,10 @@ const ReadMoreText: React.FC<ReadMoreTextProps> = ({
 };
 
 const styles = StyleSheet.create({
+  arrow: {
+    width: 18, 
+    height: 18 
+  },
   component: {
     flexDirection: 'column',
     width: '100%',

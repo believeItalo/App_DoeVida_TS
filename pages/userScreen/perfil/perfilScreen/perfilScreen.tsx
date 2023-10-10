@@ -15,6 +15,9 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
   const [userDetails, setUserDetails] = useState(null);
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
+  //Fazer a busac ad api pelo id que vem de:userData.id
+  console.log(userData.id);
+  
   return (
     <ScrollView>
       <View style={styles.container}>

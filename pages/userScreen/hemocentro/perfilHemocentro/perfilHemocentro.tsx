@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Dimensions, TextInput, Alert, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,31 +13,57 @@ interface PerfilHemocentroScreenProps {
     navigation: any; // 
     route: any;
 }
+
 interface Hospital {
     hospitalId: number;
     name: string;
-  }
-  
-  interface Address {
+}
+
+interface Address {
+    cep: string | undefined;
     uf: string;
     city: string;
     neighborhood: string;
-  }
-  
-  interface Hemocentro {
+}
+
+interface Hemocentro {
     hospital: Hospital;
     address: Address;
-  }
+}
+
 export default function PerfilHemocentro({ navigation, route }: PerfilHemocentroScreenProps) {
     const [modalVisible, setModalVisible] = useState(true);
     const [rating, setRating] = useState(0);
-    const [selectButton, setSelectButton] = useState(false)
+    const [selectButton, setSelectButton] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
     const userName = route.params && route.params.userName ? route.params.userName : '';
     const userData = route.params && route.params.userData ? route.params.userData : null;
     const hemocentroData = route.params && route.params.hemocentroData ? route.params.hemocentroData : null;
     const [hemocentros, setHemocentros] = useState<Hemocentro[]>([]);
-    
+    const [hospitalData, setHospitalData] = useState<Hospital | null>(null); // Adicione este estado
+
+    //inputs
+    const [endereco, setEndereco] = useState<Address | null>(null);
+    useEffect(() => {
+        // Realize a chamada à API quando o componente for montado
+        fetch(`http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === 200) {
+                    // Preencha os campos de texto com os dados da API
+                    const { hospital, address } = data;
+
+                    // Preencha os campos de texto com os dados do hospital e do endereço
+                    setHospitalData(hospital);
+                    setEndereco(address); // Crie um estado para o endereço
+
+                    console.log(data);
+                }
+            })
+            .catch((error) => {
+                console.error('Erro ao buscar dados da API:', error);
+            });
+    }, []);
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
     };
@@ -50,7 +77,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         <FontAwesome5 name="bars" size={40} color="black" />
                     </TouchableOpacity>
                     <Text style={styles.title}>Hemocentro</Text>
-                    <View >
+                    <View>
                         {userData && userData.photo && (
                             <Image source={{ uri: userData.photo }} style={styles.profileImage} />
                         )}
@@ -71,10 +98,16 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             <Text style={styles.textEndereco}>
                                 Endereco
                             </Text>
-                            <TextInput style={styles.inputNomeCompleto} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
+                            <TextInput
+                                style={styles.inputNomeCompleto}
+                                placeholder='CEP'
+                                placeholderTextColor={'black'}
+                                value={endereco ? endereco.cep : ''} // Use o estado 'endereco' para o CEP
+                                editable={false}
+                            />
                         </View>
                         <View style={styles.viewEmailInput}>
-                            <TextInput style={styles.inputEmail} placeholder='CPF' placeholderTextColor={'black'} >
+                            <TextInput style={styles.inputEmail} placeholder='UF' placeholderTextColor={'black'} >
                             </TextInput>
                         </View>
                         <View>
@@ -84,17 +117,18 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
 
                     <View style={styles.viewTextFields}>
-                        <TextInput style={styles.textField} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={styles.textField} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={styles.textField} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={styles.textField} placeholder='CPF' placeholderTextColor={'black'} ></TextInput>
+                        <TextInput style={styles.textField} placeholder='Cidade' placeholderTextColor={'black'} ></TextInput>
+                        <TextInput style={styles.textField} placeholder='Bairro' placeholderTextColor={'black'} ></TextInput>
+                        <TextInput style={styles.textField} placeholder='Rua' placeholderTextColor={'black'} ></TextInput>
+                        <TextInput style={styles.textField} placeholder='Complemento' placeholderTextColor={'black'} ></TextInput>
 
                     </View>
 
                 </View>
 
                 <TouchableOpacity style={[styles.button]}
-                    onPress={() => navigation.navigate('AgendaDisponivelHemocentro', {hemocentroData: hemocentros, userName: userData.name, userData: userData })}>
+                    onPress={() => navigation.navigate('AgendaDisponivelHemocentro', { hemocentroNome: route.params.hemocentroData.hospital.name, hemocentroData: hemocentros, userName: userData.name, userData: userData })}
+                >
                     <Text
 
                         style={{ fontSize: 20, color: 'white' }}
@@ -136,7 +170,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                 </View>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.cardAvaliacao} onPress={() => navigation.navigate('PerfilHemocentro', { userName: hemocentroData.hospital.name, userData: userData })}>
+                        <TouchableOpacity style={styles.cardAvaliacao} onPress={() => navigation.navigate('AgendaDisponivelHemocentro', { hemocentroNome: route.params.hemocentroData.hospital.name, hemocentroData: hemocentros, userName: userData.name, userData: userData })}>
                             <View style={styles.contentCardAvaliacao}>
                                 <View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 30, paddingRight: 70 }}>
