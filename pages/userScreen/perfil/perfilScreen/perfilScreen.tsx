@@ -39,7 +39,8 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
   const userData = route.params && route.params.userData ? route.params.userData : null;
   const [endereco, setEndereco] = useState<Address | null>(null);
   const [user, setUser] = useState<UserDate | null>(null)
-  //Fazer a busac ad api pelo id que vem de:userData.id
+  
+  //Fazer a busca ad api pelo id que vem de:userData.id
   console.log(userData.id);
   useEffect(() => {
     // Realize a chamada à API quando o componente for montado
@@ -66,7 +67,6 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
   return (
     <ScrollView>
       <View style={styles.container}>
-
         <View style={styles.header}>
           <View style={{ paddingRight: 60, paddingLeft: 20 }}>
             <TouchableOpacity
@@ -217,9 +217,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 180,
+    height: 150,
     paddingTop: 10,
+    gap:12,
     width: '100%',
+
   },
   title: {
     fontSize: 30,
