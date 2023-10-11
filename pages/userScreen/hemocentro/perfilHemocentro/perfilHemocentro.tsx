@@ -20,6 +20,8 @@ interface Hospital {
 }
 
 interface Address {
+    complement: string | undefined;
+    street: string | undefined;
     cep: string | undefined;
     uf: string;
     city: string;
@@ -46,7 +48,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [endereco, setEndereco] = useState<Address | null>(null);
     useEffect(() => {
         // Realize a chamada à API quando o componente for montado
-        fetch(`http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -95,33 +97,59 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 <View style={styles.informacoesHospital}>
                     <View style={styles.viewTextInputCpf}>
                         <View style={styles.viewAlignEnderecoField}>
-                            <Text style={styles.textEndereco}>
-                                Endereco
-                            </Text>
+                            <Text style={styles.textEndereco}>Endereco</Text>
                             <TextInput
                                 style={styles.inputNomeCompleto}
                                 placeholder='CEP'
                                 placeholderTextColor={'black'}
-                                value={endereco ? endereco.cep : ''} // Use o estado 'endereco' para o CEP
+                                value={endereco ? endereco.cep : ''}
                                 editable={false}
                             />
                         </View>
                         <View style={styles.viewEmailInput}>
-                            <TextInput style={styles.inputEmail} placeholder='UF' placeholderTextColor={'black'} >
-                            </TextInput>
+                            <TextInput
+                                style={styles.inputEmail}
+                                placeholder='UF'
+                                placeholderTextColor={'black'}
+                                value={endereco ? endereco.uf : ''}
+                                editable={false}
+                            />
                         </View>
                         <View>
-                            <Image source={require('../perfilHemocentro/imgs/localizacao.png')}></Image>
+                            <Image source={require('../perfilHemocentro/imgs/localizacao.png')} />
                         </View>
                     </View>
 
 
                     <View style={styles.viewTextFields}>
-                        <TextInput style={styles.textField} placeholder='Cidade' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={styles.textField} placeholder='Bairro' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={styles.textField} placeholder='Rua' placeholderTextColor={'black'} ></TextInput>
-                        <TextInput style={styles.textField} placeholder='Complemento' placeholderTextColor={'black'} ></TextInput>
-
+                        <TextInput
+                            style={styles.textField}
+                            placeholder='Cidade'
+                            placeholderTextColor={'black'}
+                            value={endereco ? endereco.city : ''}
+                            editable={false}
+                        />
+                        <TextInput
+                            style={styles.textField}
+                            placeholder='Bairro'
+                            placeholderTextColor={'black'}
+                            value={endereco ? endereco.neighborhood : ''}
+                            editable={false}
+                        />
+                        <TextInput
+                            style={styles.textField}
+                            placeholder='Rua'
+                            placeholderTextColor={'black'}
+                            value={endereco ? endereco.street : ''}
+                            editable={false}
+                        />
+                        <TextInput
+                            style={styles.textField}
+                            placeholder='Complemento'
+                            placeholderTextColor={'black'}
+                            value={endereco ? endereco.complement : ''}
+                            editable={false}
+                        />
                     </View>
 
                 </View>
@@ -202,7 +230,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 </View>
 
             </View>
-            <Modal isVisible={modalVisible}>
+            {/* <Modal isVisible={modalVisible}>
                 <View style={styles.modalContainer}>
                     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 26, fontWeight: '300' }}>Avaliar?</Text>
@@ -236,7 +264,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         </Pressable>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
         </ScrollView>
 
     );
