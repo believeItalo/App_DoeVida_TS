@@ -26,9 +26,9 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
   const handleLogin = async () => {
     try {
-      //'http://192.168.0.16:5050/api/v1/user-login'
-      //http://10.107.144.11:8080/api/v1/user-login senai
-      const response = await axios.post('http://192.168.0.16:5050/api/v1/user-login', {
+      //url casa Ítalo'http://192.168.0.16:5050/api/v1/user-login'
+      //url senai http://10.107.144.11:8080/api/v1/user-login
+      const response = await axios.post('http://10.107.144.11:8080/api/v1/user-login', {
         email: email,
         password: password,
       });

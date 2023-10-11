@@ -1,12 +1,13 @@
 
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Dimensions, TextInput, Alert, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Dimensions, Alert, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { TextInput } from 'react-native-paper';
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -15,6 +16,7 @@ interface PerfilHemocentroScreenProps {
 }
 
 interface Hospital {
+    photo: string | undefined;
     hospitalId: number;
     name: string;
 }
@@ -42,13 +44,14 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const userData = route.params && route.params.userData ? route.params.userData : null;
     const hemocentroData = route.params && route.params.hemocentroData ? route.params.hemocentroData : null;
     const [hemocentros, setHemocentros] = useState<Hemocentro[]>([]);
-    const [hospitalData, setHospitalData] = useState<Hospital | null>(null); // Adicione este estado
-
-    //inputs
+    const [hospitalData, setHospitalData] = useState<Hospital | null>(null); 
     const [endereco, setEndereco] = useState<Address | null>(null);
+
     useEffect(() => {
         // Realize a chamada à API quando o componente for montado
-        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        //url Ítalo: http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
+        //url senai: http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
+        fetch(`http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -58,14 +61,16 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                     // Preencha os campos de texto com os dados do hospital e do endereço
                     setHospitalData(hospital);
                     setEndereco(address); // Crie um estado para o endereço
-
                     console.log(data);
+
+
                 }
             })
             .catch((error) => {
                 console.error('Erro ao buscar dados da API:', error);
             });
     }, []);
+    
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
     };
@@ -81,13 +86,16 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                     <Text style={styles.title}>Hemocentro</Text>
                     <View>
                         {userData && userData.photo && (
-                            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+                            <Image source={{ uri: userData.photo }} style={styles.userimage} />
                         )}
                     </View>
                 </View>
                 <View style={styles.viewSlider}>
-                    <Image source={require('../perfilHemocentro/imgs/hemocentroPic.png')} style={styles.image}></Image>
+
+                    <Image source={{ uri: hospitalData ? hospitalData.photo : ' ' }} style={styles.profileImage} />
+
                 </View>
+
                 <View style={styles.viewNomeHemocentro}>
                     <Text style={styles.nomeHemocentro}>
                         {route.params && route.params.hemocentroData ? route.params.hemocentroData.hospital.name : ''}
@@ -99,8 +107,8 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         <View style={styles.viewAlignEnderecoField}>
                             <Text style={styles.textEndereco}>Endereco</Text>
                             <TextInput
+                                label="CEP"
                                 style={styles.inputNomeCompleto}
-                                placeholder='CEP'
                                 placeholderTextColor={'black'}
                                 value={endereco ? endereco.cep : ''}
                                 editable={false}
@@ -108,8 +116,8 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         </View>
                         <View style={styles.viewEmailInput}>
                             <TextInput
+                                label="UF"
                                 style={styles.inputEmail}
-                                placeholder='UF'
                                 placeholderTextColor={'black'}
                                 value={endereco ? endereco.uf : ''}
                                 editable={false}
@@ -123,29 +131,29 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
                     <View style={styles.viewTextFields}>
                         <TextInput
+                            label="Estado"
                             style={styles.textField}
-                            placeholder='Cidade'
                             placeholderTextColor={'black'}
                             value={endereco ? endereco.city : ''}
                             editable={false}
                         />
                         <TextInput
                             style={styles.textField}
-                            placeholder='Bairro'
+                            label="Cidade"
                             placeholderTextColor={'black'}
                             value={endereco ? endereco.neighborhood : ''}
                             editable={false}
                         />
                         <TextInput
                             style={styles.textField}
-                            placeholder='Rua'
+                            label='Rua'
                             placeholderTextColor={'black'}
                             value={endereco ? endereco.street : ''}
                             editable={false}
                         />
                         <TextInput
                             style={styles.textField}
-                            placeholder='Complemento'
+                            label='Complemento'
                             placeholderTextColor={'black'}
                             value={endereco ? endereco.complement : ''}
                             editable={false}
@@ -312,6 +320,12 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     profileImage: {
+        height: 300,
+        width: 400,
+        borderRadius:5
+     
+    },
+    userimage: {
         height: 70,
         width: 70,
         borderRadius: 50
@@ -335,25 +349,25 @@ const styles = StyleSheet.create({
         gap: 10
     },
     textField: {
-        width: 335,
-        height: 40,
+        width: 353,
+        height: 60,
         borderWidth: 1,
-        padding: 10,
         borderColor: '#F0F0F0',
         borderRadius: 5,
+        backgroundColor: 'white'
     },
     inputEmail: {
-        width: 50,
-        height: 40,
+        width: 70,
+        height: 60,
         borderWidth: 1,
-        padding: 10,
         borderColor: '#F0F0F0',
         borderRadius: 5,
         flexDirection: 'column',
+        backgroundColor: 'white'
     },
     viewEmailInput: {
         alignItems: 'flex-end',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     viewTextInputCpf: {
         flexDirection: 'row',
@@ -362,11 +376,11 @@ const styles = StyleSheet.create({
     },
     inputNomeCompleto: {
         width: 100,
-        height: 40,
+        height: 60,
         borderWidth: 1,
-        padding: 10,
         borderColor: '#F0F0F0',
         borderRadius: 5,
+        backgroundColor: 'white',
     },
     textEndereco: {
         fontSize: 16

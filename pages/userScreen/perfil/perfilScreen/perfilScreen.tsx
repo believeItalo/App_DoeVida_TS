@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
+import { TextInput } from 'react-native-paper';
 const Stack = createNativeStackNavigator();
 
 interface MeuPerfilScreen {
@@ -10,14 +11,58 @@ interface MeuPerfilScreen {
   route: any;
 }
 
+interface UserDate {
+  name: string;
+  photo: string;
+  email: string;
+  phone: string;
+  weight: string;
+  age: number;
+  bloodType: string;
+  sex: string;
+  cpf: string;
+}
+
+interface Address {
+  complement: string | undefined;
+  street: string | undefined;
+  cep: string | undefined;
+  uf: string;
+  city: string;
+  neighborhood: string;
+}
+
 export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) {
 
   const [userDetails, setUserDetails] = useState(null);
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
+  const [endereco, setEndereco] = useState<Address | null>(null);
+  const [user, setUser] = useState<UserDate | null>(null)
   //Fazer a busac ad api pelo id que vem de:userData.id
   console.log(userData.id);
-  
+  useEffect(() => {
+    // Realize a chamada à API quando o componente for montado
+    //url Ítalo: http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
+    //url senai: http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
+    fetch(`http://10.107.144.11:8080/api/v1/users/${userData.id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+
+          const { user, address } = data
+
+          setEndereco(address)
+          setUser(user)
+
+          console.log(data);
+        }
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar dados da API:', error);
+      });
+  }, []);
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -61,44 +106,57 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
         </View>
         <View style={styles.dadosPessoaisTextFields}>
 
-          <TextInput style={styles.input} keyboardType='email-address' />
-          <TextInput style={styles.input} keyboardType='email-address' />
-          <TextInput style={styles.input} keyboardType='email-address' />
+          <TextInput style={styles.input}
+            editable={false}
+            label='Nome completo'
+            value={user ? user.name : ' '}
+          />
+          <TextInput style={styles.input}
+            editable={false}
+            label='E-mail'
+            value={user ? user.email : ' '}
+          />
+          <TextInput style={styles.input}
+            editable={false}
+            label='Telefone'
+            value={user ? user.phone : ' '}
+          />
 
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 20, paddingTop: 7 }}>
-            <TextInput style={{
-              width: 100, height: 40, borderWidth: 1,
-              padding: 10,
-              borderColor: '#7395F7',
-              borderRadius: 5,
-            }} keyboardType='email-address' />
+          <View style={styles.viewTextInput}>
+            <TextInput style={styles.smallInput}
+              editable={false}
+              label='Sexo'
+              value={user ? user.sex.charAt(0).toUpperCase() + user.sex.slice(1).toLowerCase() : ' '}
 
-            <TextInput style={{
-              width: 70, height: 40, borderWidth: 1,
-              padding: 10,
-              borderColor: '#7395F7',
-              borderRadius: 5,
-            }} keyboardType='email-address' />
+            />
 
-            <TextInput style={{
-              width: 100, height: 40, borderWidth: 1,
-              padding: 10,
-              borderColor: '#7395F7',
-              borderRadius: 5,
-            }} keyboardType='email-address' />
+            <TextInput style={styles.smallInput}
+              label='Peso'
+              value={user ? user.weight : ' '}
+              editable={false}
+            />
+
+            <TextInput style={styles.smallInput}
+              label='Idade'
+              value={user ? user.age.toString() : ' '}
+              editable={false}
+            />
           </View>
 
-          <View style={{ width: '100%', paddingLeft: 52, paddingTop: 15 }}>
-            <TextInput style={{
-              width: 100, height: 100, borderWidth: 1,
-              padding: 10,
-              borderColor: '#7395F7',
-              borderRadius: 5,
-            }} keyboardType='email-address' />
+          <View style={styles.viewBloodType}>
+            <TextInput style={styles.bloodTypeInput}
+              label='Tipo sanguíneo'
+              value={user ? user.bloodType : ' '}
+              editable={false}
+            />
 
           </View>
 
-          <TextInput style={styles.input} keyboardType='email-address' />
+          <TextInput style={styles.input}
+            label='CPF'
+            value={'42377557899'}
+            editable={false}
+          />
 
 
         </View>
@@ -111,25 +169,34 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
 
         <View style={styles.dadosResidenciasTextFields}>
 
-          <TextInput style={styles.input} keyboardType='email-address' />
+          <TextInput style={styles.input}
+            label='CEP'
+            value={endereco ? endereco.cep : ' '}
+            editable={false}
+          />
 
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 20, paddingTop: 7 }}>
-            <TextInput style={{
-              width: 70, height: 40, borderWidth: 1,
-              padding: 10,
-              borderColor: '#7395F7',
-              borderRadius: 5,
-            }} keyboardType='email-address' />
+          <View style={styles.viewDataInput}>
+            <TextInput style={styles.smallInputType}
+            label='Estado'
+            value={endereco ? endereco.uf : ' '}
+              editable={false}
+            />
 
-            <TextInput style={{
-              width: 220, height: 40, borderWidth: 1,
-              padding: 10,
-              borderColor: '#7395F7',
-              borderRadius: 5,
-            }} keyboardType='email-address' />
+            <TextInput style={styles.mediumInput}
+              label='Cidade'
+              value={endereco ? endereco.city.charAt(0).toUpperCase() + endereco.city.slice(1).toLowerCase() : ' '}
+              editable={false} />
           </View>
-          <TextInput style={styles.input} keyboardType='email-address' />
-          <TextInput style={styles.input} keyboardType='email-address' />
+          <TextInput style={styles.input}
+            label='Bairro'
+            value={endereco ? endereco.neighborhood : ' '}
+            editable={false}
+          />
+          <TextInput style={styles.input}
+            label='Complemento'
+            value={endereco ? endereco.complement : ' '}
+            editable={false}
+          />
 
         </View>
       </View>
@@ -197,12 +264,63 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   input: {
-    height: 40,
-    width: 310,
+    height: 60,
+    width: 355,
     margin: 12,
     borderWidth: 1,
-    padding: 10,
     borderColor: '#7395F7',
     borderRadius: 5,
+    backgroundColor: 'white'
   },
+  viewTextInput: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 20,
+    paddingTop: 7
+  },
+  mediumInput: {
+    width: 245,
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#7395F7',
+    borderRadius: 5,
+    backgroundColor: 'white'
+  },
+  smallInput: {
+    width: 105,
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#7395F7',
+    borderRadius: 5,
+    backgroundColor: 'white',
+    fontSize: 15
+  },
+  viewBloodType: {
+    width: '100%',
+    paddingLeft: 28,
+    paddingTop: 15
+  },
+
+  bloodTypeInput: {
+    width: 100,
+    height: 100,
+    borderWidth: 1,
+    borderColor: '#7395F7',
+    borderRadius: 5,
+    backgroundColor: 'white'
+  },
+  viewDataInput: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 20,
+    paddingTop: 7
+  },
+  smallInputType: {
+    width: 90,
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#7395F7',
+    borderRadius: 5,
+    backgroundColor: 'white'
+  }
 });
