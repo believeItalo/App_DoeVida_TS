@@ -44,14 +44,15 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const userData = route.params && route.params.userData ? route.params.userData : null;
     const hemocentroData = route.params && route.params.hemocentroData ? route.params.hemocentroData : null;
     const [hemocentros, setHemocentros] = useState<Hemocentro[]>([]);
-    const [hospitalData, setHospitalData] = useState<Hospital | null>(null); 
+    const [hospitalData, setHospitalData] = useState<Hospital | null>(null);
     const [endereco, setEndereco] = useState<Address | null>(null);
-
+    console.log(hemocentroData);
+    
     useEffect(() => {
         // Realize a chamada à API quando o componente for montado
         //url Ítalo: http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
         //url senai: http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
-        fetch(`http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -70,7 +71,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao buscar dados da API:', error);
             });
     }, []);
-    
+
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
     };
@@ -162,14 +163,17 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
                 </View>
 
-                <TouchableOpacity style={[styles.button]}
-                    onPress={() => navigation.navigate('AgendaDisponivelHemocentro', { hemocentroNome: route.params.hemocentroData.hospital.name, hemocentroData: hemocentros, userName: userData.name, userData: userData })}
+                <TouchableOpacity
+                    style={[styles.button]}
+                    onPress={() => navigation.navigate('AgendaDisponivelHemocentro', {
+                        hemocentroNome: route.params.hemocentroData.hospital.name,
+                        hemocentroData: hemocentros,
+                        userName: userData.name,
+                        userData: userData,
+                        hospitalId: route.params.hemocentroData.hospital.hospitalId, // Include hospital ID
+                    })}
                 >
-                    <Text
-
-                        style={{ fontSize: 20, color: 'white' }}
-
-                    >Agendamentos Disponiveis</Text>
+                    <Text style={{ fontSize: 20, color: 'white' }}>Agendamentos Disponiveis</Text>
                 </TouchableOpacity>
 
                 <ScrollView>
@@ -322,8 +326,8 @@ const styles = StyleSheet.create({
     profileImage: {
         height: 300,
         width: 400,
-        borderRadius:5
-     
+        borderRadius: 5
+
     },
     userimage: {
         height: 70,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, } from 'react-native';
 import Modal from 'react-native-modal';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -8,12 +8,65 @@ interface AgendaDisponivelHemocentroScreenProps {
   navigation: any;
   route: any;
 }
-
+interface Hospital {
+  photo: string | undefined;
+  hospitalId: number;
+  name: string;
+}
+interface Schedule {
+  id: number;
+  date: string;
+  hour: string;
+  site: string;
+}
 export default function AgendaDisponivelHemocentro({ navigation, route }: AgendaDisponivelHemocentroScreenProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
+  const [bookSchedules, setBookSchedules] = useState([]);
+  const [hospitalData, setHospitalData] = useState<Hospital | null>(null);
   const userData = route.params && route.params.userData ? route.params.userData : null;
   const hemocentroNome = route.params && route.params.hemocentroNome ? route.params.hemocentroNome : '';
+  const hospitalId = route.params && route.params.hospitalId ? route.params.hospitalId : null;
+  useEffect(() => {
+    fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${hospitalId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+          // Preencha os campos de texto com os dados da API
+          const { hospital } = data;
+
+          // Preencha os campos de texto com os dados do hospital e do endereço
+          setHospitalData(hospital);
+          console.log(data);
+
+
+        }
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar dados da API:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`http://192.168.0.16:5050/api/v1/hospital/${hospitalId}/book-schedules`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status === 200) {
+          setBookSchedules(data.bookSchedules);
+        } else {
+          console.error('Received a non-200 status:', data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
 
   return (
     <ScrollView>
@@ -30,13 +83,9 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
           </View>
         </View>
         <View style={styles.imageContainer}>
-          <Image
-            source={require('../perfilHemocentro/imgs/hemocentroPic.png')}
-            style={styles.image}
-          />
-          <Image
-            source={require('../perfilHemocentro/imgs/sliderLength.png')}
-          />
+          {hospitalData && hospitalData.photo && (
+            <Image source={{ uri: hospitalData.photo }} style={styles.profileImageHemocentro} />
+          )}
         </View>
         <View style={styles.nomeHemocentroContainer}>
           <Text style={styles.nomeHemocentro}>{hemocentroNome}</Text>
@@ -45,27 +94,29 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
           <Text style={styles.agendaTitle}>{getStrings().agendaTitle}</Text>
         </View>
         <View style={styles.cardsContainer}>
-          <View style={styles.cardAgenda}>
-            <TouchableOpacity style={styles.contentCardAgenda}>
-              <View style={styles.cardInfoRow}>
-                <Text style={styles.titleCardAgenda}>Data:</Text>
-                <Text style={styles.descriptionCardAgenda}>
-                  18/09/2023 às 13:30
-                </Text>
-              </View>
-              <View style={styles.cardInfoColumn}>
-                <Text style={styles.titleCardAgenda}>Local de doação:</Text>
-                <Text style={styles.descriptionCardAgenda}>
-                  Descricao de local de doacao 1
-                </Text>
-              </View>
-              <View style={styles.agendarButtonContainer}>
-                <TouchableOpacity style={styles.agendarButton} onPress={() => setModalVisible(true)}>
-                  <Text style={styles.agendarButtonText}>{getStrings().agendaTitle}</Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          </View>
+          {bookSchedules.map((schedule: Schedule) => ( // Provide type for schedule
+            <View style={styles.cardAgenda} key={schedule.id}>
+              <TouchableOpacity style={styles.contentCardAgenda}>
+                <View style={styles.cardInfoRow}>
+                  <Text style={styles.titleCardAgenda}>Data:</Text>
+                  <Text style={styles.descriptionCardAgenda}>
+                    {schedule.date} às {schedule.hour}
+                  </Text>
+                </View>
+                <View style={styles.cardInfoColumn}>
+                  <Text style={styles.titleCardAgenda}>Local de doação:</Text>
+                  <Text style={styles.descriptionCardAgenda}>
+                    {schedule.site}
+                  </Text>
+                </View>
+                <View style={styles.agendarButtonContainer}>
+                  <TouchableOpacity style={styles.agendarButton} onPress={() => setModalVisible(true)}>
+                    <Text style={styles.agendarButtonText}>{"Agendar"}</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}
         </View>
       </View>
 
@@ -106,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 10,
-   
+
   },
   title: {
     fontSize: 30,
@@ -201,6 +252,13 @@ const styles = StyleSheet.create({
   agendarButtonText: {
     color: 'white',
   },
+  profileImageHemocentro: {
+    height: 300,
+    width: 400,
+    borderRadius:10
+}
 });
+
+
 
 
