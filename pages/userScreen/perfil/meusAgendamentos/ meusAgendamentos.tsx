@@ -1,14 +1,33 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image,ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Modal } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Platform } from 'react-native';
 interface MeusAgendamentosProps {
     navigation: any;
 }
 const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
+    const [isCancelModalVisible, setCancelModalVisible] = useState(false);
+    const [isRescheduleModalVisible, setRescheduleModalVisible] = useState(false);
 
+    const toggleCancelModal = () => {
+        setCancelModalVisible(!isCancelModalVisible);
+    };
+
+    const toggleRescheduleModal = () => {
+        setRescheduleModalVisible(!isRescheduleModalVisible);
+    };
+
+    const handleCancellationConfirmation = () => {
+        // Logic for handling cancellation confirmation
+        setCancelModalVisible(false);
+    };
+
+    const handleReschedulingConfirmation = () => {
+        // Logic for handling rescheduling confirmation
+        setRescheduleModalVisible(false);
+    };
     return (
-        <ScrollView style={{ height: '100%',backgroundColor:'white', }}>
+        <ScrollView style={{ height: '100%', backgroundColor: 'white', }}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.openDrawer()}>
                     <FontAwesome5 name="bars" size={40} color="black" />
@@ -39,8 +58,12 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                             <Text>Concluído</Text>
                         </View>
                         <View style={styles.crudIconsAgendamento}>
-                            <Image source={require('./imgs/iconCalendar.png')} style={styles.iconCalendar}></Image>
-                            <Image source={require('./imgs/iconReagendar.png')} style={styles.iconCalendar}></Image>
+                            <TouchableOpacity onPress={toggleCancelModal}>
+                                <Image source={require('./imgs/iconCalendar.png')} style={styles.iconCalendar} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={toggleRescheduleModal}>
+                                <Image source={require('./imgs/iconReagendar.png')} style={styles.iconCalendar} />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -60,8 +83,12 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                             <Text>Pendente</Text>
                         </View>
                         <View style={styles.crudIconsAgendamento}>
-                            <Image source={require('./imgs/iconCalendar.png')} style={styles.iconCalendar}></Image>
-                            <Image source={require('./imgs/iconReagendar.png')} style={styles.iconCalendar}></Image>
+                            <TouchableOpacity onPress={toggleCancelModal}>
+                                <Image source={require('./imgs/iconCalendar.png')} style={styles.iconCalendar} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={toggleRescheduleModal}>
+                                <Image source={require('./imgs/iconReagendar.png')} style={styles.iconCalendar} />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -81,8 +108,12 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                             <Text>Cancelado</Text>
                         </View>
                         <View style={styles.crudIconsAgendamento}>
-                            <Image source={require('./imgs/iconCalendar.png')} style={styles.iconCalendar}></Image>
-                            <Image source={require('./imgs/iconReagendar.png')} style={styles.iconCalendar}></Image>
+                            <TouchableOpacity onPress={toggleCancelModal}>
+                                <Image source={require('./imgs/iconCalendar.png')} style={styles.iconCalendar} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={toggleRescheduleModal}>
+                                <Image source={require('./imgs/iconReagendar.png')} style={styles.iconCalendar} />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -101,12 +132,49 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                             <Text>Concluído</Text>
                         </View>
                         <View style={styles.crudIconsAgendamento}>
-                            <Image source={require('./imgs/iconCalendar.png')} style={styles.iconCalendar}></Image>
-                            <Image source={require('./imgs/iconReagendar.png')} style={styles.iconCalendar}></Image>
+                            <TouchableOpacity onPress={toggleCancelModal}>
+                                <Image source={require('./imgs/iconCalendar.png')} style={styles.iconCalendar} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={toggleRescheduleModal}>
+                                <Image source={require('./imgs/iconReagendar.png')} style={styles.iconCalendar} />
+                            </TouchableOpacity>
                         </View>
                     </View>
+                    <Modal visible={isCancelModalVisible} animationType="slide" transparent={true}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalTitle}>Cancel Appointment</Text>
+                                {/* Conteúdo adicional para o cancelamento */}
+                                <View style={styles.modalButtonsContainer}>
+                                    <TouchableOpacity style={styles.modalButton} onPress={toggleCancelModal}>
+                                        <Text style={styles.modalButtonText}>Close</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.modalButton} onPress={handleCancellationConfirmation}>
+                                        <Text style={styles.modalButtonText}>Confirm</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <Modal visible={isRescheduleModalVisible} animationType="slide" transparent={true}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalTitle}>Reschedule Appointment</Text>
+                                {/* Conteúdo adicional para reagendamento */}
+                                <View style={styles.modalButtonsContainer}>
+                                    <TouchableOpacity style={styles.modalButton} onPress={toggleRescheduleModal}>
+                                        <Text style={styles.modalButtonText}>Close</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.modalButton} onPress={handleReschedulingConfirmation}>
+                                        <Text style={styles.modalButtonText}>Confirm</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
-               
+
             </View>
 
         </ScrollView>
@@ -142,23 +210,23 @@ const styles = StyleSheet.create({
         width: 195
     },
     cardAgendamentos: {
-        width:350,
+        width: 350,
         borderRadius: 30,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
         gap: 10,
-        borderWidth:1,
-        borderColor:'black',
-     
+        borderWidth: 1,
+        borderColor: 'black',
+
     },
     viewCardsAgendamentos: {
         alignItems: 'center',
         gap: 20,
         backgroundColor: 'white',
-        paddingBottom:40,
-        paddingTop:40
+        paddingBottom: 40,
+        paddingTop: 40
     },
     viewCardsImages: {
         width: '100%',
@@ -214,7 +282,52 @@ const styles = StyleSheet.create({
     iconCalendar: {
         width: 30,
         height: 30
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    modalButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '80%',
+    },
+    modalButton: {
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
 });
 
 export default HomeScreen;

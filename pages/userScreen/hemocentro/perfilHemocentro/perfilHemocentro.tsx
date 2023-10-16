@@ -36,7 +36,7 @@ interface Hemocentro {
 }
 
 export default function PerfilHemocentro({ navigation, route }: PerfilHemocentroScreenProps) {
-    const [modalVisible, setModalVisible] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
     const [rating, setRating] = useState(0);
     const [selectButton, setSelectButton] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
@@ -47,7 +47,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [hospitalData, setHospitalData] = useState<Hospital | null>(null);
     const [endereco, setEndereco] = useState<Address | null>(null);
     console.log(hemocentroData);
-    
+
     useEffect(() => {
         // Realize a chamada à API quando o componente for montado
         //url Ítalo: http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
@@ -232,7 +232,10 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
                 <View style={{ width: '100%', paddingLeft: 20, paddingBottom: 30 }}>
                     <TouchableOpacity
-                        style={[styles.button, { width: 170, height: 50, backgroundColor: "white", borderColor: "#7395F7", borderWidth: 2 }]}
+                        style={[
+                            styles.button,
+                            { width: 170, height: 50, backgroundColor: 'white', borderColor: '#7395F7', borderWidth: 2 },
+                        ]}
                         onPress={() => setModalVisible(true)}
                     >
                         <Text style={{ fontSize: 20 }}>Avaliar</Text>
@@ -242,7 +245,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 </View>
 
             </View>
-            {/* <Modal isVisible={modalVisible}>
+            <Modal isVisible={modalVisible}>
                 <View style={styles.modalContainer}>
                     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 26, fontWeight: '300' }}>Avaliar?</Text>
@@ -250,21 +253,27 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             <Text style={{ fontSize: 16, fontWeight: '300' }}>Digite a sua opinião sobre o </Text>
                             <Text style={{ fontSize: 16, fontWeight: '300' }}>hospital e deixe uma avaliação</Text>
                         </View>
-
+                        <TextInput
+                            style={styles.inputAvaliacao}
+                            multiline={true}
+                            placeholderTextColor="#888"
+                            onChangeText={(text) => {
+                                // Aqui você pode fazer algo com o texto digitado
+                            }}
+                        />
                     </View>
                     <View style={{ paddingTop: 20 }}>
-
-                    </View>
-                    <View style={styles.ratingContainer}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <TouchableOpacity
-                                key={star}
-                                onPress={() => handleRatingPress(star)}
-                                style={styles.starButton}
-                            >
-                                <FontAwesome5 name="star" size={30} color={star <= rating ? '#FFD700' : '#D3D3D3'} />
-                            </TouchableOpacity>
-                        ))}
+                        <View style={styles.ratingContainer}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <TouchableOpacity
+                                    key={star}
+                                    onPress={() => handleRatingPress(star)}
+                                    style={styles.starButton}
+                                >
+                                    <FontAwesome5 name="star" size={30} color={star <= rating ? '#FFD700' : '#D3D3D3'} />
+                                </TouchableOpacity>
+                            ))}
+                        </View>
                     </View>
 
                     <View style={styles.modalButtonsContainer}>
@@ -276,7 +285,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         </Pressable>
                     </View>
                 </View>
-            </Modal> */}
+            </Modal>
         </ScrollView>
 
     );
@@ -385,6 +394,7 @@ const styles = StyleSheet.create({
         borderColor: '#F0F0F0',
         borderRadius: 5,
         backgroundColor: 'white',
+        fontSize:12
     },
     textEndereco: {
         fontSize: 16
@@ -448,6 +458,15 @@ const styles = StyleSheet.create({
     modalButtonsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
+        marginTop: 20,
+    },
+    inputAvaliacao: {
+        width: 300,
+        height: 150,
+        borderWidth: 1,
+        borderColor: '#2C62F1',
+        backgroundColor:'white',
+        borderRadius: 5,
         marginTop: 20,
     },
     modalButton: {
