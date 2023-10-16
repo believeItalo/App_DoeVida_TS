@@ -23,6 +23,7 @@ import PerfilHemocentroScreen from './pages/userScreen/hemocentro/perfilHemocent
 import AgendaDisponivelHemocentroScreen from './pages/userScreen/hemocentro/agendamentosDisponiveis/agendamentosDisponiveis';
 import QuemPodeDoarScreen from './pages/userScreen/quemPodeDoar/quemPodeDoar';
 import MeusAgendamentosScreen from './pages/userScreen/perfil/meusAgendamentos/ meusAgendamentos'
+import CampanhasScreen from './pages/userScreen/campanhas/campanhasScreen'
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Image } from 'react-native';
 
@@ -52,6 +53,7 @@ function HomeStack() {
       <Stack.Screen name="AjudaScreen" component={AjudaScreen} options={{ headerShown: false }} />
       <Stack.Screen name="MeuPerfil" component={MeuPerfilScreen} options={{headerShown:false}}></Stack.Screen>
       <Stack.Screen name="MeusAgendamentos" component={MeusAgendamentosScreen} options={{headerShown:false}}></Stack.Screen>
+      <Stack.Screen name="CampanhasScreen" component={CampanhasScreen} options={{headerShown:false}}></Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -103,6 +105,16 @@ export default function App() {
         <Drawer.Screen
           name="Meus Agendamentos"
           component={MeusAgendamentosScreen}
+          options={{
+            headerShown: false,
+            drawerIcon: ({ color, size }) => (
+              <FontAwesome5 name="calendar" size={24} color="black" /> 
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Campanhas"
+          component={CampanhasScreen}
           options={{
             headerShown: false,
             drawerIcon: ({ color, size }) => (

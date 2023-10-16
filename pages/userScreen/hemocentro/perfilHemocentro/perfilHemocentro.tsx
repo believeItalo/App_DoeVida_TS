@@ -52,7 +52,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         // Realize a chamada à API quando o componente for montado
         //url Ítalo: http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
         //url senai: http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
-        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://10.107.144.19:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {

@@ -27,8 +27,13 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   const userData = route.params && route.params.userData ? route.params.userData : null;
   const hemocentroNome = route.params && route.params.hemocentroNome ? route.params.hemocentroNome : '';
   const hospitalId = route.params && route.params.hospitalId ? route.params.hospitalId : null;
+
+  console.log(hospitalId);
+  
   useEffect(() => {
-    fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${hospitalId}`)
+    //senai:10.107.144.11:8080
+    //http://192.168.0.16:5050/api/v1/hospital-data/${hospitalId} casa italo
+    fetch(`http://10.107.144.19:8080/api/v1/hospital-data/${hospitalId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200) {
@@ -48,7 +53,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   }, []);
 
   useEffect(() => {
-    fetch(`http://192.168.0.16:5050/api/v1/hospital/${hospitalId}/book-schedules`)
+    fetch(`http://10.107.144.19:8080/api/v1/hospital/${hospitalId}/book-schedules`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
