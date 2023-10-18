@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView, Alert } from 'react-native';
 import { getStrings } from '../../../strings/arquivoDeStrings';
+import axios from 'axios';
 
 interface CadastroSenhaScreenProps {
   navigation: any;
@@ -19,31 +20,34 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
       console.log('Dados do formulário recebidos:', formData);
     }
   }, [route.params]);
+ 
+  const handleContinuar = async () => {
+    try {
+      if (senha !== confirmarSenha) {
+        Alert.alert('Erro', 'As senhas não correspondem');
+        return;
+      }
 
-  const handleSubmit = () => {
-    if (senha === confirmarSenha) {
-      // Atualize o JSON do formulário com a senha
-      formDataJSON.user.password = senha;
+      const userPayload = {
+        ...formDataJSON.user,
+        password: senha,
+      };
 
-      // Realize a solicitação POST
-      fetch('http://192.168.0.16:5050/api/v1/user-registration', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formDataJSON),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('Resposta da solicitação POST:', data);
-          // Navegue para a próxima tela ou execute outras ações necessárias após o sucesso da solicitação
-        })
-        .catch((error) => {
-          console.error('Erro na solicitação POST:', error);
-          // Trate o erro adequadamente
-        });
-    } else {
-      console.error('As senhas não coincidem.');
+      const formDataWithPassword = {
+        ...formDataJSON,
+        user: userPayload,
+      };
+
+      const response = await axios.post('http://10.107.144.19:8080/api/v1/user-registration', formDataWithPassword); // Substitua 'sua_URL_aqui' pela URL real
+
+      if (response.status === 200) {
+        // lógica de navegação ou manipulação de sucesso aqui
+        console.log('Usuário cadastrado com sucesso:', response.data);
+        navigation.navigate('CadastroEndereco')
+      }
+    } catch (error) {
+      console.error('Erro ao enviar dados:', error);
+      // lógica de manipulação de erro aqui
     }
   };
 
@@ -79,7 +83,8 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
 
         <TouchableOpacity
           style={[styles.button, styles.primaryButton]}
-          onPress={handleSubmit}>
+          onPress={handleContinuar} // Adicionando o manipulador de eventos para o botão "Continuar"
+        >
           <Text style={[styles.buttonText, styles.buttonTextWhite]}>
             {getStrings().continuarButtonLabel}
           </Text>
@@ -89,7 +94,7 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
   );
 }
 
-  
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

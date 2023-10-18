@@ -21,7 +21,7 @@ export default function AjudaScreen({ navigation,route }: AjudaScreenProps) {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <FontAwesome5 name="bars" size={40} color="black" />
+            <FontAwesome5 name="bars" size={40} color="white" />
           </TouchableOpacity>
           <Text style={styles.title}>Ajuda</Text>
           <View >
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50
   },
   header: {
-    height: 170,
+    height: 120,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     gap: 90,
     paddingLeft: 30,
     paddingTop: 20,
+    backgroundColor:'rgba(78, 123, 242, 0.76)'
   },
   profileImage: {
     height: 70,
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: '300',
-    color: 'black',
+    color: 'white',
   },
   lineBetweenTextBox: {
     height: 1,
@@ -106,7 +107,8 @@ const styles = StyleSheet.create({
   alignReadMoreText: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%'
+    width: '100%',
+    paddingTop:30
   },
   viewBloodText: {
     width: '80%'
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '15%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingTop:90
   }
 });

@@ -56,7 +56,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <FontAwesome5 name="bars" size={40} color="black" />
+          <FontAwesome5 name="bars" size={40} color="white" />
         </TouchableOpacity>
         <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
 
@@ -104,12 +104,13 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor:'white',
     width: '100%',
     height: '100%',
+
   },
   header: {
-    height: 170,
+    height: 120,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -117,6 +118,7 @@ const styles = StyleSheet.create({
     gap: 40,
     paddingLeft: 30,
     paddingTop: 20,
+    backgroundColor:'rgba(78, 123, 242, 0.76)',
   },
   profileImage: {
     height: 70,
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: '300',
-    color: 'black',
+    color: 'white',
   },
   columnCardsHemocentros: {
     display: 'flex',
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    width: 405,
+    width:415,
     gap: 30,
     paddingTop: 30,
     paddingBottom: 30,
@@ -145,6 +147,7 @@ const styles = StyleSheet.create({
     borderColor: '#7395F7',
     height: 170,
     width: 340,
+    backgroundColor:'white'
   },
   contentCardHemocentro: {
     display: 'flex',
@@ -165,6 +168,7 @@ const styles = StyleSheet.create({
     height: 40,
     flex: 1,
     paddingHorizontal: 10,
+    
   },
   searchContainer: {
     flexDirection: 'row',
@@ -176,5 +180,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 40,
     gap: 20,
+    marginTop:30,
+    
   },
 });

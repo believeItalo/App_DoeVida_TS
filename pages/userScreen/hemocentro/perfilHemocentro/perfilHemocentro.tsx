@@ -82,7 +82,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <FontAwesome5 name="bars" size={40} color="black" />
+                        <FontAwesome5 name="bars" size={40} color="white" />
                     </TouchableOpacity>
                     <Text style={styles.title}>Hemocentro</Text>
                     <View>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     header: {
-        height: 170,
+        height: 120,
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
@@ -308,6 +308,7 @@ const styles = StyleSheet.create({
         gap: 50,
         paddingLeft: 10,
         paddingTop: 20,
+        backgroundColor:'rgba(78, 123, 242, 0.76)',
     },
     viewSlider: {
         width: 400,
@@ -315,12 +316,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        gap: 20
+        gap: 20,
+        paddingTop:50
     },
     title: {
         fontSize: 30,
         fontWeight: '300',
-        color: 'black',
+        color: 'white',
     },
     image: {
         height: 300,

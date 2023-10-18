@@ -43,7 +43,7 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Text style={styles.userInfoText}>{getStrings().welcomeText}</Text>
-          <Text style={[styles.userInfoText, { fontSize: 18, fontWeight: '400' }]}>{userName}</Text>
+          <Text style={[styles.userInfoText, { fontSize: 20, fontWeight: '400' }]}>{userName}</Text>
         </View>
         <View style={styles.userImage}>
           {userData && userData.photo && (
@@ -88,20 +88,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    height: '25%',
-    width: '80%',
+    height: '20%',
+    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+    gap:110,
+    backgroundColor:'rgba(78, 123, 242, 0.76)'
   },
   userInfo: {
     height: '60%',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    
   },
   userInfoText: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '300',
+    color:'white'
   },
   userImage: {
     paddingTop: 50,
@@ -153,5 +157,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'space-evenly',
+    paddingTop:50
   },
 });

@@ -27,6 +27,8 @@ const CadastroTipoSanguineoScreen: React.FC<CadastroTipoSanguineoScreenProps> = 
       console.log('Dados do formulário recebidos:', formData);
     }
   }, [route.params]);
+   
+  console.log(formData);
   
   return (
     <ScrollView>

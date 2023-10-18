@@ -9,10 +9,10 @@ import { getStrings } from '../../../strings/arquivoDeStrings';
 const Stack = createNativeStackNavigator();
 interface AjudaScreenProps {
   navigation: any;
-  route:any; 
+  route: any;
 }
 
-export default function AjudaScreen({ navigation,route }: AjudaScreenProps) {
+export default function AjudaScreen({ navigation, route }: AjudaScreenProps) {
   const [userDetails, setUserDetails] = useState(null);
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
@@ -20,15 +20,15 @@ export default function AjudaScreen({ navigation,route }: AjudaScreenProps) {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <FontAwesome5 name="bars" size={40} color="black" />
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <FontAwesome5 name="bars" size={40} color="white" />
           </TouchableOpacity>
           <Text style={styles.title}>{getStrings().helpTitle}</Text>
           <View >
-          {userData && userData.photo && (
-            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
-          )}
-        </View>
+            {userData && userData.photo && (
+              <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+            )}
+          </View>
         </View>
         <View style={styles.viewImgAjuda}>
           <Image source={require('./imgs/imgAjuda.png')}></Image>
@@ -82,12 +82,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     height: '200%',
-    paddingBottom:120
+    paddingBottom: 120
   },
-  bloodText:{
-    fontSize:20,
-    textAlign:'center',
-    fontWeight:'300'
+  bloodText: {
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: '300'
   },
   titleCadastroScreen: {
     fontSize: 30,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50
   },
   header: {
-    height: 170,
+    height: 120,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     gap: 90,
     paddingLeft: 30,
     paddingTop: 20,
+    backgroundColor: 'rgba(78, 123, 242, 0.76)'
   },
   profileImage: {
     height: 70,
@@ -113,25 +114,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: '300',
-    color: 'black',
+    color: 'white',
   },
-  lineBetweenTextBox:{
-     height:1,
-     width:'70%',
-     backgroundColor:'#C8C8C8'
-    },
-    alignReadMoreText:{
-      alignItems:'center',
-      justifyContent:'center',
-      width:'100%'
-    },
-    viewBloodText:{
-      width:'80%'
-    },
-    viewImgAjuda:{
-      width:'100%',
-      height:'10%',
-      alignItems:'center',
-      justifyContent:'center'
-    }
+  lineBetweenTextBox: {
+    height: 1,
+    width: '70%',
+    backgroundColor: '#C8C8C8'
+  },
+  alignReadMoreText: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  viewBloodText: {
+    width: '80%',
+    paddingTop: 50
+  },
+  viewImgAjuda: {
+    width: '100%',
+    height: '10%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 50
+  }
 });

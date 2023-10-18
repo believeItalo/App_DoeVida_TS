@@ -31,7 +31,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         email: email,
         password: password,
       });
-
       if (response.status === 200) {
         const userData = response.data.userData;
         console.log(userData);

@@ -11,6 +11,8 @@ interface CadastroEnderecoScreenProps {
 const EnderecoScreen: React.FC<CadastroEnderecoScreenProps> = ({ navigation, route }) => {
   const [formData, setFormData] = useState(route.params ? route.params.formDataJSON : {});
   const [cep, setCep] = useState('');
+  const [complementUser, setcomplementUser] = useState('');
+  const [adressNumber, setadressNumber] = useState('');
   const [infoCep, setInfoCep] = useState({
     estado: '',
     cidade: '',
@@ -19,30 +21,6 @@ const EnderecoScreen: React.FC<CadastroEnderecoScreenProps> = ({ navigation, rou
     rua: '',
   });
 
-  const updateFormData = () => {
-    const updatedFormData = {
-      ...formData,
-      address: {
-        cep,
-        uf: infoCep.estado,
-        city: infoCep.cidade,
-        neighborhood: infoCep.bairro,
-        street: infoCep.rua,
-        number: '', // O número será definido posteriormente
-        complement: '', // O complemento será definido posteriormente
-      },
-    };
-    setFormData(updatedFormData);
-  };
-
-  useEffect(() => {
-    if (route.params && route.params.formDataJSON) {
-      const formData = route.params.formDataJSON;
-      console.log('Dados do formulário recebidos:', formData);
-    }
-  }, [route.params]);
-
-
   const getCep = async () => {
     try {
       const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
@@ -50,7 +28,7 @@ const EnderecoScreen: React.FC<CadastroEnderecoScreenProps> = ({ navigation, rou
         estado: data.uf,
         cidade: data.localidade,
         bairro: data.bairro,
-        numero: " ",
+        numero: adressNumber,
         rua: data.logradouro
       });
     } catch (error) {
@@ -112,6 +90,27 @@ const EnderecoScreen: React.FC<CadastroEnderecoScreenProps> = ({ navigation, rou
             <TextInput style={[styles.input, styles.longInput]} editable={false} value={infoCep.rua} />
           </View>
         </View>
+        <View style={styles.rowContainer3}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.titleInput}>{'Complemento'}</Text>
+            <TextInput
+              style={[styles.input, styles.mediumInput]}
+              editable={true}
+              value={complementUser}
+              onChangeText={(text) => setcomplementUser(text)}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.titleInput}>{"Numero"}</Text>
+            <TextInput
+              style={[styles.input, styles.shortInput]}
+              editable={true}
+              value={adressNumber}
+              onChangeText={(text) => setadressNumber(text)}
+            />
+          </View>
+        </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={() => navigation.navigate('CadastroTipoSanguineo')}>
@@ -121,7 +120,18 @@ const EnderecoScreen: React.FC<CadastroEnderecoScreenProps> = ({ navigation, rou
             style={[styles.button, styles.primaryButton]}
             onPress={() => {
               navigation.navigate('CadastroSenha', {
-                formDataJSON: formData, // Os dados do formulário que você deseja passar
+                formDataJSON: {
+                  ...formData,
+                  address: {
+                    cep: cep,
+                    city: infoCep.cidade,
+                    complement: complementUser,
+                    neighborhood: infoCep.bairro,
+                    number: adressNumber,
+                    street: infoCep.rua,
+                    uf: infoCep.estado,
+                  }
+                },
               });
             }}
           >
@@ -157,6 +167,12 @@ const styles = StyleSheet.create({
     paddingLeft: 55,
     width: '100%',
     gap: -180,
+  },
+  rowContainer3: {
+    flexDirection: 'row',
+    paddingLeft: 55,
+    width: '100%',
+    gap: -120,
   },
   rowContainer2: {
     flexDirection: 'row',
