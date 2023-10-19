@@ -20,7 +20,6 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
       console.log('Dados do formulário recebidos:', formData);
     }
   }, [route.params]);
- 
   const handleContinuar = async () => {
     try {
       if (senha !== confirmarSenha) {
@@ -43,7 +42,7 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
       if (response.status === 200) {
         // lógica de navegação ou manipulação de sucesso aqui
         console.log('Usuário cadastrado com sucesso:', response.data);
-        navigation.navigate('CadastroEndereco')
+ 
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
@@ -83,7 +82,11 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
 
         <TouchableOpacity
           style={[styles.button, styles.primaryButton]}
-          onPress={handleContinuar} // Adicionando o manipulador de eventos para o botão "Continuar"
+          onPress={async () => {
+            await handleContinuar();
+            navigation.navigate('Home');
+            Alert.alert('Sucesso', 'Usuário cadastrado, efetue o login');
+          }}
         >
           <Text style={[styles.buttonText, styles.buttonTextWhite]}>
             {getStrings().continuarButtonLabel}

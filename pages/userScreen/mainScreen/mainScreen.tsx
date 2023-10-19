@@ -88,24 +88,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    height: '20%',
+    height: '25%',
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap:110,
-    backgroundColor:'rgba(78, 123, 242, 0.76)'
+
   },
   userInfo: {
     height: '60%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    
+    color:'black'
   },
   userInfoText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '300',
-    color:'white'
+    color:'black'
   },
   userImage: {
     paddingTop: 50,
@@ -157,6 +157,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingTop:50
+    paddingTop:20
   },
 });

@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity } from 'react-native';
 import { getStrings } from '../../../strings/arquivoDeStrings';
 import * as ImagePicker from 'expo-image-picker';
-
+import { Picker } from '@react-native-picker/picker';
+import { getDownloadURL, uploadBytes, ref, deleteObject } from 'firebase/storage'
+import { storage } from '../../../fireBaseConfig';
 interface CadastroScreenProps {
   navigation: any;
 }
@@ -15,7 +17,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
   const [dataNascimento, setDataNascimento] = useState<string>('');
   const [peso, setPeso] = useState<string>('');
   const [sexo, setSexo] = useState<string>('');
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | any>(null);
   const [senha, setSenha] = useState<string>('');
 
   const montarObjetoJSON = () => {
@@ -27,7 +29,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
         phone: telefone,
         dateOfBirth: dataNascimento,
         weight: parseFloat(peso),
-        photo: image || '',
+        photo: image || '', // Image URL from Firebase Storage
         password: senha,
         sex: sexo,
         bloodType: '', // O tipo sanguíneo será definido posteriormente
@@ -42,7 +44,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
         complement: '', // O complemento será definido posteriormente
       },
     };
-
+  
     return formData;
   };
 
@@ -56,7 +58,32 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
 
     console.log(result);
     if (!result.canceled && result.assets.length > 0) {
-      setImage(result.assets[0].uri);
+      const uploadURL = await uploadImage(result.assets[0].uri)
+      setImage(uploadURL);
+    }
+  };
+  const uploadImage = async (uri: string) => {
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+  
+    try {
+      const storageRef = ref(storage, `image-${Date.now()}`);
+      const result = await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef); // get the download URL from Firebase Storage
+      return downloadURL;
+    } catch (error) {
+      alert(`Error : ${error}`);
     }
   };
 
@@ -104,7 +131,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
           <Text style={styles.label}>
             {getStrings().emailLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput maxLength={256}  style={styles.input} keyboardType="email-address" value={email} onChangeText={novoEmail => setEmail(novoEmail)} />
+          <TextInput maxLength={256} style={styles.input} keyboardType="email-address" value={email} onChangeText={novoEmail => setEmail(novoEmail)} />
         </View>
 
         <View style={styles.section}>
@@ -125,7 +152,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
           <Text style={styles.label}>
             {getStrings().dataNascimentoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput maxLength={10} style={styles.input} value={dataNascimento} onChangeText={novoDataNascimento => setDataNascimento(novoDataNascimento)}/>
+          <TextInput maxLength={10} style={styles.input} value={dataNascimento} onChangeText={novoDataNascimento => setDataNascimento(novoDataNascimento)} />
         </View>
 
         <View style={styles.doubleSection}>
@@ -139,7 +166,14 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
             <Text style={styles.label}>
               {getStrings().sexoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
             </Text>
-            <TextInput style={styles.smallInput} value={sexo} onChangeText={novoSexo => setSexo(novoSexo)}/>
+            <Picker
+              style={styles.pickerSex}
+              selectedValue={sexo}
+              onValueChange={(itemValue) => setSexo(itemValue)}
+            >
+              <Picker.Item label="Masculino" value="Masculine" />
+              <Picker.Item label="Feminino" value="Feminine" />
+            </Picker>
           </View>
         </View>
       </View>
@@ -225,11 +259,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 60,
-    width: '100%',
+    width: '67%',
   },
   halfSection: {
     width: '48%'
+  },
+  pickerSex: {
+    borderColor: '#7395F7',
+    borderWidth: 1,
+    borderRadius: 5,
+    overflow: 'hidden',
   },
   buttonContainer: {
     flexDirection: 'row',

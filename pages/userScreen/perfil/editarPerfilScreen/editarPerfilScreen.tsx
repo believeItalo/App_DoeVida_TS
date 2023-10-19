@@ -13,6 +13,8 @@ interface EditarPerfilScreen {
 }
 
 interface UserDate {
+    password: any;
+    dateOfBirth: any;
     name: string;
     photo: string;
     email: string;
@@ -31,6 +33,7 @@ interface Address {
     uf: string;
     city: string;
     neighborhood: string;
+    number: string;
 }
 
 export default function EditarPerfilScreen({ navigation, route }: EditarPerfilScreen) {
@@ -40,8 +43,8 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
     const userData = route.params && route.params.userData ? route.params.userData : null;
     const [endereco, setEndereco] = useState<Address | null>(null);
     const [user, setUser] = useState<UserDate | null>(null)
-
-    //Fazer a busca ad api pelo id que vem de:userData.id
+    const [editedUser, setEditedUser] = useState<UserDate | null>(null);
+    const [editedAddress, setEditedAddress] = useState<Address | null>(null);
     console.log(userData.id);
 
     //GET
@@ -49,7 +52,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
         // Realize a chamada à API quando o componente for montado
         //url Ítalo: http://192.168.0.16:5050/api/v1/users/${userData.id}
         //url senai: http://10.107.144.11:8080/api/v1/users/${userData.id}
-        fetch(`http://192.168.0.16:5050/api/v1/users/${userData.id}`)
+        fetch(`http://10.107.144.19:8080/api/v1/users/${userData.id}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -66,6 +69,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
                 console.error('Erro ao buscar dados da API:', error);
             });
     }, []);
+
 
     return (
         <ScrollView>
@@ -108,10 +112,12 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
                         label='Nome completo'
                         value={user ? user.name : ' '}
                     />
-                    <TextInput style={styles.input}
+                    <TextInput
+                        style={styles.input}
                         editable={true}
                         label='E-mail'
-                        value={user ? user.email : ' '}
+                        value={user ? user.email : ''}
+
                     />
                     <TextInput style={styles.input}
                         editable={true}
@@ -201,6 +207,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
 
                     <TouchableOpacity
                         style={[styles.buttonSalvarPerfil]}
+
                     >
                         <Text style={{ fontSize: 20, color: 'white' }}>Salvar</Text>
                     </TouchableOpacity>
@@ -341,11 +348,11 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: "#7395F7",
     },
-    alignButtonSalvar:{
-        width:'100%',
-        alignItems:'center',
-        justifyContent:'center',
-        paddingTop:30,
-        paddingBottom:30
+    alignButtonSalvar: {
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 30,
+        paddingBottom: 30
     }
 });
