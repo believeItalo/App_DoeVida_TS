@@ -44,7 +44,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
         complement: '', // O complemento será definido posteriormente
       },
     };
-  
+
     return formData;
   };
 
@@ -76,7 +76,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
       xhr.open('GET', uri, true);
       xhr.send(null);
     });
-  
+
     try {
       const storageRef = ref(storage, `image-${Date.now()}`);
       const result = await uploadBytes(storageRef, blob);
@@ -87,7 +87,46 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
     }
   };
 
+  const formatarDataNascimento = (value: string) => {
+    if (value.length === 2 && dataNascimento.length === 1) {
+      value = value + '/';
+    } else if (value.length === 5 && dataNascimento.length === 4) {
+      value = value + '/';
+    }
+    return value;
+  };
+
+  const validatePhoneNumber = (input: string) => {
+    const phoneRegex = /^\d{10,11}$/; // Regex para verificar se o número tem entre 10 e 11 dígitos
+
+    if (!phoneRegex.test(input)) {
+      alert('Por favor, insira um número de telefone válido com 10 ou 11 dígitos numéricos.');
+      return false;
+    }
+    return true;
+  };
+
   const navigateToCadastroTipoSanguineo = () => {
+    if (
+      nome.trim() === '' ||
+      email.trim() === '' ||
+      telefone.trim() === '' ||
+      !validatePhoneNumber(telefone) || // Validar o número de telefone
+      cpf.trim() === '' ||
+      parseFloat(peso) < 50 || // Verificando peso
+      sexo.trim() === '' ||
+      image === null
+    ) {
+      if (parseFloat(peso) < 50) {
+        alert('Ops, você não pode doar sangue estando abaixo de 50 Kg');
+      } else {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+      }
+      return;
+    }
+
+    // Implementar outras validações conforme necessário
+
     const formDataJSON = montarObjetoJSON();
     navigation.navigate('CadastroTipoSanguineo', { formDataJSON });
   };
@@ -152,7 +191,21 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
           <Text style={styles.label}>
             {getStrings().dataNascimentoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput maxLength={10} style={styles.input} value={dataNascimento} onChangeText={novoDataNascimento => setDataNascimento(novoDataNascimento)} />
+          <TextInput
+            maxLength={10}
+            style={styles.input}
+            value={dataNascimento}
+            onChangeText={(novoDataNascimento) => {
+              if (
+                novoDataNascimento.length <= 10 &&
+                novoDataNascimento.match(
+                  /^\d{0,2}\/?\d{0,2}\/?\d{0,4}$/ // RegEx to allow only numbers and '/'
+                )
+              ) {
+                setDataNascimento(formatarDataNascimento(novoDataNascimento));
+              }
+            }}
+          />
         </View>
 
         <View style={styles.doubleSection}>
