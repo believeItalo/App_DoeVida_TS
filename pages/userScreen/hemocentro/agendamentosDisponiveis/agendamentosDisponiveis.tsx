@@ -32,7 +32,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   
   useEffect(() => {
     //senai:10.107.144.11:8080
-    //http://192.168.0.16:5050/api/v1/hospital-data/${hospitalId} casa italo
+ 
     fetch(`http://10.107.144.12:8080/api/v1/hospital-data/${hospitalId}`)
       .then((response) => response.json())
       .then((data) => {

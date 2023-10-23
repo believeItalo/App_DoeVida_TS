@@ -44,7 +44,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
   console.log(userData.id);
   useEffect(() => {
     // Realize a chamada à API quando o componente for montado
-    //url Ítalo: http://192.168.0.16:5050/api/v1/users/${userData.id}
+ 
     //url senai: http://10.107.144.11:8080/api/v1/users/${userData.id}
     fetch(`http://10.107.144.12:8080/api/v1/users/${userData.id}`)
       .then((response) => response.json())
