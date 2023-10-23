@@ -27,7 +27,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const handleLogin = async () => {
     try {
       //url casa Ítalo'http://192.168.0.16:5050/api/v1/user-login'
-      const response = await axios.post('http://10.107.144.19:8080/api/v1/user-login', {
+      const response = await axios.post('http://10.107.144.12:8080/api/v1/user-login', {
         email: email,
         password: password,
       });

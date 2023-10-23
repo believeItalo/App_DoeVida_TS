@@ -14,7 +14,7 @@ interface MainUserScreenProps {
 export default function MainUserScreen({ navigation, route }: MainUserScreenProps) {
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
-  
+
   useFocusEffect(
     React.useCallback(() => {
       const backAction = () => {
@@ -45,11 +45,13 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
           <Text style={styles.userInfoText}>{getStrings().welcomeText}</Text>
           <Text style={[styles.userInfoText, { fontSize: 20, fontWeight: '400' }]}>{userName}</Text>
         </View>
-        <View style={styles.userImage}>
-          {userData && userData.photo && (
-            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
-          )}
-        </View>
+        <TouchableOpacity  onPress={() => navigation.navigate('MeuPerfil', { userData: userData })}>
+          <View style={styles.userImage}>
+            {userData && userData.photo && (
+              <Image source={{ uri: userData.photo }} style={styles.profileImage} />
+            )}
+          </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.containerCardContainer}>
         <View style={styles.cardContainer}>
@@ -58,9 +60,9 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
             <Text style={styles.cardText}>{getStrings().hemocentrosText}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('MeuPerfil', { userData: userData })}>
-            <Image source={require('../mainScreen/imgs/imgCardMeuPerfil.png')} style={styles.cardImage} />
-            <Text style={styles.cardText}>{getStrings().meuPerfilText}</Text>
+          <TouchableOpacity style={styles.card}>
+            <Image source={require('../mainScreen/imgs/imgCampanhas.png')} style={styles.cardImage} />
+            <Text style={styles.cardText}>{getStrings().campanhaText}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.cardContainer}>
@@ -93,19 +95,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap:110,
+    gap: 110,
 
   },
   userInfo: {
     height: '60%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    color:'black'
+    color: 'black'
   },
   userInfoText: {
     fontSize: 20,
     fontWeight: '300',
-    color:'black'
+    color: 'black'
   },
   userImage: {
     paddingTop: 50,
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
   profileImage: {
     height: 70,
     width: 70,
-    borderRadius:50
+    borderRadius: 50
   },
   cardContainer: {
     flexDirection: 'row',
@@ -157,6 +159,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingTop:20
+    paddingTop: 20
   },
 });

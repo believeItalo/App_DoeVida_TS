@@ -37,7 +37,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
     // Fetch data from the API when the component mounts
     //url Casa Ítalo: http://192.168.0.16:5050/api/v1/hospitals
     // url senai: http://10.107.144.11:8080/api/v1/hospitals
-    axios.get('http://10.107.144.19:8080/api/v1/hospitals')
+    axios.get('http://10.107.144.12:8080/api/v1/hospitals')
       .then(response => {
         if (response.data && response.data.hospitals) {
           setHemocentros(response.data.hospitals);

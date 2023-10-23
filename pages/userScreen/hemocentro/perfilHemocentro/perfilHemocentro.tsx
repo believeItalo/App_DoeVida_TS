@@ -8,6 +8,7 @@ import { ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { TextInput } from 'react-native-paper';
+import MapView, { Marker } from 'react-native-maps';
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -46,13 +47,18 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [hemocentros, setHemocentros] = useState<Hemocentro[]>([]);
     const [hospitalData, setHospitalData] = useState<Hospital | null>(null);
     const [endereco, setEndereco] = useState<Address | null>(null);
-    console.log(hemocentroData);
-
+    const [opinion, setOpinion] = useState('');
+    const [mapRegion, setMapRegion] = useState({
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+    });
     useEffect(() => {
         // Realize a chamada à API quando o componente for montado
         //url Ítalo: http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
         //url senai: http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
-        fetch(`http://10.107.144.19:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://10.107.144.12:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -72,6 +78,30 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             });
     }, []);
 
+    const postReview = () => {
+        const reviewData = {
+            opinion,
+            idUser: userData.id,
+            idHospital: route.params.hemocentroData.hospital.hospitalId,
+            idStar: rating,
+        };
+
+        fetch('http://10.107.144.12:8080/api/v1/review-registration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reviewData),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Review enviado com sucesso:', data);
+                setModalVisible(false);
+            })
+            .catch((error) => {
+                console.error('Erro ao enviar avaliação:', error);
+            });
+    };
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
     };
@@ -124,9 +154,24 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                 editable={false}
                             />
                         </View>
-                        <View>
-                            <Image source={require('../perfilHemocentro/imgs/localizacao.png')} />
+                        <View style={styles.mapContainer}>
+                            {endereco && endereco.street && (
+                                <MapView
+                                    style={styles.map}
+                                    region={mapRegion}
+                                >
+                                    <Marker
+                                        coordinate={{
+                                            latitude: mapRegion.latitude,
+                                            longitude: mapRegion.longitude,
+                                        }}
+                                        title={route.params.hemocentroData.hospital.name}
+                                        description={endereco.street}
+                                    />
+                                </MapView>
+                            )}
                         </View>
+
                     </View>
 
 
@@ -258,7 +303,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             multiline={true}
                             placeholderTextColor="#888"
                             onChangeText={(text) => {
-                                // Aqui você pode fazer algo com o texto digitado
+                                setOpinion(text);
                             }}
                         />
                     </View>
@@ -280,7 +325,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         <Pressable style={styles.modalButton} onPress={() => setModalVisible(false)}>
                             <Text style={styles.modalButtonText}>Fechar</Text>
                         </Pressable>
-                        <Pressable style={styles.modalButton} onPress={() => console.log("Confirmado")}>
+                        <Pressable style={styles.modalButton} onPress={postReview}>
                             <Text style={styles.modalButtonText}>Confirmar</Text>
                         </Pressable>
                     </View>
@@ -308,7 +353,7 @@ const styles = StyleSheet.create({
         gap: 50,
         paddingLeft: 10,
         paddingTop: 20,
-        backgroundColor:'rgba(78, 123, 242, 0.76)',
+        backgroundColor: 'rgba(78, 123, 242, 0.76)',
     },
     viewSlider: {
         width: 400,
@@ -317,7 +362,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'column',
         gap: 20,
-        paddingTop:50
+        paddingTop: 50
     },
     title: {
         fontSize: 30,
@@ -396,7 +441,7 @@ const styles = StyleSheet.create({
         borderColor: '#F0F0F0',
         borderRadius: 5,
         backgroundColor: 'white',
-        fontSize:12
+        fontSize: 12
     },
     textEndereco: {
         fontSize: 16
@@ -420,6 +465,15 @@ const styles = StyleSheet.create({
         borderColor: '#7395F7',
         height: 250,
         width: 370,
+    },
+    mapContainer: {
+        width: 127,
+        height: 127,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
     },
     contentCardAvaliacao: {
         display: 'flex',
@@ -467,7 +521,7 @@ const styles = StyleSheet.create({
         height: 150,
         borderWidth: 1,
         borderColor: '#2C62F1',
-        backgroundColor:'white',
+        backgroundColor: 'white',
         borderRadius: 5,
         marginTop: 20,
     },

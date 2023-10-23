@@ -50,6 +50,7 @@ export function getStrings() {
         userName: 'João Pedro',
         hemocentrosText: 'Hemocentros',
         meuPerfilText: 'Meu Perfil',
+        campanhaText: 'Campanhas',
         ajudaText: 'Ajuda',
         quemPodeDoarText: 'Quem Pode\nDoar?',
 
