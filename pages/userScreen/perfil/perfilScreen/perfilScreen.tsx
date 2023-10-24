@@ -39,12 +39,11 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
   const userData = route.params && route.params.userData ? route.params.userData : null;
   const [endereco, setEndereco] = useState<Address | null>(null);
   const [user, setUser] = useState<UserDate | null>(null)
-  
+
   //Fazer a busca ad api pelo id que vem de:userData.id
-  console.log(userData.id);
   useEffect(() => {
     // Realize a chamada à API quando o componente for montado
- 
+
     //url senai: http://10.107.144.11:8080/api/v1/users/${userData.id}
     fetch(`http://10.107.144.12:8080/api/v1/users/${userData.id}`)
       .then((response) => response.json())
@@ -63,6 +62,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
         console.error('Erro ao buscar dados da API:', error);
       });
   }, []);
+
 
   return (
     <ScrollView>
@@ -152,9 +152,10 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
 
           </View>
 
-          <TextInput style={styles.input}
+          <TextInput
+            style={styles.input}
             label='CPF'
-            value={'42377557899'}
+            value={user && user.cpf ? user.cpf : ' '}
             editable={false}
           />
 
@@ -177,8 +178,8 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
 
           <View style={styles.viewDataInput}>
             <TextInput style={styles.smallInputType}
-            label='Estado'
-            value={endereco ? endereco.uf : ' '}
+              label='Estado'
+              value={endereco ? endereco.uf : ' '}
               editable={false}
             />
 
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 150,
     paddingTop: 10,
-    gap:12,
+    gap: 12,
     width: '100%',
 
   },

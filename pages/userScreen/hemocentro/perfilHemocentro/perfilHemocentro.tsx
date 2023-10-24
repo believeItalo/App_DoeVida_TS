@@ -51,42 +51,44 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [mapRegion, setMapRegion] = useState({
         latitude: 0,
         longitude: 0,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 0.,
+        longitudeDelta: 0,
     });
+
+    console.log(userData.id);
+    
     useEffect(() => {
         // Realize a chamada à API quando o componente for montado
-      
+
         //url senai: http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
         fetch(`http://10.107.144.12:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
-                    // Preencha os campos de texto com os dados da API
-                    const { hospital, address } = data;
+                    setHospitalData(data.hospital);
+                    setEndereco(data.address);
 
-                    // Preencha os campos de texto com os dados do hospital e do endereço
-                    setHospitalData(hospital);
-                    setEndereco(address); // Crie um estado para o endereço
-                    console.log(data);
-
-
+                    console.log('Latitude:', data.address.latitude);
+                    console.log('Longitude:', data.address.longitude);
                 }
             })
             .catch((error) => {
                 console.error('Erro ao buscar dados da API:', error);
             });
     }, []);
-
     const postReview = () => {
+        const currentDate = new Date();
+        const ISODate = currentDate.toISOString();
+    
         const reviewData = {
-            opinion,
+            opinion: opinion,
+            date: ISODate,
             idUser: userData.id,
             idHospital: route.params.hemocentroData.hospital.hospitalId,
             idStar: rating,
         };
-
-        fetch('http://10.107.144.12:8080/api/v1/review-registration', {
+    
+        fetch('http://10.107.144.6:8080/api/v1/review-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

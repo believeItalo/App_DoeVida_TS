@@ -37,7 +37,7 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
         user: userPayload,
       };
 
-      const response = await axios.post('http://10.107.144.19:8080/api/v1/user-registration', formDataWithPassword);
+      const response = await axios.post('http://10.107.144.19:8080/api/v1/user-registration', formDataWithPassword);  
       if (response.status === 200) {
         // lógica de navegação ou manipulação de sucesso aqui
         console.log('Usuário cadastrado com sucesso:', response.data);

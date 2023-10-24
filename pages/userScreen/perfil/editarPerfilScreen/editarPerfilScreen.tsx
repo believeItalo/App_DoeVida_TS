@@ -50,9 +50,9 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
     //GET
     useEffect(() => {
         // Realize a chamada à API quando o componente for montado
-        //url Ítalo: http://192.168.0.16:5050/api/v1/users/${userData.id}
+
         //url senai: http://10.107.144.11:8080/api/v1/users/${userData.id}
-        fetch(`http://10.107.144.12:8080/api/v1/users/${userData.id}`)
+        fetch(`http://10.107.144.6:8080/api/v1/users/${userData.id}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -70,8 +70,8 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
             });
     }, []);
 
-    
-   
+
+
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -141,7 +141,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
                         />
 
                         <TextInput style={styles.smallInput}
-                            label='false'
+                            label='Idade'
                             value={user ? user.age.toString() : ' '}
                             editable={true}
                         />
@@ -156,9 +156,11 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
 
                     </View>
 
-                    <TextInput style={styles.input}
+
+                    <TextInput
+                        style={styles.input}
                         label='CPF'
-                        value={user ? user.cpf:' '}
+                        value={user && user.cpf ? user.cpf : ' '}
                         editable={false}
                     />
 
@@ -208,7 +210,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
 
                     <TouchableOpacity
                         style={[styles.buttonSalvarPerfil]}
-                        
+
                     >
                         <Text style={{ fontSize: 20, color: 'white' }}>Salvar</Text>
                     </TouchableOpacity>
