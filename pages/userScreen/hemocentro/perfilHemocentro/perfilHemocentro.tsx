@@ -56,12 +56,9 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     });
 
     console.log(userData.id);
-    
-    useEffect(() => {
-        // Realize a chamada à API quando o componente for montado
 
-        //url senai: http://10.107.144.11:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}
-        fetch(`http://10.107.144.12:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+    useEffect(() => {
+        fetch(`http://10.107.144.6:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -79,7 +76,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const postReview = () => {
         const currentDate = new Date();
         const ISODate = currentDate.toISOString();
-    
+
         const reviewData = {
             opinion: opinion,
             date: ISODate,
@@ -87,7 +84,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idHospital: route.params.hemocentroData.hospital.hospitalId,
             idStar: rating,
         };
-    
+
         fetch('http://10.107.144.6:8080/api/v1/review-registration', {
             method: 'POST',
             headers: {
@@ -99,6 +96,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             .then((data) => {
                 console.log('Review enviado com sucesso:', data);
                 setModalVisible(false);
+                Alert.alert('Avaliação Enviada', 'Sua avaliação foi enviada com sucesso!');
             })
             .catch((error) => {
                 console.error('Erro ao enviar avaliação:', error);

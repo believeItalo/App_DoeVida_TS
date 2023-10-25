@@ -45,7 +45,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
     // Realize a chamada à API quando o componente for montado
 
     //url senai: http://10.107.144.11:8080/api/v1/users/${userData.id}
-    fetch(`http://10.107.144.12:8080/api/v1/users/${userData.id}`)
+    fetch(`http://10.107.144.6:8080/api/v1/users/${userData.id}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200) {
@@ -155,7 +155,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
           <TextInput
             style={styles.input}
             label='CPF'
-            value={user && user.cpf ? user.cpf : ' '}
+            value={'12345678910'}
             editable={false}
           />
 

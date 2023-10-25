@@ -70,7 +70,45 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
             });
     }, []);
 
-
+    const handleSave = () => {
+        const updatedUserData = {
+            id: userData.id,
+            user: {
+                name: user?.name,
+                cpf: user?.cpf,
+                email: editedUserEmail || (user && user.email) || '',
+                phone: user?.phone,
+                dateOfBirth:user?.dateOfBirth,
+                weight: user?.weight,
+                photo: user?.photo,
+                password: '1234',
+                sex: user?.sex,
+                bloodType: user?.bloodType
+            },
+            address: {
+                cep: endereco?.cep,
+                uf: endereco?.uf,
+                city: endereco?.city,
+                neighborhood: endereco?.neighborhood,
+                street: endereco?.street,
+                number: endereco?.number,
+                complement: endereco?.complement
+            }
+        };
+    
+ 
+        
+        axios.put(`http://10.107.144.6:8080/api/v1/user-update/`, updatedUserData)
+            .then(response => {
+                console.log('PUT request successful:', response.data);
+                alert('Os dados foram atualizados com sucesso')
+                // Aqui você pode adicionar algum feedback ao usuário de que o perfil foi atualizado com sucesso.
+            })
+            .catch(response => {
+                console.log('Erro ao fazer requisição PUT:', updatedUserData);
+                // Aqui você pode adicionar algum feedback ao usuário de que houve um erro ao atualizar o perfil.
+            });
+    };
 
     return (
         <ScrollView>
@@ -160,7 +198,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
                     <TextInput
                         style={styles.input}
                         label='CPF'
-                        value={user && user.cpf ? user.cpf : ' '}
+                        value={'12345678910'}
                         editable={false}
                     />
 
@@ -210,6 +248,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
 
                     <TouchableOpacity
                         style={[styles.buttonSalvarPerfil]}
+                        onPress={handleSave}
 
                     >
                         <Text style={{ fontSize: 20, color: 'white' }}>Salvar</Text>
