@@ -7,6 +7,7 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { getStrings } from '../../../../strings/arquivoDeStrings';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface BuscaHemocentroScreenProps {
   navigation: any;
@@ -17,7 +18,22 @@ interface Hospital {
   name: string;
 }
 
+interface UserDate {
+  name: string;
+  photo: string;
+  email: string;
+  phone: string;
+  weight: string;
+  age: number;
+  bloodType: string;
+  sex: string;
+  cpf: string;
+}
+
 interface Address {
+  complement: string | undefined;
+  street: string | undefined;
+  cep: string | undefined;
   uf: string;
   city: string;
   neighborhood: string;
@@ -33,11 +49,41 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
   const [hemocentros, setHemocentros] = useState<Hemocentro[]>([]);
+  const [endereco, setEndereco] = useState<Address | null>(null);
+  const [user, setUser] = useState<UserDate | null>(null)
+
+  useEffect(() => {
+    // Recupere o userId do AsyncStorage
+    const getUserId = async () => {
+        try {
+            const id = await AsyncStorage.getItem('userId');
+            if (id !== null) {
+                // Realize a chamada à API com o userId recuperado
+                fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.status === 200) {
+                            const { user, address } = data;
+                            setEndereco(address);
+                            setUser(user);
+                            console.log(data);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao buscar dados da API:', error);
+                    });
+            }
+        } catch (e) {
+            // Lidar com possíveis erros de leitura do AsyncStorage
+            console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+        }
+    };
+    getUserId();
+}, []);
+
   useEffect(() => {
     // Fetch data from the API when the component mounts
-    
-    // url senai: http://10.107.144.11:8080/api/v1/hospitals
-    axios.get('http://10.107.144.6:8080/api/v1/hospitals')
+    axios.get('http://10.107.144.12:8080/api/v1/hospitals')
       .then(response => {
         if (response.data && response.data.hospitals) {
           setHemocentros(response.data.hospitals);
@@ -61,9 +107,9 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
         <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
 
         <View>
-          {userData && userData.photo && (
-            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
-          )}
+          
+            <Image source={{ uri: user?.photo }} style={styles.profileImage} />
+         
         </View>
       </View>
       <View style={styles.searchContainer}>

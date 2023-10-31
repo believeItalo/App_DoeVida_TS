@@ -11,6 +11,7 @@ interface LoginScreenProps {
   navigation: any;
 }
 
+
 export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +28,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const handleLogin = async () => {
     try {
 
-      const response = await axios.post('http://10.107.144.6:8080/api/v1/user-login', {
+      const response = await axios.post('http://10.107.144.12:8080/api/v1/user-login', {
         email: email,
         password: password,
       });
@@ -37,7 +38,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         
         // Armazena o token no AsyncStorage
         await AsyncStorage.setItem('token', userData.token);
-      
+        await AsyncStorage.setItem('userId', userData.id.toString());
         // Usar navigation.replace em vez de navigation.navigate
         navigation.replace('MainUserScreen', { userName: userData.name, userData: userData });
       } else {

@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Stack = createNativeStackNavigator();
 
 interface MeuPerfilScreen {
@@ -42,26 +43,33 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
 
   //Fazer a busca ad api pelo id que vem de:userData.id
   useEffect(() => {
-    // Realize a chamada à API quando o componente for montado
-
-    //url senai: http://10.107.144.11:8080/api/v1/users/${userData.id}
-    fetch(`http://10.107.144.6:8080/api/v1/users/${userData.id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === 200) {
-
-          const { user, address } = data
-
-          setEndereco(address)
-          setUser(user)
-
-          console.log(data);
+    // Recupere o userId do AsyncStorage
+    const getUserId = async () => {
+        try {
+            const id = await AsyncStorage.getItem('userId');
+            if (id !== null) {
+                // Realize a chamada à API com o userId recuperado
+                fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.status === 200) {
+                            const { user, address } = data;
+                            setEndereco(address);
+                            setUser(user);
+                            console.log(data);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao buscar dados da API:', error);
+                    });
+            }
+        } catch (e) {
+            // Lidar com possíveis erros de leitura do AsyncStorage
+            console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
         }
-      })
-      .catch((error) => {
-        console.error('Erro ao buscar dados da API:', error);
-      });
-  }, []);
+    };
+    getUserId();
+}, []);
 
 
   return (
@@ -82,12 +90,8 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
           </Text>
         </View>
 
-        <View style={styles.userImage}>
-          {userData && userData.photo && (
-            <Image source={{ uri: userData.photo }} style={styles.profileImage} />
-          )}
-        </View>
-        <Text style={[styles.userName]}>{userData.name}</Text>
+        <Image source={{ uri: user?.photo }} style={{ height: 100, width: 100, borderRadius: 50 }} />
+        <Text style={[styles.userName]}>{user?.name}</Text>
         <TouchableOpacity
           style={[styles.buttonEditarPerfil]}
           onPress={() => navigation.navigate('EditarPerfil', { userData: userData })}

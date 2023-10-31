@@ -9,6 +9,7 @@ import Modal from 'react-native-modal';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { TextInput } from 'react-native-paper';
 import MapView, { Marker } from 'react-native-maps';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -20,6 +21,18 @@ interface Hospital {
     photo: string | undefined;
     hospitalId: number;
     name: string;
+}
+
+interface UserDate {
+    name: string;
+    photo: string;
+    email: string;
+    phone: string;
+    weight: string;
+    age: number;
+    bloodType: string;
+    sex: string;
+    cpf: string;
 }
 
 interface Address {
@@ -46,6 +59,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const hemocentroData = route.params && route.params.hemocentroData ? route.params.hemocentroData : null;
     const [hemocentros, setHemocentros] = useState<Hemocentro[]>([]);
     const [hospitalData, setHospitalData] = useState<Hospital | null>(null);
+    const [user, setUser] = useState<UserDate | null>(null)
     const [endereco, setEndereco] = useState<Address | null>(null);
     const [opinion, setOpinion] = useState('');
     const [mapRegion, setMapRegion] = useState({
@@ -55,10 +69,37 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         longitudeDelta: 0,
     });
 
-    console.log(userData.id);
+    useEffect(() => {
+        // Recupere o userId do AsyncStorage
+        const getUserId = async () => {
+            try {
+                const id = await AsyncStorage.getItem('userId');
+                if (id !== null) {
+                    // Realize a chamada à API com o userId recuperado
+                    fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.status === 200) {
+                                const { user, address } = data;
+                                setEndereco(address);
+                                setUser(user);
+                                console.log(data);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Erro ao buscar dados da API:', error);
+                        });
+                }
+            } catch (e) {
+                // Lidar com possíveis erros de leitura do AsyncStorage
+                console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+            }
+        };
+        getUserId();
+    }, []);
 
     useEffect(() => {
-        fetch(`http://10.107.144.6:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://10.107.144.12:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -85,7 +126,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch('http://10.107.144.6:8080/api/v1/review-registration', {
+        fetch('http://10.107.144.12:8080/api/v1/review-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,9 +157,9 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                     </TouchableOpacity>
                     <Text style={styles.title}>Hemocentro</Text>
                     <View>
-                        {userData && userData.photo && (
-                            <Image source={{ uri: userData.photo }} style={styles.userimage} />
-                        )}
+                        
+                            <Image source={{ uri: user?.photo }} style={styles.userimage} />
+                      
                     </View>
                 </View>
                 <View style={styles.viewSlider}>

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView, BackHandler, Alert } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getStrings } from '../../../strings/arquivoDeStrings';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -10,11 +11,64 @@ interface MainUserScreenProps {
   navigation: any;
   route: any;
 }
+interface UserDate {
+  password: any;
+  dateOfBirth: any;
+  name: string;
+  photo: string;
+  email: string;
+  phone: string;
+  weight: string;
+  age: number;
+  bloodType: string;
+  sex: string;
+  cpf: string;
+}
+
+interface Address {
+  complement: string | undefined;
+  street: string | undefined;
+  cep: string | undefined;
+  uf: string;
+  city: string;
+  neighborhood: string;
+  number: string;
+}
 
 export default function MainUserScreen({ navigation, route }: MainUserScreenProps) {
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
-
+  const [endereco, setEndereco] = useState<Address | null>(null);
+  const [user, setUser] = useState<UserDate | null>(null)
+  useEffect(() => {
+    // Recupere o userId do AsyncStorage
+    const getUserId = async () => {
+      try {
+        const id = await AsyncStorage.getItem('userId');
+        if (id !== null) {
+          // Realize a chamada à API com o userId recuperado
+          fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === 200) {
+                const { user, address } = data;
+                setEndereco(address);
+                setUser(user);
+                console.log(data);
+              }
+            })
+            .catch((error) => {
+              console.error('Erro ao buscar dados da API:', error);
+            });
+        }
+      } catch (e) {
+        // Lidar com possíveis erros de leitura do AsyncStorage
+        console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+      }
+    };
+    getUserId();
+    
+  }, []);
   useFocusEffect(
     React.useCallback(() => {
       const backAction = () => {
@@ -43,13 +97,11 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Text style={styles.userInfoText}>{getStrings().welcomeText}</Text>
-          <Text style={[styles.userInfoText, { fontSize: 20, fontWeight: '400' }]}>{userName}</Text>
+          <Text style={[styles.userInfoText, { fontSize: 20, fontWeight: '400' }]}>{user?.name}</Text>
         </View>
-        <TouchableOpacity  onPress={() => navigation.navigate('MeuPerfil', { userData: userData })}>
+        <TouchableOpacity onPress={() => navigation.navigate('MeuPerfil', { userData: userData })}>
           <View style={styles.userImage}>
-            {userData && userData.photo && (
-              <Image source={{ uri: userData.photo }} style={styles.profileImage} />
-            )}
+          <Image source={{ uri: user?.photo }} style={styles.profileImage} />
           </View>
         </TouchableOpacity>
       </View>
