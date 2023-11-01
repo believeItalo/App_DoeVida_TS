@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ImageBackground } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome5 } from '@expo/vector-icons';
 const Stack = createNativeStackNavigator();
 
 interface MeuPerfilScreen {
@@ -40,36 +41,54 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
   const userData = route.params && route.params.userData ? route.params.userData : null;
   const [endereco, setEndereco] = useState<Address | null>(null);
   const [user, setUser] = useState<UserDate | null>(null)
+  const [modalVisible, setModalVisible] = useState(false);
 
-  //Fazer a busca ad api pelo id que vem de:userData.id
+  //getdas informacoes do usuario logado
   useEffect(() => {
-    // Recupere o userId do AsyncStorage
+
     const getUserId = async () => {
-        try {
-            const id = await AsyncStorage.getItem('userId');
-            if (id !== null) {
-                // Realize a chamada à API com o userId recuperado
-                fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.status === 200) {
-                            const { user, address } = data;
-                            setEndereco(address);
-                            setUser(user);
-                            console.log(data);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao buscar dados da API:', error);
-                    });
-            }
-        } catch (e) {
-            // Lidar com possíveis erros de leitura do AsyncStorage
-            console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+      try {
+        const id = await AsyncStorage.getItem('userId');
+        if (id !== null) {
+          // Realize a chamada à API com o userId recuperado
+          fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === 200) {
+                const { user, address } = data;
+                setEndereco(address);
+                setUser(user);
+                console.log(data);
+              }
+            })
+            .catch((error) => {
+              console.error('Erro ao buscar dados da API:', error);
+            });
         }
+      } catch (e) {
+        // Lidar com possíveis erros de leitura do AsyncStorage
+        console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+      }
     };
     getUserId();
-}, []);
+  }, []);
+
+  //excluir usuario
+  const handleDeleteProfile = async () => {
+    const id = await AsyncStorage.getItem('userId');
+    fetch(`http://10.107.144.12:8080/api/v1/delete-user/5`, {
+      method: 'DELETE',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Profile deleted successfully', data);
+
+        // Aqui você pode realizar outras ações depois de excluir o perfil, se necessário.
+      })
+      .catch((error) => {
+        console.error('Error deleting profile:', error);
+      });
+  };
 
 
   return (
@@ -203,8 +222,69 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
             editable={false}
           />
 
+          <View style={styles.viewButtonDelete}>
+            <TouchableOpacity style={styles.buttonDelete} onPress={() => setModalVisible(true)}>
+              <Text style={styles.textButtonDelete}>Excluir perfil</Text>
+              <Image source={require('../perfilScreen/imgs/warningIcon.png')} style={styles.imgWarning}></Image>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={styles.viewTextDeleteProfile}>
+              <Text style={{ color: 'white', fontSize: 16 }}>Tem certeza que deseja excluir</Text>
+              <View style={styles.alignSubTextDeleteProfile}>
+                <Text style={{ color: 'white', fontSize: 16 }}>seu perfil?</Text>
+              </View>
+            </View>
+
+
+            <Image source={require('./imgs/Warning-pana.png')} style={{ width: 170, height: 170 }}></Image>
+
+          </View>
+
+          <View style={{ backgroundColor: 'white', width: 300, height: 170, borderBottomEndRadius: 10, borderBottomStartRadius: 10, alignItems: 'center', justifyContent: 'center', borderColor: '#0057FF', borderWidth: 2 }}>
+            <View style={styles.viewTextAreYouSure}>
+              <Text>Seu perfil será excluido e não terá como desfazer</Text>
+              <View style={styles.alignSubTextDeleteProfile}>
+                <Text>esta ação.</Text>
+              </View>
+
+            </View>
+
+            <View style={styles.modalButtonsContainer}>
+              <TouchableOpacity
+                style={styles.modalButtonNo}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.modalButtonText}>Não</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButtonYes}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  handleDeleteProfile
+                  alert('O perfil foi excluido')
+                  navigation.replace('Home')
+                }}
+              >
+                <Text style={styles.modalButtonText}>Sim</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -216,7 +296,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     height: '100%',
-    paddingBottom: 50,
+    paddingBottom: 20,
   },
   header: {
     display: 'flex',
@@ -329,5 +409,78 @@ const styles = StyleSheet.create({
     borderColor: '#7395F7',
     borderRadius: 5,
     backgroundColor: 'white'
+  },
+  viewButtonDelete: {
+    width: '100%',
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonDelete: {
+    height: 50,
+    width: 150,
+    backgroundColor: '#EE5353',
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10
+  },
+  textButtonDelete: {
+    color: 'white',
+    fontSize: 16
+  },
+  imgWarning: {
+    width: 30,
+    height: 30
+  },
+  modalContainer: {
+    backgroundColor: '#0057FF',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+    width: 300,
+    height: 400,
+    alignSelf: 'center',
+    marginTop: 100,
+    elevation: 5,
+    borderColor: '#0057FF',
+    borderWidth: 2,
+
+  },
+  modalButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  modalButtonNo: {
+    marginHorizontal: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    backgroundColor: '#407BFF',
+    borderRadius: 5,
+  },
+  modalButtonYes: {
+    marginHorizontal: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    backgroundColor: '#F43434',
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  viewTextDeleteProfile: {
+    width: 220,
+  },
+  alignSubTextDeleteProfile: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  viewTextAreYouSure: {
+    width: 180,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
