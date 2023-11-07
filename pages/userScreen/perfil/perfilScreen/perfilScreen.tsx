@@ -51,7 +51,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
         const id = await AsyncStorage.getItem('userId');
         if (id !== null) {
           // Realize a chamada à API com o userId recuperado
-          fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+          fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.status === 200) {
@@ -76,18 +76,26 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
   //excluir usuario
   const handleDeleteProfile = async () => {
     const id = await AsyncStorage.getItem('userId');
-    fetch(`http://10.107.144.12:8080/api/v1/delete-user/5`, {
+    fetch(`http://10.107.144.20:8080/api/v1/delete-user/${id}`, {
       method: 'DELETE',
     })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Profile deleted successfully', data);
-
-        // Aqui você pode realizar outras ações depois de excluir o perfil, se necessário.
+        if (data && data.status === 200) {
+          const { user, address } = data;
+          setEndereco(address);
+          setUser(user);
+          console.log(data);
+        } else {
+          console.error('Invalid response data:', data);
+        }
       })
-      .catch((error) => {
-        console.error('Error deleting profile:', error);
-      });
   };
 
 
@@ -274,9 +282,9 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
                 style={styles.modalButtonYes}
                 onPress={() => {
                   setModalVisible(!modalVisible);
-                  handleDeleteProfile
-                  alert('O perfil foi excluido')
-                  navigation.replace('Home')
+                  handleDeleteProfile(); // Execute a função handleDeleteProfile
+                  alert('O perfil foi excluído');
+                  navigation.replace('Home');
                 }}
               >
                 <Text style={styles.modalButtonText}>Sim</Text>
@@ -483,4 +491,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   }
-});
+}); 
