@@ -106,7 +106,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
           <View style={{ paddingRight: 60, paddingLeft: 20 }}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('MainUserScreen', { userName: userData.name, userData: userData })
+                navigation.navigate('MainUserScreen', { userData: userData })
               }
             >
               <Image source={require('../perfilScreen/imgs/setaVoltar.png')} style={{ width: 50, height: 50 }} />
@@ -175,12 +175,13 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
           </View>
 
           <View style={styles.viewBloodType}>
-            <TextInput style={styles.bloodTypeInput}
+            <TextInput 
+              style={styles.bloodTypeInput}
               label='Tipo sanguíneo'
               value={user ? user.bloodType : ' '}
+              contentStyle={styles.teste}
               editable={false}
             />
-
           </View>
 
           <TextInput
@@ -282,7 +283,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
                 style={styles.modalButtonYes}
                 onPress={() => {
                   setModalVisible(!modalVisible);
-                  handleDeleteProfile(); // Execute a função handleDeleteProfile
+                  handleDeleteProfile(); 
                   alert('O perfil foi excluído');
                   navigation.replace('Home');
                 }}
@@ -390,19 +391,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     fontSize: 15
   },
+  teste:{
+    fontSize:24,
+    alignSelf:'center'
+  },
   viewBloodType: {
     width: '100%',
     paddingLeft: 28,
-    paddingTop: 15
+    paddingTop: 15,
   },
 
   bloodTypeInput: {
-    width: 100,
+    width: 150,
     height: 100,
     borderWidth: 1,
     borderColor: '#7395F7',
     borderRadius: 5,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   viewDataInput: {
     display: 'flex',

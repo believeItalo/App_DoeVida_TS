@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, LayoutAnimation } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
+
 interface ReadMoreTextProps {
   initialText: string;
   maxLength: number;
@@ -21,6 +22,7 @@ const ReadMoreText: React.FC<ReadMoreTextProps> = ({
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
   };
 

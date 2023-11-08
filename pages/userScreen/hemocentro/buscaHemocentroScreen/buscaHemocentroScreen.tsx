@@ -59,7 +59,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
             const id = await AsyncStorage.getItem('userId');
             if (id !== null) {
                 // Realize a chamada à API com o userId recuperado
-                fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+                fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
                     .then((response) => response.json())
                     .then((data) => {
                         if (data.status === 200) {
@@ -83,7 +83,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
 
   useEffect(() => {
     // Fetch data from the API when the component mounts
-    axios.get('http://10.107.144.12:8080/api/v1/hospitals')
+    axios.get('http://10.107.144.20:8080/api/v1/hospitals')
       .then(response => {
         if (response.data && response.data.hospitals) {
           setHemocentros(response.data.hospitals);
@@ -127,7 +127,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
           {filteredHemocentros.map(hemocentro => (
             <TouchableOpacity
               style={styles.cardHemocentros}
-              onPress={() => navigation.navigate('PerfilHemocentro', { hemocentroData: hemocentro, userName: userData.name, userData: userData})}
+              onPress={() => navigation.navigate('PerfilHemocentro', { hemocentroData: hemocentro, userData: userData})}
               key={hemocentro.hospital.hospitalId}
             >
               <View style={styles.contentCardHemocentro}>

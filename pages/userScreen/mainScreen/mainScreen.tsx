@@ -112,7 +112,7 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
             <Text style={styles.cardText}>{getStrings().hemocentrosText}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CampanhasScreen', {userData: userData})}>
             <Image source={require('../mainScreen/imgs/imgCampanhas.png')} style={styles.cardImage} />
             <Text style={styles.cardText}>{getStrings().campanhaText}</Text>
           </TouchableOpacity>

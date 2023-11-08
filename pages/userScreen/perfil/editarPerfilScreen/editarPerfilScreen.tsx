@@ -141,7 +141,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
                 });
             })
             .catch((error) => {
-                console.error('Erro ao buscar dados do CEP na API:', error);
+
             });
     };
 
@@ -218,9 +218,11 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
                     </View>
 
                     <View style={styles.viewBloodType}>
-                        <TextInput style={styles.bloodTypeInput}
+                        <TextInput
+                            style={styles.bloodTypeInput}
                             label='Tipo sanguíneo'
                             value={user ? user.bloodType : ' '}
+                            contentStyle={styles.teste}
                             editable={false}
                         />
                     </View>
@@ -363,8 +365,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
     },
-    styleinputCidade:{
-        width:125 
+    styleinputCidade: {
+        width: 125
 
     },
     input: {
@@ -404,9 +406,12 @@ const styles = StyleSheet.create({
         paddingLeft: 28,
         paddingTop: 15
     },
-
+    teste: {
+        fontSize: 24,
+        alignSelf: 'center'
+    },
     bloodTypeInput: {
-        width: 100,
+        width: 150,
         height: 100,
         borderWidth: 1,
         borderColor: '#7395F7',

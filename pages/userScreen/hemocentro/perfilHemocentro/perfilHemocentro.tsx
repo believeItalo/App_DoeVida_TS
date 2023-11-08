@@ -76,7 +76,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
                     // Realize a chamada à API com o userId recuperado
-                    fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+                    fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -99,7 +99,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     }, []);
 
     useEffect(() => {
-        fetch(`http://10.107.144.12:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://10.107.144.20:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -254,8 +254,6 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                     onPress={() => navigation.navigate('AgendaDisponivelHemocentro', {
                         hemocentroNome: route.params.hemocentroData.hospital.name,
                         hemocentroData: hemocentros,
-                        userName: userData.name,
-                        userData: userData,
                         hospitalId: route.params.hemocentroData.hospital.hospitalId, // Include hospital ID
                     })}
                 >
@@ -276,40 +274,6 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                 </View>
                                 <View>
                                     <Text style={styles.descriptionAvaliacao}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus a urna a scelerisque. Morbi accumsan odio sit amet nulla eleifend molestie. Nullam pretium tortor est.</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.cardAvaliacao} onPress={() => navigation.navigate('PerfilHemocentro')} >
-                            <View style={styles.contentCardAvaliacao}>
-                                <View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 30, paddingRight: 70 }}>
-                                        <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
-                                        <Text style={styles.titleCardAvaliacao}>Beatriz Fideliz</Text>
-                                        <Text>11/11/2011</Text>
-                                    </View>
-
-                                </View>
-                                <View>
-
-                                    <Text style={styles.descriptionAvaliacao}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus a urna a scelerisque. Morbi accumsan odio sit amet nulla eleifend molestie. Nullam pretium tortor est.</Text>
-
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.cardAvaliacao} onPress={() => navigation.navigate('AgendaDisponivelHemocentro', { hemocentroNome: route.params.hemocentroData.hospital.name, hemocentroData: hemocentros, userName: userData.name, userData: userData })}>
-                            <View style={styles.contentCardAvaliacao}>
-                                <View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 30, paddingRight: 70 }}>
-                                        <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
-                                        <Text style={styles.titleCardAvaliacao}>Beatriz Fideliz</Text>
-                                        <Text>11/11/2011</Text>
-                                    </View>
-
-                                </View>
-                                <View>
-
-                                    <Text style={styles.descriptionAvaliacao}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus a urna a scelerisque. Morbi accumsan odio sit amet nulla eleifend molestie. Nullam pretium tortor est.</Text>
-
                                 </View>
                             </View>
                         </TouchableOpacity>

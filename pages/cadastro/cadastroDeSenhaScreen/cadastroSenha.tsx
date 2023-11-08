@@ -35,17 +35,15 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
       const formDataWithPassword = {
         ...formDataJSON,
         user: userPayload,
-      };
-
-      const response = await axios.post('http://10.107.144.12:8080/api/v1/user-registration', formDataWithPassword);  
+      };      
+      const response = await axios.post('http://10.107.144.20:8080/api/v1/user-registration', formDataWithPassword);  
       if (response.status === 200) {
-        // lógica de navegação ou manipulação de sucesso aqui
+        
         console.log('Usuário cadastrado com sucesso:', response.data);
  
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
-      // lógica de manipulação de erro aqui
     }
   };
 
@@ -83,7 +81,6 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
           style={[styles.button, styles.primaryButton]}
           onPress={async () => {
             await handleContinuar();
-            navigation.navigate('Home');
             Alert.alert('Sucesso', 'Usuário cadastrado, efetue o login');
           }}
         >
@@ -164,5 +161,3 @@ const styles = StyleSheet.create({
 
 
 export default CadastroSenhaScreen;
-
-

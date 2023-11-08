@@ -103,7 +103,7 @@ export default function App() {
           }}
         />
         <Drawer.Screen
-          name="Meus Agendamentos"
+          name="Agendamentos"
           component={MeusAgendamentosScreen}
           options={{
             headerShown: false,
@@ -118,7 +118,7 @@ export default function App() {
           options={{
             headerShown: false,
             drawerIcon: ({ color, size }) => (
-              <FontAwesome5 name="calendar" size={24} color="black" /> 
+              <FontAwesome5 name="bullhorn" size={18} color="black" /> 
             ),
           }}
         />
@@ -128,17 +128,17 @@ export default function App() {
           options={{
             headerShown: false,
             drawerIcon: ({ color, size }) => (
-              <FontAwesome5 name="calendar" size={24} color="black" /> 
+              <FontAwesome5 name="fire" size={24} color="black" /> 
             ),
           }}
         />
          <Drawer.Screen
-          name="Ajuda"
+          name="   Ajuda"
           component={AjudaScreen}
           options={{
             headerShown: false,
             drawerIcon: ({ color, size }) => (
-              <FontAwesome5 name="info" size={24} color="black" /> 
+              <FontAwesome5 name="info" size={26} color="black" /> 
             ),
           }}
         />

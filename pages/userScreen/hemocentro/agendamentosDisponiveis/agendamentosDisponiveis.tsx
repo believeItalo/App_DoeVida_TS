@@ -33,7 +33,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   useEffect(() => {
     //senai:10.107.144.11:8080
  
-    fetch(`http://10.107.144.12:8080/api/v1/hospital-data/${hospitalId}`)
+    fetch(`http://10.107.144.20:8080/api/v1/hospital-data/${hospitalId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200) {
@@ -53,7 +53,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   }, []);
 
   useEffect(() => {
-    fetch(`http://10.107.144.12:8080/api/v1/hospital/${hospitalId}/book-schedules`)
+    fetch(`http://10.107.144.20:8080/api/v1/hospital/${hospitalId}/book-schedules`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
