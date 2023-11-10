@@ -50,19 +50,18 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
     });
 
     console.log(result);
-    if (result !== null && result.assets && result.assets.length > 0) {
-        const uploadURL = await uploadImage(result.assets[0].uri);
-        setImage(uploadURL);
+    if (!result.canceled && result.assets.length > 0) {
+      const uploadURL = await uploadImage(result.assets[0].uri)
+      setImage(uploadURL);
     }
-};
-
+  };
   const uploadImage = async (uri: string) => {
     const blob = await new Promise<Blob>((resolve, reject) => {
       const xhr = new XMLHttpRequest();

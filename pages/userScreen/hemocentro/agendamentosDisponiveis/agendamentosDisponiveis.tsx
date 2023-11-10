@@ -31,7 +31,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   console.log(hospitalId);
   
   useEffect(() => {
-    //senai:10.107.144.11:8080
+
  
     fetch(`http://10.107.144.20:8080/api/v1/hospital-data/${hospitalId}`)
       .then((response) => response.json())
@@ -263,7 +263,3 @@ const styles = StyleSheet.create({
     borderRadius:10
 }
 });
-
-
-
-

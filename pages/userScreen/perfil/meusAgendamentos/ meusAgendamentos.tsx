@@ -94,6 +94,8 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
             });
     }, []);
 
+    
+
     const toggleCancelModal = () => {
         setCancelModalVisible(!isCancelModalVisible);
     };

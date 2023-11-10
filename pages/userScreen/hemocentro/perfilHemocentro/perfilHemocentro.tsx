@@ -10,6 +10,9 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { TextInput } from 'react-native-paper';
 import MapView, { Marker } from 'react-native-maps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
+import axios from 'axios';
+
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -69,13 +72,12 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         longitudeDelta: 0,
     });
 
+
     useEffect(() => {
-        // Recupere o userId do AsyncStorage
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    // Realize a chamada à API com o userId recuperado
                     fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
@@ -91,12 +93,12 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         });
                 }
             } catch (e) {
-                // Lidar com possíveis erros de leitura do AsyncStorage
                 console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
             }
         };
         getUserId();
     }, []);
+
 
     useEffect(() => {
         fetch(`http://10.107.144.20:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
@@ -105,15 +107,14 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 if (data.status === 200) {
                     setHospitalData(data.hospital);
                     setEndereco(data.address);
-
-                    console.log('Latitude:', data.address.latitude);
-                    console.log('Longitude:', data.address.longitude);
                 }
             })
             .catch((error) => {
                 console.error('Erro ao buscar dados da API:', error);
             });
     }, []);
+
+
     const postReview = () => {
         const currentDate = new Date();
         const ISODate = currentDate.toISOString();
@@ -126,7 +127,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch('http://10.107.144.12:8080/api/v1/review-registration', {
+        fetch('http://10.107.144.20:8080/api/v1/review-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -143,6 +144,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao enviar avaliação:', error);
             });
     };
+
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
     };
@@ -157,9 +159,9 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                     </TouchableOpacity>
                     <Text style={styles.title}>Hemocentro</Text>
                     <View>
-                        
-                            <Image source={{ uri: user?.photo }} style={styles.userimage} />
-                      
+
+                        <Image source={{ uri: user?.photo }} style={styles.userimage} />
+
                     </View>
                 </View>
                 <View style={styles.viewSlider}>
@@ -195,23 +197,6 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                 editable={false}
                             />
                         </View>
-                        <View style={styles.mapContainer}>
-                            {endereco && endereco.street && (
-                                <MapView
-                                    style={styles.map}
-                                    region={mapRegion}
-                                >
-                                    <Marker
-                                        coordinate={{
-                                            latitude: mapRegion.latitude,
-                                            longitude: mapRegion.longitude,
-                                        }}
-                                        title={route.params.hemocentroData.hospital.name}
-                                        description={endereco.street}
-                                    />
-                                </MapView>
-                            )}
-                        </View>
 
                     </View>
 
@@ -246,7 +231,6 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             editable={false}
                         />
                     </View>
-
                 </View>
 
                 <TouchableOpacity
@@ -254,7 +238,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                     onPress={() => navigation.navigate('AgendaDisponivelHemocentro', {
                         hemocentroNome: route.params.hemocentroData.hospital.name,
                         hemocentroData: hemocentros,
-                        hospitalId: route.params.hemocentroData.hospital.hospitalId, // Include hospital ID
+                        hospitalId: route.params.hemocentroData.hospital.hospitalId, 
                     })}
                 >
                     <Text style={{ fontSize: 20, color: 'white' }}>Agendamentos Disponiveis</Text>
@@ -310,7 +294,10 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             onChangeText={(text) => {
                                 setOpinion(text);
                             }}
-                        />
+                            maxLength={10}
+                            textAlignVertical="top"  // Adicione esta linha
+                        >
+                        </TextInput>
                     </View>
                     <View style={{ paddingTop: 20 }}>
                         <View style={styles.ratingContainer}>
@@ -529,6 +516,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 5,
         marginTop: 20,
+        textAlignVertical: 'top',
     },
     modalButton: {
         marginHorizontal: 10,
