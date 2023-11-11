@@ -38,7 +38,7 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
         user: userPayload,
       };
 
-      const response = await axios.post('http://10.107.144.20:8080/api/v1/user-registration', formDataWithPassword);
+      const response = await axios.post('http://192.168.0.16:5050/api/v1/user-registration', formDataWithPassword);
  
       if (response.status === 200) {
         // lógica de navegação ou manipulação de sucesso aqui

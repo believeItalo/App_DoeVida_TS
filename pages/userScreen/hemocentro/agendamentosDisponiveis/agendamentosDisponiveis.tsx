@@ -1,50 +1,105 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { getStrings } from '../../../../strings/arquivoDeStrings'
+import { getStrings } from '../../../../strings/arquivoDeStrings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AgendaDisponivelHemocentroScreenProps {
   navigation: any;
   route: any;
 }
+
 interface Hospital {
   photo: string | undefined;
   hospitalId: number;
   name: string;
 }
+
 interface Schedule {
   id: number;
   date: string;
   hour: string;
   site: string;
 }
+
+interface UserDate {
+  password: any;
+  dateOfBirth: any;
+  name: string;
+  photo: string;
+  email: string;
+  phone: string;
+  weight: string;
+  age: number;
+  bloodType: string;
+  sex: string;
+  cpf: string;
+}
+
+interface Address {
+  complement: string | undefined;
+  street: string | undefined;
+  cep: string | undefined;
+  uf: string;
+  city: string;
+  neighborhood: string;
+  number: string;
+}
+
 export default function AgendaDisponivelHemocentro({ navigation, route }: AgendaDisponivelHemocentroScreenProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
-  const [bookSchedules, setBookSchedules] = useState([]);
+  const [bookSchedules, setBookSchedules] = useState<Schedule[]>([]); // Explicitly set the type to Schedule[]
   const [hospitalData, setHospitalData] = useState<Hospital | null>(null);
   const userData = route.params && route.params.userData ? route.params.userData : null;
   const hemocentroNome = route.params && route.params.hemocentroNome ? route.params.hemocentroNome : '';
   const hospitalId = route.params && route.params.hospitalId ? route.params.hospitalId : null;
-
+  const [endereco, setEndereco] = useState<Address | null>(null);
+  const [user, setUser] = useState<UserDate | null>(null);
+  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
+  const [scheduledIds, setScheduledIds] = useState<number[]>([]);
   console.log(hospitalId);
-  
-  useEffect(() => {
+  const [userId, setUserId] = useState<number | null>(null);
 
- 
-    fetch(`http://10.107.144.20:8080/api/v1/hospital-data/${hospitalId}`)
+  useEffect(() => {
+    // Recupere o userId do AsyncStorage
+    const getUserId = async () => {
+      try {
+        const id = await AsyncStorage.getItem('userId');
+        if (id !== null) {
+          // Realize a chamada à API com o userId recuperado
+          fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === 200) {
+                const { user, address } = data;
+                setEndereco(address);
+                setUser(user);
+                setUserId(user.id); // Certifique-se de que `user.id` seja do tipo `number`
+                console.log(data);
+              }
+            })
+            .catch((error) => {
+              console.error('Erro ao buscar dados da API:', error);
+            });
+        }
+      } catch (e) {
+        // Lidar com possíveis erros de leitura do AsyncStorage
+        console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+      }
+    };
+    getUserId();
+  }, []);
+
+  useEffect(() => {
+    fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${hospitalId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200) {
-          // Preencha os campos de texto com os dados da API
           const { hospital } = data;
-
-          // Preencha os campos de texto com os dados do hospital e do endereço
           setHospitalData(hospital);
           console.log(data);
-
-
         }
       })
       .catch((error) => {
@@ -53,7 +108,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   }, []);
 
   useEffect(() => {
-    fetch(`http://10.107.144.20:8080/api/v1/hospital/${hospitalId}/book-schedules`)
+    fetch(`http://192.168.0.16:5050/api/v1/hospital/${hospitalId}/book-schedules`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -72,7 +127,6 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
       });
   }, []);
 
-
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -81,11 +135,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
             <FontAwesome5 name="bars" size={40} color="black" />
           </TouchableOpacity>
           <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
-          <View >
-            {userData && userData.photo && (
-              <Image source={{ uri: userData.photo }} style={styles.profileImage} />
-            )}
-          </View>
+          <Image source={{ uri: user?.photo }} style={styles.profileImage} />
         </View>
         <View style={styles.imageContainer}>
           {hospitalData && hospitalData.photo && (
@@ -99,7 +149,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
           <Text style={styles.agendaTitle}>{getStrings().agendaTitle}</Text>
         </View>
         <View style={styles.cardsContainer}>
-          {bookSchedules.map((schedule: Schedule) => ( // Provide type for schedule
+          {bookSchedules.map((schedule: Schedule) => (
             <View style={styles.cardAgenda} key={schedule.id}>
               <TouchableOpacity style={styles.contentCardAgenda}>
                 <View style={styles.cardInfoRow}>
@@ -110,12 +160,16 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
                 </View>
                 <View style={styles.cardInfoColumn}>
                   <Text style={styles.titleCardAgenda}>Local de doação:</Text>
-                  <Text style={styles.descriptionCardAgenda}>
-                    {schedule.site}
-                  </Text>
+                  <Text style={styles.descriptionCardAgenda}>{schedule.site}</Text>
                 </View>
                 <View style={styles.agendarButtonContainer}>
-                  <TouchableOpacity style={styles.agendarButton} onPress={() => setModalVisible(true)}>
+                  <TouchableOpacity
+                    style={styles.agendarButton}
+                    onPress={() => {
+                      setSelectedScheduleId(schedule.id);
+                      setModalVisible(true);
+                    }}
+                  >
                     <Text style={styles.agendarButtonText}>{"Agendar"}</Text>
                   </TouchableOpacity>
                 </View>
@@ -132,11 +186,79 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
             <Text style={{ fontSize: 16, color: '#6D6868' }}>{getStrings().confirmAgendaDescription}</Text>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 50, justifyContent: 'center' }}>
-            <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#98E768', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection: 'row', gap: 20 }}>
-              <Text style={{ color: 'white', marginLeft: 5, fontSize: 16 }}>{getStrings().yesButtonText}</Text>
+            <TouchableOpacity
+              style={{
+                width: 100,
+                height: 50,
+                backgroundColor: '#98E768',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 5,
+                flexDirection: 'row',
+                gap: 20,
+              }}
+              onPress={() => {
+                fetch('http://192.168.0.16:5050/api/v1/schedule', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    idUser: userId,
+                    idBookSchedule: selectedScheduleId,
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.status === 201) {
+                      setBookSchedules((prevSchedules) =>
+                        prevSchedules.filter((schedule) => schedule.id !== selectedScheduleId)
+                      );
+
+                      fetch('http://192.168.0.16:5050/api/v1/schedule-status', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          observation: 'Alo',
+                          idStatus: 1,
+                          idSchedule: data.idSchedule,
+                        }),
+                      })
+                        .then((response) => response.json())
+                        .then((statusData) => {
+                          if (statusData.status === 201) {
+                            console.log('Agendamento realizado com sucesso!');
+                            setModalVisible(false);
+                            Alert.alert(
+                              'Sucesso',
+                              'Seu agendamento foi realizado com sucesso!',
+                              [{ text: 'OK', onPress: () => console.log('OK Pressed') }]
+                            );
+                          } else {
+                            console.error('Erro ao definir o status do agendamento:', statusData);
+                          }
+                        })
+                        .catch((error) => {
+                          console.error('Erro ao chamar a segunda API:', error);
+                        });
+                    } else {
+                      console.error('Erro ao criar o agendamento:', data);
+                    }
+                  })
+                  .catch((error) => {
+                    console.error('Erro ao chamar a primeira API:', error);
+                  });
+              }}
+            >
+              <Text style={{ color: 'white', marginLeft: 5, fontSize: 16 }}>Yes</Text>
               <FontAwesome5 name="check" size={20} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: 100, height: 50, backgroundColor: '#EE5353', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection: 'row', gap: 20 }} onPress={() => setModalVisible(false)}>
+            <TouchableOpacity
+              style={{ width: 100, height: 50, backgroundColor: '#EE5353', alignItems: 'center', justifyContent: 'center', borderRadius: 5, flexDirection: 'row', gap: 20 }}
+              onPress={() => setModalVisible(false)}
+            >
               <Text style={{ color: 'white', marginLeft: 5, fontSize: 16 }}>{getStrings().noButtonText}</Text>
               <FontAwesome5 name="times" size={20} color="white" />
             </TouchableOpacity>
@@ -146,7 +268,6 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
     </ScrollView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -260,6 +381,6 @@ const styles = StyleSheet.create({
   profileImageHemocentro: {
     height: 300,
     width: 400,
-    borderRadius:10
-}
+    borderRadius: 10
+  }
 });

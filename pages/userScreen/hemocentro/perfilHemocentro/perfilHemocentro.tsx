@@ -12,7 +12,8 @@ import MapView, { Marker } from 'react-native-maps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import axios from 'axios';
-
+import { Rating } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -71,14 +72,15 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         latitudeDelta: 0.,
         longitudeDelta: 0,
     });
-
+    const [reviews, setReviews] = useState([]);
+    const [reviewsStatistics, setReviewsStatistics] = useState([]);
 
     useEffect(() => {
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
+                    fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -101,7 +103,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
 
     useEffect(() => {
-        fetch(`http://10.107.144.20:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -127,7 +129,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch('http://10.107.144.20:8080/api/v1/review-registration', {
+        fetch('http://192.168.0.16:5050/api/v1/review-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -144,6 +146,26 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao enviar avaliação:', error);
             });
     };
+
+    useEffect(() => {
+        const fetchReviewsStatistics = async () => {
+            try {
+                const response = await axios.get(
+                    `http://192.168.0.16:5050/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
+                );
+
+                if (response.status === 200) {
+                    setReviewsStatistics(response.data.reviewsStatistics);
+                } else {
+                    console.error('Erro ao obter estatísticas de avaliações:', response.status);
+                }
+            } catch (error) {
+                console.error('Erro na solicitação para obter estatísticas de avaliações:', error);
+            }
+        };
+
+        fetchReviewsStatistics();
+    }, [route.params.hemocentroData.hospital.hospitalId]);
 
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
@@ -238,7 +260,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                     onPress={() => navigation.navigate('AgendaDisponivelHemocentro', {
                         hemocentroNome: route.params.hemocentroData.hospital.name,
                         hemocentroData: hemocentros,
-                        hospitalId: route.params.hemocentroData.hospital.hospitalId, 
+                        hospitalId: route.params.hemocentroData.hospital.hospitalId,
                     })}
                 >
                     <Text style={{ fontSize: 20, color: 'white' }}>Agendamentos Disponiveis</Text>
@@ -246,21 +268,42 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
                 <ScrollView>
                     <View style={styles.columnCardsAvaliacao}>
-                        <TouchableOpacity style={styles.cardAvaliacao} onPress={() => navigation.navigate('PerfilHemocentro')} >
-                            <View style={styles.contentCardAvaliacao}>
-                                <View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 30, paddingRight: 70 }}>
-                                        <Image source={require('../buscaHemocentroScreen/imgs/profilePicHemocentro.png')} style={{ height: 70, width: 70 }} />
-                                        <Text style={styles.titleCardAvaliacao}>Beatriz Fideliz</Text>
-                                        <Text>11/11/2011</Text>
-                                    </View>
+                        {reviewsStatistics.map((review: {
+                            photo: any; name: string | number | boolean | React.ReactElement<any, string |
+                                React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal |
+                            null | undefined; date: string | number | boolean | React.ReactElement<any, string |
+                                React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal |
+                            null | undefined; opinion: string | number | boolean | React.ReactElement<any, string |
+                                React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null |
+                            undefined;
+                        }, index: React.Key | null | undefined) => (
+                            <View style={styles.cardAvaliacao} key={index}>
+                                <View style={styles.cardAvaliacao} key={index}>
+                                    <View style={styles.contentCardAvaliacao}>
+                                        <View>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 15, paddingRight: 70 }}>
+                                                <Image source={{ uri: review.photo }} style={{ height: 70, width: 70, borderRadius: 50 }} />
+                                                <View>
+                                                    <Text style={styles.titleCardAvaliacao}>{review.name}</Text>
+                                                    <View style={{ flexDirection: 'row' }}>
+                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
+                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
+                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
+                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
+                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
+                                                    </View>
 
-                                </View>
-                                <View>
-                                    <Text style={styles.descriptionAvaliacao}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus a urna a scelerisque. Morbi accumsan odio sit amet nulla eleifend molestie. Nullam pretium tortor est.</Text>
+                                                </View>
+                                                <Text>{review.date}</Text>
+                                            </View>
+                                        </View>
+                                        <View>
+                                            <Text style={styles.descriptionAvaliacao}>{review.opinion}</Text>
+                                        </View>
+                                    </View>
                                 </View>
                             </View>
-                        </TouchableOpacity>
+                        ))}
                     </View>
                 </ScrollView>
 
@@ -294,7 +337,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             onChangeText={(text) => {
                                 setOpinion(text);
                             }}
-                            maxLength={10}
+
                             textAlignVertical="top"  // Adicione esta linha
                         >
                         </TextInput>
@@ -455,7 +498,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 10,
         borderColor: '#7395F7',
-        height: 250,
+        height: 200,
         width: 370,
     },
     mapContainer: {
@@ -475,13 +518,13 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         gap: 20,
-        paddingLeft: 40
+        paddingLeft: 30
     },
     titleCardAvaliacao: {
         fontSize: 20,
     },
     descriptionAvaliacao: {
-        fontSize: 14,
+        fontSize: 16,
         width: 260
     },
     columnCardsAvaliacao: {
