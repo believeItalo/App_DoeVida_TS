@@ -6,6 +6,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput as PaperTextInput } from 'react-native-paper';
 import axios from 'axios';
+import { Alert } from 'react-native';
 
 
 interface MeusAgendamentosProps {
@@ -64,8 +65,9 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
     const [user, setUser] = useState<UserDate | null>(null)
     const [reschedule, setReschedule] = useState<Agendamentos | null>(null)
     const [agendaSelecionada, setAgendaSelecionada] = useState<AgendamentosDisponivel | null>(null);
-
-
+    const [selectedSchedule, setSelectedSchedule] = useState<Agendamentos | null>(null);
+    const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
+    const [cancelObservation, setCancelObservation] = useState('');
     useEffect(() => {
 
         const getUserId = async () => {
@@ -133,8 +135,15 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                 console.error('Erro ao buscar os dados da API:', error);
             });
     }, []);
-    
 
+
+    const handleCardClick = (schedule: Agendamentos) => {
+        setSelectedSchedule(schedule);
+    };
+    const handleCancelClick = (scheduleId: number) => {
+        setSelectedScheduleId(scheduleId);
+        toggleCancelModal();
+    };
     const toggleCancelModal = () => {
         setCancelModalVisible(!isCancelModalVisible);
     };
@@ -143,9 +152,42 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
         setRescheduleModalVisible(!isRescheduleModalVisible);
     };
 
-    const handleCancellationConfirmation = () => {
+    const handleCancellationConfirmation = async () => {
+        try {
+            // Verifica se há um agendamento selecionado
+            if (selectedScheduleId !== null) {
+                const cancelationData = {
+                    id: selectedScheduleId,
+                    observation: "Sofia Linda Melhor Filha Te Amo",
+                };
 
-        setCancelModalVisible(false);
+                // Faz a requisição para cancelar o agendamento
+                const response = await axios.put('http://192.168.0.16:5050/api/v1/schedule-cancel', cancelationData);
+
+                // Verifica a resposta da requisição
+                if (response.status === 200) {
+                    console.log('Agendamento cancelado com sucesso!');
+
+                    Alert.alert('Sucesso', 'Agendamento cancelado com sucesso!');
+                } else {
+                  
+                }
+            } else {
+                console.error('Nenhum agendamento selecionado para cancelar.');
+                // Lida com o caso em que nenhum agendamento está selecionado
+            }
+        } catch (error) {
+            console.error('Erro ao processar a requisição de cancelamento:', error);
+            // Lida com erros durante a requisição
+        }
+
+        // Limpa o estado do agendamento selecionado após o cancelamento
+        setSelectedSchedule(null);
+        setSelectedScheduleId(null);
+        setCancelObservation('');
+
+        // Fecha o modal de cancelamento
+        toggleCancelModal();
     };
 
     const handleReschedulingConfirmation = () => {
@@ -195,16 +237,18 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
 
                         <View style={styles.divFinal}>
                             <View style={styles.divTextEstado}>
-                                {/* <View style={styles.divPontoRed}>
-                                    <View style={styles.pontoAmarelo}></View>
-                                </View> */}
                                 <View style={styles.textEstado}>
-                                    <Text style={{ color: "#E5C05E", fontSize: 12, fontWeight: '500' }}>{schedule.status}</Text>
+                                    {schedule.status === 'PENDING' ? (
+                                        <Text style={{ color: 'red', fontSize: 12, fontWeight: '500' }}>Canceled</Text>
+                                    ) : (
+                                        <Text style={{ color: "#E5C05E", fontSize: 12, fontWeight: '500' }}>{schedule.status}</Text>
+                                    )}
                                 </View>
                             </View>
+
                             <View style={styles.divIcons}>
                                 <View style={styles.containerIcon}>
-                                    <TouchableOpacity onPress={toggleCancelModal}>
+                                    <TouchableOpacity onPress={() => handleCancelClick(schedule.scheduleId)}>
                                         <Image source={require('./imgs/cancel-event.png')} style={styles.iconCalendar} />
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={toggleRescheduleModal}>
@@ -235,6 +279,8 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                                     placeholder="Digite o motivo aqui"
                                     maxLength={200}
                                     style={styles.cardMotivo}
+                                    value={cancelObservation}
+                                    onChangeText={(text) => setCancelObservation(text)}
                                 />
                             </View>
 

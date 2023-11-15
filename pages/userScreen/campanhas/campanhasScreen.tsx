@@ -40,7 +40,7 @@ interface Campaign {
   hour: string;
   description: string;
   image: string;
-  hospital_photo:string;
+  hospital_photo: string;
 }
 const Stack = createNativeStackNavigator();
 
@@ -117,7 +117,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
               <View style={styles.card}>
                 <View style={styles.cardHeader}>
                   <View style={styles.containerImgHospital}>
-                    <Image style={styles.imgHospital} source={{ uri: campanha.image }} />
+                    <Image style={styles.imgHospital} source={{ uri: campanha.hospital_photo }} />
                   </View>
                   <View style={styles.containerTexto}>
                     <Text style={styles.textHospital}>{campanha.hospital_name}</Text>
@@ -128,7 +128,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
                   <View style={styles.linha}></View>
                 </View>
                 <View>
-                  <Image style={styles.imgPublicidade} source={{ uri: campanha.hospital_photo }} />
+                  <Image style={styles.imgPublicidade} source={{ uri: campanha.image }} />
                 </View>
               </View>
             </View>
@@ -213,7 +213,8 @@ const styles = StyleSheet.create({
   },
   imgHospital: {
     width: 45,
-    height: 45
+    height: 45,
+    borderRadius:50
   },
   containerImgHospital: {
     width: 70,
