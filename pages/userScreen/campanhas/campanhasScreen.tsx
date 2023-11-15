@@ -32,12 +32,23 @@ interface Address {
   neighborhood: string;
 }
 
+interface Campaign {
+  campaign_id: number;
+  hospital_id: number;
+  hospital_name: string;
+  date: string;
+  hour: string;
+  description: string;
+  image: string;
+  hospital_photo:string;
+}
 const Stack = createNativeStackNavigator();
 
 
 export default function BuscaHemocentroScreen({ navigation, route }: CampanhasScreenProps) {
   const [endereco, setEndereco] = useState<Address | null>(null);
   const [user, setUser] = useState<UserDate | null>(null)
+  const [campanhas, setCampanhas] = useState<Campaign[]>([]);
   useEffect(() => {
     // Recupere o userId do AsyncStorage
     const getUserId = async () => {
@@ -60,11 +71,29 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
             });
         }
       } catch (e) {
- 
+
         console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
       }
     };
     getUserId();
+  }, []);
+
+  useEffect(() => {
+    const getCampanhas = async () => {
+      try {
+        const response = await fetch('http://192.168.0.16:5050/api/v1/campaigns');
+        const data = await response.json();
+        if (data.status === 200) {
+          setCampanhas(data.campaigns);
+        } else {
+          console.error('Erro ao buscar campanhas:', data);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar campanhas:', error);
+      }
+    };
+
+    getCampanhas();
   }, []);
   return (
 
@@ -81,54 +110,29 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
 
         </View>
       </View>
-      <ScrollView style={{marginTop:-30}}>
+      <ScrollView style={{ marginTop: -30 }}>
         <View style={styles.containerPrincipal}>
-          <View style={styles.cardContainer}>
-            <View style={styles.card}>
-              <View style={styles.cardHeader}>
-                <View style={styles.containerImgHospital}>
-                  <Image style={styles.imgHospital} source={require('./img/profilePicHemocentro.png')}></Image>
+          {campanhas.map((campanha) => (
+            <View key={campanha.campaign_id} style={styles.cardContainer}>
+              <View style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <View style={styles.containerImgHospital}>
+                    <Image style={styles.imgHospital} source={{ uri: campanha.image }} />
+                  </View>
+                  <View style={styles.containerTexto}>
+                    <Text style={styles.textHospital}>{campanha.hospital_name}</Text>
+                    <Text style={styles.textHospital}>{campanha.date} - {campanha.hour}</Text>
+                  </View>
                 </View>
-                <View style={styles.containerTexto}>
-                  <Text style={styles.textHospital}>Hospital Notredame</Text>
-                  <Text style={styles.textHospital}>Intermedica</Text>
+                <View style={styles.linhaContainer}>
+                  <View style={styles.linha}></View>
                 </View>
-                <View style={styles.containerCurtir}>
-                  <Image style={styles.imgCurtir} source={require('./img/coracao.png')}></Image>
+                <View>
+                  <Image style={styles.imgPublicidade} source={{ uri: campanha.hospital_photo }} />
                 </View>
-              </View>
-              <View style={styles.linhaContainer}>
-                <View style={styles.linha}></View>
-              </View>
-              <View>
-                <Image style={styles.imgPublicidade} source={require('./img/publicidade.png')}></Image>
               </View>
             </View>
-          </View>
-
-          <View style={styles.cardContainer}>
-            <View style={styles.card}>
-              <View style={styles.cardHeader}>
-                <View style={styles.containerImgHospital}>
-                  <Image style={styles.imgHospital} source={require('./img/profilePicHemocentro.png')}></Image>
-                </View>
-                <View style={styles.containerTexto}>
-                  <Text style={styles.textHospital}>Hospital Notredame</Text>
-                  <Text style={styles.textHospital}>Intermedica</Text>
-                </View>
-                <View style={styles.containerCurtir}>
-                  <Image style={styles.imgCurtir} source={require('./img/coracao.png')}></Image>
-                </View>
-              </View>
-              <View style={styles.linhaContainer}>
-                <View style={styles.linha}></View>
-              </View>
-              <View>
-                <Image style={styles.imgPublicidade} source={require('./img/publicidadeDoa.png')}></Image>
-              </View>
-            </View>
-          </View>
-
+          ))}
         </View>
       </ScrollView>
     </View>
@@ -223,6 +227,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 70,
     flexDirection: "row",
+    justifyContent: 'center',
+    gap: 20
   },
   cardContainer: {
     height: 500,

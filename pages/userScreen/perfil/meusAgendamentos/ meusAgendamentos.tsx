@@ -5,6 +5,8 @@ import { Platform } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput as PaperTextInput } from 'react-native-paper';
+import axios from 'axios';
+
 
 interface MeusAgendamentosProps {
     navigation: any;
@@ -18,6 +20,14 @@ interface Agendamentos {
     site: string;
     status: string;
     hospital: string;
+}
+
+interface AgendamentosDisponivel {
+    id: number,
+    name: string,
+    date: string,
+    hour: string,
+    site: string
 }
 
 interface UserDate {
@@ -41,24 +51,29 @@ interface Address {
     neighborhood: string;
 }
 
+
+
 const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
     const [isCancelModalVisible, setCancelModalVisible] = useState(false);
     const [isRescheduleModalVisible, setRescheduleModalVisible] = useState(false);
-    const [agendamento, setAgendamentoData] = useState<Agendamentos | null>(null);
     const [schedules, setSchedules] = useState<Agendamentos[]>([]);
+    const [bookSchedules, setBookSchedules] = useState<AgendamentosDisponivel[]>([]);
     const [textInputValue, setTextInputValue] = useState('');
     const charactersPerLine = 10;
     const [endereco, setEndereco] = useState<Address | null>(null);
     const [user, setUser] = useState<UserDate | null>(null)
+    const [reschedule, setReschedule] = useState<Agendamentos | null>(null)
+    const [agendaSelecionada, setAgendaSelecionada] = useState<AgendamentosDisponivel | null>(null);
+
 
     useEffect(() => {
-        // Recupere o userId do AsyncStorage
+
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    // Realize a chamada à API com o userId recuperado
-                    fetch(`http://10.107.144.12:8080/api/v1/users/${id}`)
+
+                    fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -73,7 +88,32 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                         });
                 }
             } catch (e) {
-                // Lidar com possíveis erros de leitura do AsyncStorage
+
+                console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+            }
+        };
+        getUserId();
+    }, []);
+
+    //GET AGENDAMENTOS USUARIO: 
+    useEffect(() => {
+        const getUserId = async () => {
+            try {
+                const id = await AsyncStorage.getItem('userId');
+                if (id !== null) {
+                    // Realize a chamada à API com o userId recuperado
+                    axios.get(`http://192.168.0.16:5050/api/v1/users/${id}/schedules`)
+                        .then((response) => {
+                            const { status, schedules } = response.data;
+                            if (status === 200) {
+                                setSchedules(schedules);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Erro ao buscar dados da API:', error);
+                        });
+                }
+            } catch (e) {
                 console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
             }
         };
@@ -82,18 +122,17 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
 
     useEffect(() => {
         // Substitua a URL da API pela URL real.
-        fetch('http://10.107.144.12:8080/api/v1/users/1/schedules')
+        fetch('http://192.168.0.16:5050/api/v1/hospital/1/book-schedules')
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
-                    setSchedules(data.schedules);
+                    setBookSchedules(data.bookSchedules);
                 }
             })
             .catch((error) => {
                 console.error('Erro ao buscar os dados da API:', error);
             });
     }, []);
-
     
 
     const toggleCancelModal = () => {
@@ -113,6 +152,9 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
 
         setRescheduleModalVisible(false);
     };
+
+
+
 
 
     return (
@@ -153,11 +195,11 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
 
                         <View style={styles.divFinal}>
                             <View style={styles.divTextEstado}>
-                                <View style={styles.divPontoRed}>
+                                {/* <View style={styles.divPontoRed}>
                                     <View style={styles.pontoAmarelo}></View>
-                                </View>
+                                </View> */}
                                 <View style={styles.textEstado}>
-                                    <Text style={{ color: "#E5C05E", fontSize: 12 }}>{schedule.status === "RESCHEDULED" ? "Remarcar" : "Pendente"}</Text>
+                                    <Text style={{ color: "#E5C05E", fontSize: 12, fontWeight: '500' }}>{schedule.status}</Text>
                                 </View>
                             </View>
                             <View style={styles.divIcons}>
@@ -229,9 +271,12 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                             <View style={styles.containerHospital}>
 
                                 <ScrollView contentContainerStyle={{ gap: 15, }}>
-                                    {schedules.map((schedule, index) => (
+
+
+
+                                    {bookSchedules.map((bookSchedules, index) => (
                                         <View>
-                                            <TouchableOpacity>
+                                            <TouchableOpacity >
                                                 <View style={styles.cardAgendamentos} key={index}>
 
                                                     <View style={styles.imgHemocentro}>
@@ -239,9 +284,9 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                                                     </View>
 
                                                     <View style={styles.textsCardAgendamentoModal}  >
-                                                        <Text style={styles.titleCardAgendamentos}>{schedule.hospital}</Text>
-                                                        <Text style={styles.dateAgendamentoCard}>{schedule.date} as {schedule.hour}</Text>
-                                                        <Text style={styles.descriptionAgendamentoCard}>{schedule.site}</Text>
+                                                        <Text style={styles.titleCardAgendamentos}>{bookSchedules.name}</Text>
+                                                        <Text style={styles.dateAgendamentoCard}>{bookSchedules.date} as {bookSchedules.hour}</Text>
+                                                        <Text style={styles.descriptionAgendamentoCard}>{bookSchedules.site}</Text>
                                                     </View>
                                                     <View style={styles.viewStatusAgendamento}>
 
@@ -493,9 +538,9 @@ const styles = StyleSheet.create({
     },
     textsCardAgendamentoModal: {
         flexDirection: 'column',
-        width: '50%',
+        width: '70%',
         height: 150,
-        // backgroundColor:"red",
+        //backgroundColor:"red",
         //alignItems:"center",
         justifyContent: "center",
         paddingLeft: 20,
@@ -708,7 +753,7 @@ const styles = StyleSheet.create({
     divFinal: {
         width: 132,
         height: 125,
-        //  backgroundColor:"blue"
+        // backgroundColor:"blue"
     },
     divTextEstado: {
         //backgroundColor:"orange",
@@ -719,11 +764,11 @@ const styles = StyleSheet.create({
         paddingLeft: 40,
     },
     textEstado: {
-        //backgroundColor:"purple",
+        // backgroundColor:"purple",
         width: 80,
-        height: 30,
+        height: 100,
         paddingLeft: 6,
-        paddingTop: 3
+        paddingTop: 13
     },
     divPontoRed: {
         //backgroundColor:"black",
@@ -750,14 +795,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#E5C05E'
     },
     divIcons: {
-        //backgroundColor:"pink",
+        // backgroundColor:"pink",
         width: "100%",
         height: 50,
         flexDirection: 'row',
         gap: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingLeft: 25
+        paddingLeft: 50,
+        paddingTop: 30
     },
     containerIcon: {
         //backgroundColor:"green",
