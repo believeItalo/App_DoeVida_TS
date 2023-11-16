@@ -23,6 +23,7 @@
     "expo-location": "~16.1.0",
     "expo-status-bar": "~1.6.0",
     "firebase": "^10.5.0",
+    "geolib": "^3.3.4",
     "react": "18.2.0",
     "react-native": "0.72.4",
     "react-native-elements": "^3.4.3",
@@ -37,7 +38,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-snap-carousel": "^1.6.1",
     "react-native-svg": "13.9.0",
-    "react-native-vector-icons": "^10.0.2"
+    "react-native-vector-icons": "^10.0.2",
+    "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

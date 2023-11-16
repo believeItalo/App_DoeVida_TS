@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { Rating } from 'react-native-elements';
+import { TextInput as PaperTextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 const Stack = createNativeStackNavigator();
 
@@ -80,7 +81,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
+                    fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -103,7 +104,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
 
     useEffect(() => {
-        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://10.107.144.20:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -129,7 +130,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch('http://192.168.0.16:5050/api/v1/review-registration', {
+        fetch('http://10.107.144.20:8080/api/v1/review-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -151,7 +152,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         const fetchReviewsStatistics = async () => {
             try {
                 const response = await axios.get(
-                    `http://192.168.0.16:5050/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
+                    `http://10.107.144.20:8080/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
                 );
 
                 if (response.status === 200) {
@@ -330,17 +331,18 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             <Text style={{ fontSize: 16, fontWeight: '300' }}>Digite a sua opinião sobre o </Text>
                             <Text style={{ fontSize: 16, fontWeight: '300' }}>hospital e deixe uma avaliação</Text>
                         </View>
-                        <TextInput
-                            style={styles.inputAvaliacao}
-                            multiline={true}
-                            placeholderTextColor="#888"
-                            onChangeText={(text) => {
-                                setOpinion(text);
-                            }}
-
-                            textAlignVertical="top"  // Adicione esta linha
-                        >
-                        </TextInput>
+                        <View style={styles.containerMotivo}>
+                            <PaperTextInput
+                                mode="outlined"
+                                multiline
+                                placeholder="Digite sua avaliacao"
+                                maxLength={200}
+                                style={styles.cardMotivo}
+                                onChangeText={(text) => {
+                                    setOpinion(text);
+                                }}
+                            />
+                        </View>
                     </View>
                     <View style={{ paddingTop: 20 }}>
                         <View style={styles.ratingContainer}>
@@ -550,6 +552,25 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         marginTop: 20,
+    },
+
+    cardMotivo: {
+        backgroundColor: '#EAEAEA',
+        elevation: 5, // elevação da sombra no Android,
+        shadowColor: 'black', // Sombra mais escura com Alpha 0.8
+        borderColor: 'black',
+        width: 300,
+        height: 200,
+        flexDirection: "column"
+    },  
+    containerMotivo: {
+        //backgroundColor:"pink",
+        height: 230,
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+
+
     },
     inputAvaliacao: {
         width: 300,

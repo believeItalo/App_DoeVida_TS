@@ -54,7 +54,7 @@ interface Address {
 
 
 
-const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
+const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
     const [isCancelModalVisible, setCancelModalVisible] = useState(false);
     const [isRescheduleModalVisible, setRescheduleModalVisible] = useState(false);
     const [schedules, setSchedules] = useState<Agendamentos[]>([]);
@@ -68,6 +68,7 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
     const [selectedSchedule, setSelectedSchedule] = useState<Agendamentos | null>(null);
     const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
     const [cancelObservation, setCancelObservation] = useState('');
+    const [dataUpdated, setDataUpdated] = useState(false);
     useEffect(() => {
 
         const getUserId = async () => {
@@ -75,7 +76,7 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
 
-                    fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
+                    fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -104,7 +105,7 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
                     // Realize a chamada à API com o userId recuperado
-                    axios.get(`http://192.168.0.16:5050/api/v1/users/${id}/schedules`)
+                    axios.get(`http://10.107.144.20:8080/api/v1/users/${id}/schedules`)
                         .then((response) => {
                             const { status, schedules } = response.data;
                             if (status === 200) {
@@ -124,7 +125,7 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
 
     useEffect(() => {
         // Substitua a URL da API pela URL real.
-        fetch('http://192.168.0.16:5050/api/v1/hospital/1/book-schedules')
+        fetch('http://10.107.144.20:8080/api/v1/hospital/1/book-schedules')
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -158,16 +159,16 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
             if (selectedScheduleId !== null) {
                 const cancelationData = {
                     id: selectedScheduleId,
-                    observation: "Sofia Linda Melhor Filha Te Amo",
+                    observation: "Observation",
                 };
 
                 // Faz a requisição para cancelar o agendamento
-                const response = await axios.put('http://192.168.0.16:5050/api/v1/schedule-cancel', cancelationData);
+                const response = await axios.put('http://10.107.144.20:8080/api/v1/schedule-cancel', cancelationData);
 
                 // Verifica a resposta da requisição
                 if (response.status === 200) {
                     console.log('Agendamento cancelado com sucesso!');
-
+                    setDataUpdated(true);
                     Alert.alert('Sucesso', 'Agendamento cancelado com sucesso!');
                 } else {
                   
@@ -239,7 +240,7 @@ const HomeScreen: React.FC<MeusAgendamentosProps> = ({ navigation }) => {
                             <View style={styles.divTextEstado}>
                                 <View style={styles.textEstado}>
                                     {schedule.status === 'PENDING' ? (
-                                        <Text style={{ color: 'red', fontSize: 12, fontWeight: '500' }}>Canceled</Text>
+                                        <Text style={{ color: 'red', fontSize: 12, fontWeight: '500' }}>CANCELED</Text>
                                     ) : (
                                         <Text style={{ color: "#E5C05E", fontSize: 12, fontWeight: '500' }}>{schedule.status}</Text>
                                     )}
@@ -862,4 +863,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default HomeScreen;
+export default MeusAgendamentosScreen;
