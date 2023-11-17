@@ -69,13 +69,12 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
     const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
     const [cancelObservation, setCancelObservation] = useState('');
     const [dataUpdated, setDataUpdated] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     useEffect(() => {
-
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-
                     fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
@@ -91,14 +90,12 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                         });
                 }
             } catch (e) {
-
                 console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
             }
         };
         getUserId();
-    }, []);
+    }, [refresh]);
 
-    //GET AGENDAMENTOS USUARIO: 
     useEffect(() => {
         const getUserId = async () => {
             try {
@@ -110,6 +107,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                             const { status, schedules } = response.data;
                             if (status === 200) {
                                 setSchedules(schedules);
+                                setDataUpdated(false); // Resetando o estado de atualização
                             }
                         })
                         .catch((error) => {
@@ -121,10 +119,12 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
             }
         };
         getUserId();
-    }, []);
+    }, [dataUpdated]);
 
+    
+    //GET AGENDAMENTOS USUARIO: 
     useEffect(() => {
-        // Substitua a URL da API pela URL real.
+        
         fetch('http://10.107.144.20:8080/api/v1/hospital/1/book-schedules')
             .then((response) => response.json())
             .then((data) => {
@@ -161,17 +161,16 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                     id: selectedScheduleId,
                     observation: "Observation",
                 };
-
+    
                 // Faz a requisição para cancelar o agendamento
                 const response = await axios.put('http://10.107.144.20:8080/api/v1/schedule-cancel', cancelationData);
-
+    
                 // Verifica a resposta da requisição
                 if (response.status === 200) {
                     console.log('Agendamento cancelado com sucesso!');
-                    setDataUpdated(true);
                     Alert.alert('Sucesso', 'Agendamento cancelado com sucesso!');
                 } else {
-                  
+                    // Handle other response statuses if needed
                 }
             } else {
                 console.error('Nenhum agendamento selecionado para cancelar.');
@@ -181,12 +180,15 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
             console.error('Erro ao processar a requisição de cancelamento:', error);
             // Lida com erros durante a requisição
         }
-
+    
         // Limpa o estado do agendamento selecionado após o cancelamento
         setSelectedSchedule(null);
         setSelectedScheduleId(null);
         setCancelObservation('');
-
+    
+        // Atualiza o estado para refletir a mudança
+        setDataUpdated(true);
+    
         // Fecha o modal de cancelamento
         toggleCancelModal();
     };

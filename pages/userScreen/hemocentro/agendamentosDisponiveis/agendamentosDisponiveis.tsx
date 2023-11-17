@@ -185,6 +185,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
             <Text style={{ fontSize: 20 }}>{getStrings().confirmAgendaText}</Text>
             <Text style={{ fontSize: 16, color: '#6D6868' }}>{getStrings().confirmAgendaDescription}</Text>
           </View>
+          
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 50, justifyContent: 'center' }}>
             <TouchableOpacity
               style={{

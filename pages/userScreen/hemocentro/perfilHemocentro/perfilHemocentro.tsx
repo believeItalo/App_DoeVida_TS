@@ -8,13 +8,14 @@ import { ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { TextInput } from 'react-native-paper';
-import MapView, { Marker } from 'react-native-maps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Location from 'expo-location';
+import MapView, { Marker } from 'react-native-maps';
+import Geocode from 'react-geocode';
 import axios from 'axios';
 import { Rating } from 'react-native-elements';
 import { TextInput as PaperTextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -67,15 +68,10 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [user, setUser] = useState<UserDate | null>(null)
     const [endereco, setEndereco] = useState<Address | null>(null);
     const [opinion, setOpinion] = useState('');
-    const [mapRegion, setMapRegion] = useState({
-        latitude: 0,
-        longitude: 0,
-        latitudeDelta: 0.,
-        longitudeDelta: 0,
-    });
-    const [reviews, setReviews] = useState([]);
+    const [refresh, setRefresh] = useState(false);
     const [reviewsStatistics, setReviewsStatistics] = useState([]);
 
+    
     useEffect(() => {
         const getUserId = async () => {
             try {
@@ -100,7 +96,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             }
         };
         getUserId();
-    }, []);
+    }, [refresh]);
 
 
     useEffect(() => {
@@ -142,6 +138,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.log('Review enviado com sucesso:', data);
                 setModalVisible(false);
                 Alert.alert('Avaliação Enviada', 'Sua avaliação foi enviada com sucesso!');
+                setRefresh(true); // Define refresh como true para recarregar a tela
             })
             .catch((error) => {
                 console.error('Erro ao enviar avaliação:', error);
@@ -154,7 +151,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 const response = await axios.get(
                     `http://10.107.144.20:8080/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
                 );
-
+    
                 if (response.status === 200) {
                     setReviewsStatistics(response.data.reviewsStatistics);
                 } else {
@@ -164,9 +161,9 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro na solicitação para obter estatísticas de avaliações:', error);
             }
         };
-
+    
         fetchReviewsStatistics();
-    }, [route.params.hemocentroData.hospital.hospitalId]);
+    }, [route.params.hemocentroData.hospital.hospitalId, refresh]);
 
     const handleRatingPress = (selectedRating: number) => {
         setRating(selectedRating);
@@ -335,7 +332,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             <PaperTextInput
                                 mode="outlined"
                                 multiline
-                                placeholder="Digite sua avaliacao"
+                                placeholder="Digite sua Avaliacao"
                                 maxLength={200}
                                 style={styles.cardMotivo}
                                 onChangeText={(text) => {
@@ -562,7 +559,7 @@ const styles = StyleSheet.create({
         width: 300,
         height: 200,
         flexDirection: "column"
-    },  
+    },
     containerMotivo: {
         //backgroundColor:"pink",
         height: 230,
