@@ -1,21 +1,15 @@
 
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Dimensions, Alert, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, Alert, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
-import Geocode from 'react-geocode';
 import axios from 'axios';
-import { Rating } from 'react-native-elements';
 import { TextInput as PaperTextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-
+import Geocoder from 'react-native-geocoding';
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -70,14 +64,15 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [opinion, setOpinion] = useState('');
     const [refresh, setRefresh] = useState(false);
     const [reviewsStatistics, setReviewsStatistics] = useState([]);
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
 
-    
     useEffect(() => {
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
+                    fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -98,9 +93,8 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         getUserId();
     }, [refresh]);
 
-
     useEffect(() => {
-        fetch(`http://10.107.144.20:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -112,7 +106,6 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao buscar dados da API:', error);
             });
     }, []);
-
 
     const postReview = () => {
         const currentDate = new Date();
@@ -126,7 +119,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch('http://10.107.144.20:8080/api/v1/review-registration', {
+        fetch('http://192.168.0.16:5050/api/v1/review-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -149,9 +142,9 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         const fetchReviewsStatistics = async () => {
             try {
                 const response = await axios.get(
-                    `http://10.107.144.20:8080/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
+                    `http://192.168.0.16:5050/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
                 );
-    
+
                 if (response.status === 200) {
                     setReviewsStatistics(response.data.reviewsStatistics);
                 } else {
@@ -161,7 +154,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro na solicitação para obter estatísticas de avaliações:', error);
             }
         };
-    
+
         fetchReviewsStatistics();
     }, [route.params.hemocentroData.hospital.hospitalId, refresh]);
 
@@ -169,8 +162,30 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         setRating(selectedRating);
     };
 
+    useEffect(() => {
+        const cep = endereco?.cep;
+    
+        if (cep) {
+            const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&postalcode=${cep}&country=Brazil`;
+    
+            axios.get(nominatimUrl)
+                .then((response) => {
+                    const { data } = response;
+                    if (data.length > 0) {
+                        const { lat, lon } = data[0];
+                        setLatitude(parseFloat(lat));
+                        setLongitude(parseFloat(lon));
+                    }
+                })
+                .catch((error) => {
+                    console.error('Erro ao obter coordenadas a partir do CEP:', error);
+                });
+        }
+    }, [endereco?.cep]);
+
     return (
         <ScrollView>
+
             <View style={styles.container}>
 
                 <View style={styles.header}>
@@ -198,6 +213,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
                 <View style={styles.informacoesHospital}>
                     <View style={styles.viewTextInputCpf}>
+
                         <View style={styles.viewAlignEnderecoField}>
                             <Text style={styles.textEndereco}>Endereco</Text>
                             <TextInput
@@ -217,7 +233,25 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                 editable={false}
                             />
                         </View>
-
+                        <View style={styles.mapContainer}>
+                            <MapView
+                                style={styles.map}
+                                region={{
+                                    latitude: latitude,
+                                    longitude: longitude,
+                                    latitudeDelta: 0.015,
+                                    longitudeDelta: 0.0121,
+                                }}
+                            >
+                                <Marker
+                                    coordinate={{
+                                        latitude: latitude,
+                                        longitude: longitude,
+                                    }}
+                                    title="Localização de Teste"
+                                />
+                            </MapView>
+                        </View>
                     </View>
 
 
@@ -252,6 +286,8 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                         />
                     </View>
                 </View>
+
+
 
                 <TouchableOpacity
                     style={[styles.button]}
@@ -419,6 +455,16 @@ const styles = StyleSheet.create({
         borderRadius: 5
 
     },
+    mapContainer: {
+        width: 120,
+        height: 150,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+        borderRadius: 5,
+    },
     userimage: {
         height: 70,
         width: 70,
@@ -499,15 +545,6 @@ const styles = StyleSheet.create({
         borderColor: '#7395F7',
         height: 200,
         width: 370,
-    },
-    mapContainer: {
-        width: 127,
-        height: 127,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-    },
-    map: {
-        ...StyleSheet.absoluteFillObject,
     },
     contentCardAvaliacao: {
         display: 'flex',
