@@ -33,6 +33,7 @@ interface UserDate {
     bloodType: string;
     sex: string;
     cpf: string;
+  
 }
 
 interface Address {
@@ -47,6 +48,7 @@ interface Address {
 interface Hemocentro {
     hospital: Hospital;
     address: Address;
+    
 }
 
 export default function PerfilHemocentro({ navigation, route }: PerfilHemocentroScreenProps) {
@@ -137,7 +139,6 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao enviar avaliação:', error);
             });
     };
-
     useEffect(() => {
         const fetchReviewsStatistics = async () => {
             try {
@@ -164,10 +165,10 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
     useEffect(() => {
         const cep = endereco?.cep;
-    
+
         if (cep) {
             const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&postalcode=${cep}&country=Brazil`;
-    
+
             axios.get(nominatimUrl)
                 .then((response) => {
                     const { data } = response;
@@ -302,7 +303,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
                 <ScrollView>
                     <View style={styles.columnCardsAvaliacao}>
-                        {reviewsStatistics.map((review: {
+                        {reviewsStatistics.map((review: {starRating:any
                             photo: any; name: string | number | boolean | React.ReactElement<any, string |
                                 React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal |
                             null | undefined; date: string | number | boolean | React.ReactElement<any, string |
@@ -320,11 +321,9 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                                 <View>
                                                     <Text style={styles.titleCardAvaliacao}>{review.name}</Text>
                                                     <View style={{ flexDirection: 'row' }}>
-                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
-                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
-                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
-                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
-                                                        <FontAwesome5 name="star" size={20} color="#FFD700"></FontAwesome5>
+                                                        {[...Array(review.starRating || 0)].map((_, i) => (
+                                                            <FontAwesome5 key={i} name="star" size={20} color="yellow" />
+                                                        ))}
                                                     </View>
 
                                                 </View>
