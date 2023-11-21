@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { TextInput as PaperTextInput } from 'react-native-paper';
-import Geocoder from 'react-native-geocoding';
+import { WebSocketSubject } from 'rxjs/webSocket'; 
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -74,7 +74,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
+                    fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -96,7 +96,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     }, [refresh]);
 
     useEffect(() => {
-        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://10.107.144.3:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -108,7 +108,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao buscar dados da API:', error);
             });
     }, []);
-
+    
     const postReview = () => {
         const currentDate = new Date();
         const ISODate = currentDate.toISOString();
@@ -121,7 +121,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch('http://192.168.0.16:5050/api/v1/review-registration', {
+        fetch('http://10.107.144.3:8080/api/v1/review-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -139,11 +139,12 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao enviar avaliação:', error);
             });
     };
+    
     useEffect(() => {
         const fetchReviewsStatistics = async () => {
             try {
                 const response = await axios.get(
-                    `http://192.168.0.16:5050/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
+                    `http://10.107.144.3:8080/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
                 );
 
                 if (response.status === 200) {
@@ -249,7 +250,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                         latitude: latitude,
                                         longitude: longitude,
                                     }}
-                                    title="Localização de Teste"
+                                    title="Localização Hemocentro"
                                 />
                             </MapView>
                         </View>
