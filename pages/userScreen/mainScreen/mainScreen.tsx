@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getStrings } from '../../../strings/arquivoDeStrings';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as Animatable from 'react-native-animatable'
 const Stack = createNativeStackNavigator();
 
 interface MainUserScreenProps {
@@ -47,7 +47,7 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
         const id = await AsyncStorage.getItem('userId');
         if (id !== null) {
           // Realize a chamada à API com o userId recuperado
-          fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
+          fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.status === 200) {
@@ -67,7 +67,7 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
       }
     };
     getUserId();
-    
+
   }, []);
   useFocusEffect(
     React.useCallback(() => {
@@ -101,34 +101,45 @@ export default function MainUserScreen({ navigation, route }: MainUserScreenProp
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('MeuPerfil', { userData: userData })}>
           <View style={styles.userImage}>
-          <Image source={{ uri: user?.photo }} style={styles.profileImage} />
+            <Image source={{ uri: user?.photo }} style={styles.profileImage} />
           </View>
         </TouchableOpacity>
       </View>
       <View style={styles.containerCardContainer}>
         <View style={styles.cardContainer}>
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('BuscaHemocentro', { userData: userData })}>
-            <Image source={require('../mainScreen/imgs/imgCardHemocentro.png')} style={styles.cardImage} />
-            <Text style={styles.cardText}>{getStrings().hemocentrosText}</Text>
-          </TouchableOpacity>
+          <Animatable.View animation="fadeInLeft" delay={400} >
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('BuscaHemocentro', { userData: userData })}>
+              <Image source={require('../mainScreen/imgs/imgCardHemocentro.png')} style={styles.cardImage} />
+              <Text style={styles.cardText}>{getStrings().hemocentrosText}</Text>
+            </TouchableOpacity>
+          </Animatable.View>
 
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CampanhasScreen', {userData: userData})}>
+          <Animatable.View animation="fadeInRight" delay={400} >  
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CampanhasScreen', { userData: userData })}>
             <Image source={require('../mainScreen/imgs/imgCampanhas.png')} style={styles.cardImage} />
             <Text style={styles.cardText}>{getStrings().campanhaText}</Text>
           </TouchableOpacity>
+          </Animatable.View>
+
         </View>
         <View style={styles.cardContainer}>
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AjudaScreen', { userData: userData })}>
-            <Image source={require('../mainScreen/imgs/imgCardAjuda.png')} style={styles.cardImage} />
-            <Text style={styles.cardText}>{getStrings().ajudaText}</Text>
-          </TouchableOpacity>
 
+          <Animatable.View animation="fadeInLeft" delay={400} >
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AjudaScreen', { userData: userData })}>
+              <Image source={require('../mainScreen/imgs/imgCardAjuda.png')} style={styles.cardImage} />
+              <Text style={styles.cardText}>{getStrings().ajudaText}</Text>
+            </TouchableOpacity>
+          </Animatable.View>
+
+
+          <Animatable.View animation="fadeInRight" delay={400} > 
           <TouchableOpacity style={[styles.card]} onPress={() => navigation.navigate('QuemPodeDoar', { userData: userData })}>
             <Image source={require('../mainScreen/imgs/imgCardQuemPodeDoar.png')} style={styles.cardImage} />
             <View style={styles.quemPodeDoarTextContainer}>
               <Text style={styles.quemPodeDoarText}>{getStrings().quemPodeDoarText}</Text>
             </View>
           </TouchableOpacity>
+          </Animatable.View>
         </View>
       </View>
     </View>
@@ -148,7 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 110,
-
+    
   },
   userInfo: {
     height: '60%',

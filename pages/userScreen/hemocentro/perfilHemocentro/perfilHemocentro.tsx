@@ -74,7 +74,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
+                    fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -96,7 +96,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     }, [refresh]);
 
     useEffect(() => {
-        fetch(`http://10.107.144.3:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -121,7 +121,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch('http://10.107.144.3:8080/api/v1/review-registration', {
+        fetch('http://192.168.0.16:5050/api/v1/review-registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         const fetchReviewsStatistics = async () => {
             try {
                 const response = await axios.get(
-                    `http://10.107.144.3:8080/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
+                    `http://192.168.0.16:5050/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
                 );
 
                 if (response.status === 200) {
