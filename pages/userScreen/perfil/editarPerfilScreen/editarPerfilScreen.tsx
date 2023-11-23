@@ -61,7 +61,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
                     // Realize a chamada à API com o userId recuperado
-                    fetch(`http://10.107.144.20:8080/api/v1/users/${id}`)
+                    fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -111,7 +111,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
             }
         };
 
-        axios.put(`http://10.107.144.20:8080/api/v1/user-update/`, updatedUserData)
+        axios.put(`http://10.107.144.3:8080/api/v1/user-update/`, updatedUserData)
             .then(response => {
                 console.log('PUT request successful:', response.data);
                 alert('Os dados foram atualizados com sucesso')
@@ -165,7 +165,14 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
 
                 <Image source={{ uri: user?.photo }} style={{ height: 100, width: 100, borderRadius: 50 }} />
                 <Text style={[styles.userName]}>{user?.name}</Text>
-
+                <View>
+                    <TouchableOpacity
+                        style={[styles.buttonEditarPerfil]}
+                        onPress={() => navigation.navigate('RedefinirSenha', { userData: userData })}
+                    >
+                        <Text style={{ fontSize: 20, color: 'white' }}>Redefinir senha</Text>
+                    </TouchableOpacity>
+                </View>
                 <View style={{ paddingTop: 40, paddingBottom: 20 }}>
                     <View style={{ backgroundColor: '#EBEBED', width: 350, height: 2 }} />
                 </View>
