@@ -70,13 +70,14 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
     const [cancelObservation, setCancelObservation] = useState('');
     const [dataUpdated, setDataUpdated] = useState(false);
     const [refresh, setRefresh] = useState(false);
-    
+    const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
+
     useEffect(() => {
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
+                    fetch(`http://192.168.100.100:5050/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -103,7 +104,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
                     // Realize a chamada à API com o userId recuperado
-                    axios.get(`http://10.107.144.3:8080/api/v1/users/${id}/schedules`)
+                    axios.get(`http://192.168.100.100:5050/api/v1/users/${id}/schedules`)
                         .then((response) => {
                             const { status, schedules } = response.data;
                             if (status === 200) {
@@ -122,11 +123,11 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
         getUserId();
     }, [dataUpdated]);
 
-    
+
     //GET AGENDAMENTOS USUARIO: 
     useEffect(() => {
-        
-        fetch('http://10.107.144.3:8080/api/v1/hospital/1/book-schedules')
+
+        fetch('http://192.168.100.100:5050/api/v1/hospital/1/book-schedules')
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -162,10 +163,10 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                     id: selectedScheduleId,
                     observation: "Observation",
                 };
-    
+
                 // Faz a requisição para cancelar o agendamento
-                const response = await axios.put('http://10.107.144.3:8080/api/v1/schedule-cancel', cancelationData);
-    
+                const response = await axios.put('http://192.168.100.100:5050/api/v1/schedule-cancel', cancelationData);
+
                 // Verifica a resposta da requisição
                 if (response.status === 200) {
                     console.log('Agendamento cancelado com sucesso!');
@@ -181,15 +182,15 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
             console.error('Erro ao processar a requisição de cancelamento:', error);
             // Lida com erros durante a requisição
         }
-    
+
         // Limpa o estado do agendamento selecionado após o cancelamento
         setSelectedSchedule(null);
         setSelectedScheduleId(null);
         setCancelObservation('');
-    
+
         // Atualiza o estado para refletir a mudança
         setDataUpdated(true);
-    
+
         // Fecha o modal de cancelamento
         toggleCancelModal();
     };
@@ -199,7 +200,10 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
         setRescheduleModalVisible(false);
     };
 
-
+    const handleCardSelection = (index: number) => {
+        setSelectedCardIndex(index);
+        setAgendaSelecionada(bookSchedules[index]); // store the selected schedule
+    };
 
 
 
@@ -324,29 +328,25 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
 
 
 
-                                    {bookSchedules.map((bookSchedules, index) => (
-                                        <View>
-                                            <TouchableOpacity >
-                                                <View style={styles.cardAgendamentos} key={index}>
-
+                                    {bookSchedules.map((bookSchedule, index) => (
+                                        <View key={index}>
+                                            <TouchableOpacity onPress={() => handleCardSelection(index)}>
+                                                <View style={[styles.cardAgendamentos, selectedCardIndex === index && styles.selectedCard]}>
                                                     <View style={styles.imgHemocentro}>
                                                         <Image source={require('./imgs/hospital.png')}></Image>
                                                     </View>
-
-                                                    <View style={styles.textsCardAgendamentoModal}  >
-                                                        <Text style={styles.titleCardAgendamentos}>{bookSchedules.name}</Text>
-                                                        <Text style={styles.dateAgendamentoCard}>{bookSchedules.date} as {bookSchedules.hour}</Text>
-                                                        <Text style={styles.descriptionAgendamentoCard}>{bookSchedules.site}</Text>
+                                                    <View style={styles.textsCardAgendamentoModal}>
+                                                        <Text style={styles.titleCardAgendamentos}>{bookSchedule.name}</Text>
+                                                        <Text style={styles.dateAgendamentoCard}>{bookSchedule.date} as {bookSchedule.hour}</Text>
+                                                        <Text style={styles.descriptionAgendamentoCard}>{bookSchedule.site}</Text>
                                                     </View>
                                                     <View style={styles.viewStatusAgendamento}>
-
                                                     </View>
-
-
                                                 </View>
                                             </TouchableOpacity>
                                         </View>
                                     ))}
+
                                 </ScrollView>
 
                             </View>
@@ -400,6 +400,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flexDirection: "row",
         gap: 15
+    },
+    selectedCard: {
+        borderColor: '#2C62F1', // Add your selected card style here
+        borderWidth: 2,
     },
     buttonDivSim: {
         backgroundColor: "#2C62F1",

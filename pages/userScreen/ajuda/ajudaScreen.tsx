@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -6,16 +6,67 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { ImageBackground } from 'react-native';
 import ReadMoreText from './textExpand';
 import { getStrings } from '../../../strings/arquivoDeStrings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Stack = createNativeStackNavigator();
 interface AjudaScreenProps {
   navigation: any;
   route: any;
 }
+interface UserDate {
+  password: any;
+  name: string;
+  photo: string;
+  email: string;
+  phone: string;
+  weight: string;
+  age: number;
+  bloodType: string;
+  sex: string;
+  cpf: string;
+}
 
+interface Address {
+  complement: string | undefined;
+  street: string | undefined;
+  cep: string | undefined;
+  uf: string;
+  city: string;
+  neighborhood: string;
+}
 export default function AjudaScreen({ navigation, route }: AjudaScreenProps) {
   const [userDetails, setUserDetails] = useState(null);
   const userName = route.params && route.params.userName ? route.params.userName : '';
   const userData = route.params && route.params.userData ? route.params.userData : null;
+  const [endereco, setEndereco] = useState<Address | null>(null);
+  const [user, setUser] = useState<UserDate | null>(null)
+  useEffect(() => {
+
+    const getUserId = async () => {
+      try {
+        const id = await AsyncStorage.getItem('userId');
+        if (id !== null) {
+          // Realize a chamada à API com o userId recuperado
+          fetch(`http://192.168.100.100:5050/api/v1/users/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === 200) {
+                const { user, address } = data;
+                setEndereco(address);
+                setUser(user);
+                console.log(data);
+              }
+            })
+            .catch((error) => {
+              console.error('Erro ao buscar dados da API:', error);
+            });
+        }
+      } catch (e) {
+        // Lidar com possíveis erros de leitura do AsyncStorage
+        console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+      }
+    };
+    getUserId();
+  }, []);
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -25,9 +76,7 @@ export default function AjudaScreen({ navigation, route }: AjudaScreenProps) {
           </TouchableOpacity>
           <Text style={styles.title}>{getStrings().helpTitle}</Text>
           <View >
-            {userData && userData.photo && (
-              <Image source={{ uri: userData.photo }} style={styles.profileImage} />
-            )}
+          <Image source={{ uri: user?.photo }} style={{ height: 70, width: 70, borderRadius: 50 }} /> 
           </View>
         </View>
         <View style={styles.viewImgAjuda}>
