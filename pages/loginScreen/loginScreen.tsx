@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, SafeAreaView, Alert, Modal } from 'react-native';
 import axios from 'axios';
 import { getStrings } from '../../strings/arquivoDeStrings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,7 +16,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [recoveryEmail, setRecoveryEmail] = useState('');
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
@@ -24,18 +25,54 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   const handlePasswordChange = (text: string) => {
     setPassword(text);
   };
+  const openModal = () => {
+    setModalVisible(true);
+  };
+  
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleRecovery = async () => {
+    try {
+      // Enviar e-mail de recuperação para o e-mail digitado
+      console.log('Enviar e-mail de recuperação para:', recoveryEmail);
+  
+      // Fazer o POST na API de recuperação de senha
+      const response = await axios.post('http://10.107.144.3:8080/api/v1/forgot-password', {
+        type: 'user',
+        email: recoveryEmail,
+      });
+  
+      // Verificar se o POST foi bem-sucedido
+      if (response.status === 200) {
+        // Feedback para o usuário (pode ser personalizado conforme necessário)
+        Alert.alert('Sucesso', 'E-mail de recuperação enviado com sucesso.');
+  
+        // Fechar o modal após o envio
+        closeModal();
+      } else {
+        // Caso o POST não tenha sido bem-sucedido
+        Alert.alert('Erro', 'Ocorreu um erro ao enviar o e-mail de recuperação. Tente novamente.');
+      }
+    } catch (error) {
+      // Em caso de erro na requisição
+      console.error('Erro ao enviar e-mail de recuperação:', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao enviar o e-mail de recuperação. Tente novamente.');
+    }
+  };
 
   const handleLogin = async () => {
     try {
       //192.168.0.16:5050
-      const response = await axios.post('http://192.168.100.100:5050/api/v1/user-login', {
+      const response = await axios.post('http://10.107.144.3:8080/api/v1/user-login', {
         email: email,
         password: password,
       });
       if (response.status === 200) {
         const userData = response.data.userData;
         console.log(userData);
-        
+
         // Armazena o token no AsyncStorage
         await AsyncStorage.setItem('token', userData.token);
         await AsyncStorage.setItem('userId', userData.id.toString());
@@ -59,7 +96,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           <Text style={styles.inputTitle}>{getStrings().emailLabel}</Text>
           <TextInput
             style={styles.input}
- 
+
             value={email}
             onChangeText={handleEmailChange}
           />
@@ -69,16 +106,16 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           <Text style={styles.inputTitle}>{getStrings().senhaLabel}</Text>
           <TextInput
             style={styles.input}
-           
+
             secureTextEntry={true}
             value={password}
             onChangeText={handlePasswordChange}
           />
         </View>
 
-        <View style={styles.forgotPasswordContainer}>
+        <TouchableOpacity onPress={openModal}>
           <Text style={styles.forgotPasswordText}>{getStrings().forgotPasswordLabel}</Text>
-        </View>
+        </TouchableOpacity>
       </SafeAreaView>
 
       <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={handleLogin}>
@@ -88,12 +125,42 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       <TouchableOpacity onPress={() => navigation.navigate('CadastroInformacoesPessoais')}>
         <Text style={styles.signupText}>{getStrings().noAccountLabel}</Text>
       </TouchableOpacity>
+      <Modal visible={isModalVisible} animationType="slide">
+        <View style={styles.modal}>
+          <Text style={styles.title}>Recuperação de Senha</Text>
+
+          <Text style={styles.inputTitle}>Informe seu e-mail</Text>
+          <TextInput
+            style={styles.input}
+            value={recoveryEmail}
+            onChangeText={setRecoveryEmail}
+            keyboardType="email-address"
+          />
+
+          <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={handleRecovery}>
+            <Text style={styles.buttonText}>Enviar Recuperação</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={closeModal}>
+            <Text style={styles.signupText}>Fechar</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
+
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+  },
+  modal:{
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

@@ -59,7 +59,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
             const id = await AsyncStorage.getItem('userId');
             if (id !== null) {
                 // Realize a chamada à API com o userId recuperado
-                fetch(`http://192.168.100.100:5050/api/v1/users/${id}`)
+                fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
                     .then((response) => response.json())
                     .then((data) => {
                         if (data.status === 200) {
@@ -83,7 +83,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
 
   useEffect(() => {
     // Fetch data from the API when the component mounts
-    axios.get('http://192.168.100.100:5050/api/v1/hospitals')
+    axios.get('http://10.107.144.3:8080/api/v1/hospitals')
       .then(response => {
         if (response.data && response.data.hospitals) {
           setHemocentros(response.data.hospitals);

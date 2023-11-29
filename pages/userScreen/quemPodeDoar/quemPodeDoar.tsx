@@ -48,7 +48,7 @@ export default function AjudaScreen({ navigation, route }: AjudaScreenProps) {
         const id = await AsyncStorage.getItem('userId');
         if (id !== null) {
           // Realize a chamada à API com o userId recuperado
-          fetch(`http://192.168.100.100:5050/api/v1/users/${id}`)
+          fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.status === 200) {
@@ -77,7 +77,7 @@ export default function AjudaScreen({ navigation, route }: AjudaScreenProps) {
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <FontAwesome5 name="bars" size={40} color="white" />
           </TouchableOpacity>
-          <Text style={styles.title}>Ajuda</Text>
+          <Text style={styles.title}>Quem Pode Doar</Text>
           <View >
           <Image source={{ uri: user?.photo }} style={{ height: 70, width: 70, borderRadius: 50 }} /> 
           </View>
@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: `center`,
-    gap: 90,
-    paddingLeft: 30,
+    gap: 30,
+    paddingLeft: 20,
     paddingTop: 20,
     backgroundColor: 'rgba(78, 123, 242, 0.76)'
   },

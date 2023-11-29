@@ -77,7 +77,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://192.168.100.100:5050/api/v1/users/${id}`)
+                    fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -104,7 +104,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
                     // Realize a chamada à API com o userId recuperado
-                    axios.get(`http://192.168.100.100:5050/api/v1/users/${id}/schedules`)
+                    axios.get(`http://10.107.144.3:8080/api/v1/users/${id}/schedules`)
                         .then((response) => {
                             const { status, schedules } = response.data;
                             if (status === 200) {
@@ -127,7 +127,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
     //GET AGENDAMENTOS USUARIO: 
     useEffect(() => {
 
-        fetch('http://192.168.100.100:5050/api/v1/hospital/1/book-schedules')
+        fetch('http://10.107.144.3:8080/api/v1/hospital/1/book-schedules')
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -165,7 +165,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                 };
 
                 // Faz a requisição para cancelar o agendamento
-                const response = await axios.put('http://192.168.100.100:5050/api/v1/schedule-cancel', cancelationData);
+                const response = await axios.put('http://10.107.144.3:8080/api/v1/schedule-cancel', cancelationData);
 
                 // Verifica a resposta da requisição
                 if (response.status === 200) {

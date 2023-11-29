@@ -47,7 +47,7 @@ export default function RedefinirSenhaScreen({ navigation }: RedefinirSenhaScree
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://192.168.100.100:5050/api/v1/users/${id}`)
+                    fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -83,7 +83,7 @@ export default function RedefinirSenhaScreen({ navigation }: RedefinirSenhaScree
             
           };
     
-          const response = await axios.put(`http://192.168.100.100:5050/api/v1/user/redefine-password/`, updatedPassword);
+          const response = await axios.put(`http://10.107.144.3:8080/api/v1/user/redefine-password/`, updatedPassword);
     
           console.log('PUT request successful:', response.data);
           alert('Os dados foram atualizados com sucesso');

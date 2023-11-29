@@ -125,8 +125,6 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
       return;
     }
 
-    // Implementar outras validações conforme necessário
-
     const formDataJSON = montarObjetoJSON();
     navigation.navigate('CadastroTipoSanguineo', { formDataJSON });
   };
