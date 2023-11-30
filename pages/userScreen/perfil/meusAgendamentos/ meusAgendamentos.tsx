@@ -15,6 +15,7 @@ interface MeusAgendamentosProps {
 }
 
 interface Agendamentos {
+    photo: string | undefined;
     scheduleId: number;
     date: string;
     hour: string;
@@ -24,6 +25,8 @@ interface Agendamentos {
 }
 
 interface AgendamentosDisponivel {
+    site_id: any;
+    book_schedule_id: any;
     id: number,
     name: string,
     date: string,
@@ -71,6 +74,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
     const [dataUpdated, setDataUpdated] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
+    const [selectedCardInfo, setSelectedCardInfo] = useState<AgendamentosDisponivel | null>(null);
 
     useEffect(() => {
         const getUserId = async () => {
@@ -95,9 +99,12 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                 console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
             }
         };
-        getUserId();
+        return () => {
+            setSchedules([]);
+        };
     }, [refresh]);
 
+    // GET AGENDAMENTOS USUARIO:
     useEffect(() => {
         const getUserId = async () => {
             try {
@@ -107,9 +114,24 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                     axios.get(`http://10.107.144.3:8080/api/v1/users/${id}/schedules`)
                         .then((response) => {
                             const { status, schedules } = response.data;
-                            if (status === 200) {
+                            if (status === 200 && schedules.length > 0) {
+                                // Extrai o idHospital do primeiro agendamento do usuário
+                                const idHospital = schedules[0].hospitalId;
+
+                                // Realize a chamada à API de book schedules mobile com o idHospital
+                                fetch(`http://10.107.144.3:8080/api/v1/hospital/${idHospital}/book-schedules-mobile`)
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                        if (data.status === 200) {
+                                            setBookSchedules(data.bookSchedules);
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.error('Erro ao buscar os dados da API:', error);
+                                    });
+
                                 setSchedules(schedules);
-                                setDataUpdated(false); // Resetando o estado de atualização
+                                setDataUpdated(false);
                             }
                         })
                         .catch((error) => {
@@ -123,21 +145,6 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
         getUserId();
     }, [dataUpdated]);
 
-
-    //GET AGENDAMENTOS USUARIO: 
-    useEffect(() => {
-
-        fetch('http://10.107.144.3:8080/api/v1/hospital/1/book-schedules')
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.status === 200) {
-                    setBookSchedules(data.bookSchedules);
-                }
-            })
-            .catch((error) => {
-                console.error('Erro ao buscar os dados da API:', error);
-            });
-    }, []);
 
 
     const handleCardClick = (schedule: Agendamentos) => {
@@ -195,14 +202,56 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
         toggleCancelModal();
     };
 
-    const handleReschedulingConfirmation = () => {
+    const handleReschedulingConfirmation = async () => {
+        try {
+            // Check if a card is selected
+            if (selectedCardInfo) {
+                const rescheduleData = {
+                    id: selectedCardInfo.book_schedule_id,
+                    date: selectedCardInfo.date,
+                    hour: selectedCardInfo.hour,
+                    siteId: selectedCardInfo.site_id,
+                };
 
-        setRescheduleModalVisible(false);
+                console.log('Reschedule Data:', rescheduleData);
+
+                // Send the PUT request to reschedule the appointment
+                const response = await axios.put('http://10.107.144.3:8080:8080/api/v1/schedule-reschedule', rescheduleData);
+
+                // Check the response status
+                console.log('Response:', response);
+
+                if (response.status === 200) {
+                    console.log('Appointment rescheduled successfully!');
+                    Alert.alert('Success', 'Appointment rescheduled successfully!');
+                } else {
+                    console.error('Failed to reschedule appointment. Status:', response.status);
+                    // Handle other response statuses if needed
+                }
+            } else {
+                console.error('No card selected for rescheduling.');
+                // Handle the case where no card is selected
+            }
+        } catch (error) {
+            console.error('Error while processing rescheduling request:', error);
+            // Handle errors during the request
+        }
+
+        // Clear selected card information after rescheduling
+        setSelectedCardIndex(null);
+        setAgendaSelecionada(null);
+        setSelectedCardInfo(null);
+
+        // Close the reschedule modal
+        toggleRescheduleModal();
     };
 
     const handleCardSelection = (index: number) => {
         setSelectedCardIndex(index);
-        setAgendaSelecionada(bookSchedules[index]); // store the selected schedule
+        const selectedInfo = bookSchedules[index];
+        setAgendaSelecionada(selectedInfo);
+        setSelectedCardInfo(selectedInfo);
+        console.log('Selected Card Info:', selectedInfo);
     };
 
 
@@ -228,7 +277,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                     <View style={styles.cardAgendamentosMy} key={schedule.scheduleId}>
                         <View style={styles.divImgHospital}>
                             <View style={styles.containerImg}>
-                                <Image style={{ width: 65, height: 65 }} source={require('./imgs/hospital.png')}></Image>
+                                <Image style={{ width: 65, height: 65, borderRadius: 50 }} source={{ uri: schedule.photo }} />
                             </View>
                         </View>
                         <View style={styles.divTextHospital}>

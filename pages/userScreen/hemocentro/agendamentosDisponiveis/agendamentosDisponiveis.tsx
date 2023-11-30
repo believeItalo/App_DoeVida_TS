@@ -51,7 +51,7 @@ interface Address {
 export default function AgendaDisponivelHemocentro({ navigation, route }: AgendaDisponivelHemocentroScreenProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
-  const [bookSchedules, setBookSchedules] = useState<Schedule[]>([]); // Explicitly set the type to Schedule[]
+  const [bookSchedules, setBookSchedules] = useState<Schedule[]>([]);
   const [hospitalData, setHospitalData] = useState<Hospital | null>(null);
   const userData = route.params && route.params.userData ? route.params.userData : null;
   const hemocentroNome = route.params && route.params.hemocentroNome ? route.params.hemocentroNome : '';
