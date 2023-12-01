@@ -100,7 +100,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
     <View style={{ flex: 1 }}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <FontAwesome5 name="bars" size={40} color="black" />
+          <FontAwesome5 name="bars" size={40} color="white" />
         </TouchableOpacity>
         <Text style={styles.title}>{"Campanhas"}</Text>
 
@@ -152,18 +152,18 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   header: {
-    height: '25%',
+    height: '20%',
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 40,
-
+    backgroundColor:'rgba(78, 123, 242, 0.76)'
   },
   title: {
     fontSize: 30,
     fontWeight: '300',
-    color: 'black',
+    color: 'white',
   },
   userInfo: {
     height: '60%',

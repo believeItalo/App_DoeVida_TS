@@ -10,6 +10,8 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { TextInput as PaperTextInput } from 'react-native-paper';
 import { WebSocketSubject } from 'rxjs/webSocket'; 
+
+
 const Stack = createNativeStackNavigator();
 
 interface PerfilHemocentroScreenProps {
@@ -68,6 +70,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [reviewsStatistics, setReviewsStatistics] = useState([]);
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
+    const [isLottieVisible, setIsLottieVisible] = useState(false);
 
     useEffect(() => {
         const getUserId = async () => {

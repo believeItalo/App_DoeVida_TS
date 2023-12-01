@@ -75,7 +75,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
     const [refresh, setRefresh] = useState(false);
     const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
     const [selectedCardInfo, setSelectedCardInfo] = useState<AgendamentosDisponivel | null>(null);
-
+    
     useEffect(() => {
         const getUserId = async () => {
             try {
@@ -99,51 +99,49 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                 console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
             }
         };
-        return () => {
-            setSchedules([]);
-        };
+        getUserId();
     }, [refresh]);
 
-    // GET AGENDAMENTOS USUARIO:
-    useEffect(() => {
-        const getUserId = async () => {
-            try {
-                const id = await AsyncStorage.getItem('userId');
-                if (id !== null) {
-                    // Realize a chamada à API com o userId recuperado
-                    axios.get(`http://10.107.144.3:8080/api/v1/users/${id}/schedules`)
-                        .then((response) => {
-                            const { status, schedules } = response.data;
-                            if (status === 200 && schedules.length > 0) {
-                                // Extrai o idHospital do primeiro agendamento do usuário
-                                const idHospital = schedules[0].hospitalId;
+// GET AGENDAMENTOS USUARIO:
+useEffect(() => {
+    const getUserId = async () => {
+        try {
+            const id = await AsyncStorage.getItem('userId');
+            if (id !== null) {
+                // Realize a chamada à API com o userId recuperado
+                axios.get(`http://10.107.144.3:8080/api/v1/users/${id}/schedules`)
+                    .then((response) => {
+                        const { status, schedules } = response.data;
+                        if (status === 200 && schedules.length > 0) {
+                            // Extrai o idHospital do primeiro agendamento do usuário
+                            const idHospital = schedules[0].hospitalId;
 
-                                // Realize a chamada à API de book schedules mobile com o idHospital
-                                fetch(`http://10.107.144.3:8080/api/v1/hospital/${idHospital}/book-schedules-mobile`)
-                                    .then((response) => response.json())
-                                    .then((data) => {
-                                        if (data.status === 200) {
-                                            setBookSchedules(data.bookSchedules);
-                                        }
-                                    })
-                                    .catch((error) => {
-                                        console.error('Erro ao buscar os dados da API:', error);
-                                    });
+                            // Realize a chamada à API de book schedules mobile com o idHospital
+                            fetch(`http://10.107.144.3:8080/api/v1/hospital/${idHospital}/book-schedules-mobile`)
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    if (data.status === 200) {
+                                        setBookSchedules(data.bookSchedules);
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error('Erro ao buscar os dados da API:', error);
+                                });
 
-                                setSchedules(schedules);
-                                setDataUpdated(false);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Erro ao buscar dados da API:', error);
-                        });
-                }
-            } catch (e) {
-                console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+                            setSchedules(schedules);
+                            setDataUpdated(false); 
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao buscar dados da API:', error);
+                    });
             }
-        };
-        getUserId();
-    }, [dataUpdated]);
+        } catch (e) {
+            console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+        }
+    };
+    getUserId();
+}, [dataUpdated]);
 
 
 
@@ -204,45 +202,41 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
 
     const handleReschedulingConfirmation = async () => {
         try {
-            // Check if a card is selected
-            if (selectedCardInfo) {
+            // Verifica se há um agendamento selecionado
+            if (agendaSelecionada !== null) {
                 const rescheduleData = {
-                    id: selectedCardInfo.book_schedule_id,
-                    date: selectedCardInfo.date,
-                    hour: selectedCardInfo.hour,
-                    siteId: selectedCardInfo.site_id,
+                    id: agendaSelecionada.site_id, // Use o campo correto para o ID
+                    date: agendaSelecionada.date,
+                    hour: agendaSelecionada.hour,
+                    siteId: agendaSelecionada.site_id,
                 };
-
-                console.log('Reschedule Data:', rescheduleData);
-
-                // Send the PUT request to reschedule the appointment
-                const response = await axios.put('http://10.107.144.3:8080:8080/api/v1/schedule-reschedule', rescheduleData);
-
-                // Check the response status
-                console.log('Response:', response);
-
+    
+                // Faz a requisição para reagendar o agendamento
+                const response = await axios.put('http:/10.107.144.3:8080/api/v1/schedule-reschedule', rescheduleData);
+    
+                // Verifica a resposta da requisição
                 if (response.status === 200) {
-                    console.log('Appointment rescheduled successfully!');
-                    Alert.alert('Success', 'Appointment rescheduled successfully!');
+                    console.log('Agendamento reagendado com sucesso!');
+                    Alert.alert('Sucesso', 'Agendamento reagendado com sucesso!');
                 } else {
-                    console.error('Failed to reschedule appointment. Status:', response.status);
                     // Handle other response statuses if needed
                 }
             } else {
-                console.error('No card selected for rescheduling.');
-                // Handle the case where no card is selected
+                console.error('Nenhum agendamento selecionado para reagendar.');
+                // Lida com o caso em que nenhum agendamento está selecionado
             }
         } catch (error) {
-            console.error('Error while processing rescheduling request:', error);
-            // Handle errors during the request
+            console.error('Erro ao processar a requisição de reagendamento:', error);
+            // Lida com erros durante a requisição
         }
-
-        // Clear selected card information after rescheduling
-        setSelectedCardIndex(null);
+    
+        // Limpa o estado do agendamento selecionado após o reagendamento
         setAgendaSelecionada(null);
-        setSelectedCardInfo(null);
-
-        // Close the reschedule modal
+    
+        // Atualiza o estado para refletir a mudança
+        setDataUpdated(true);
+    
+        // Fecha o modal de reagendamento
         toggleRescheduleModal();
     };
 
@@ -277,7 +271,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                     <View style={styles.cardAgendamentosMy} key={schedule.scheduleId}>
                         <View style={styles.divImgHospital}>
                             <View style={styles.containerImg}>
-                                <Image style={{ width: 65, height: 65, borderRadius: 50 }} source={{ uri: schedule.photo }} />
+                            <Image style={{ width: 65, height: 65, borderRadius:50 }} source={{ uri: schedule.photo }}/>
                             </View>
                         </View>
                         <View style={styles.divTextHospital}>
@@ -582,7 +576,6 @@ const styles = StyleSheet.create({
         gap: 40,
         paddingLeft: 10,
         paddingTop: 20,
-        // backgroundColor:'pink'
     },
     title: {
         fontSize: 26,

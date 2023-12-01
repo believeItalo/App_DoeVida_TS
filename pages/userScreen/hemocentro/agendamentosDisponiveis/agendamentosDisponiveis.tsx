@@ -4,7 +4,7 @@ import Modal from 'react-native-modal';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { getStrings } from '../../../../strings/arquivoDeStrings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import LottieView from 'lottie-react-native';
 interface AgendaDisponivelHemocentroScreenProps {
   navigation: any;
   route: any;
@@ -62,6 +62,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   const [scheduledIds, setScheduledIds] = useState<number[]>([]);
   console.log(hospitalId);
   const [userId, setUserId] = useState<number | null>(null);
+  const [lottieVisible, setLottieVisible] = useState(false);
 
   useEffect(() => {
     // Recupere o userId do AsyncStorage
@@ -135,7 +136,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <FontAwesome5 name="bars" size={40} color="black" />
+            <FontAwesome5 name="bars" size={40} color="white" />
           </TouchableOpacity>
           <Text style={styles.title}>{getStrings().hemocentroTitle}</Text>
           <Image source={{ uri: user?.photo }} style={styles.profileImage} />
@@ -145,7 +146,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
             <Image source={{ uri: hospitalData.photo }} style={styles.profileImageHemocentro} />
           )}
         </View>
-        <View style={styles.nomeHemocentroContainer}>
+        <View style={styles.nomeHemocentroContainer}> 
           <Text style={styles.nomeHemocentro}>{hemocentroNome}</Text>
         </View>
         <View style={styles.agendaTitleContainer}>
@@ -269,6 +270,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
           </View>
         </View>
       </Modal>
+      
     </ScrollView>
   );
 }
@@ -281,18 +283,20 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   header: {
-    height: 170,
-    width: 400,
+    height: '20%',
+    width: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems:'center',
     justifyContent: 'center',
-    paddingLeft: 10,
-
+    paddingLeft: 20,
+    paddingRight:20,
+    paddingTop:10,
+    backgroundColor:'rgba(78, 123, 242, 0.76)',
   },
   title: {
     fontSize: 30,
     fontWeight: '300',
-    color: 'black',
+    color: 'white',
     flex: 1,
     textAlign: 'center',
   },
@@ -308,6 +312,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     gap: 20,
+    paddingTop:60
   },
   image: {
     height: 300,
