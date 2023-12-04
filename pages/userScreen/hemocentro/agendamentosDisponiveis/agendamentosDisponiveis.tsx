@@ -78,7 +78,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
                 const { user, address } = data;
                 setEndereco(address);
                 setUser(user);
-                setUserId(user.id); // Certifique-se de que `user.id` seja do tipo `number`
+                setUserId(user.id);
                 console.log(data);
               }
             })
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   header: {
-    height: '20%',
+    height: '10%',
     width: '100%',
     flexDirection: 'row',
     alignItems:'center',

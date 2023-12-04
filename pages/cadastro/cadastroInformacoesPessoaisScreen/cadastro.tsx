@@ -106,6 +106,16 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
     return true;
   };
 
+  const formatarCPF = (value: string) => {
+    // Limpar caracteres não numéricos
+    const cleanedValue = value.replace(/\D/g, '');
+
+    // Adicionar a máscara de CPF
+    const formattedValue = cleanedValue.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+
+    return formattedValue;
+  };
+  
   const navigateToCadastroTipoSanguineo = () => {
     if (
       nome.trim() === '' ||
@@ -182,7 +192,13 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
           <Text style={styles.label}>
             {getStrings().cpfLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput maxLength={14} style={styles.input} keyboardType="numeric" value={cpf} onChangeText={novoCpf => setCpf(novoCpf)} />
+          <TextInput
+          maxLength={14}
+          style={styles.input}
+          keyboardType="numeric"
+          value={formatarCPF(cpf)}
+          onChangeText={(novoCpf) => setCpf(formatarCPF(novoCpf))}
+        />
         </View>
 
         <View style={styles.section}>

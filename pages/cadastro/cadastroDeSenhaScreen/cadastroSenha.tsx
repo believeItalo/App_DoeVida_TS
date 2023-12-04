@@ -17,10 +17,10 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
     if (route.params && route.params.formDataJSON) {
       const formData = route.params.formDataJSON;
       setFormDataJSON(formData);
-    
+
     }
   }, [route.params]);
- 
+
   const handleContinuar = async () => {
     try {
       if (senha !== confirmarSenha) {
@@ -28,26 +28,46 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
         return;
       }
 
-      const userPayload = {
-        ...formDataJSON.user,
-        password: senha,
-      };
-
       const formDataWithPassword = {
-        ...formDataJSON,
-        user: userPayload,
+        "user": {
+          "name": formDataJSON.user.name,
+          "cpf": formDataJSON.user.cpf,
+          "email": formDataJSON.user.email,
+          "phone": formDataJSON.user.phone,
+          "dateOfBirth": formDataJSON.user.dateOfBirth,
+          "weight": formDataJSON.user.weight,
+          "photo": formDataJSON.user.photo,
+          "password": senha,
+          "sex": formDataJSON.user.sex,
+          "bloodType": formDataJSON.user.bloodType
+        },
+        "address": {
+          "cep": formDataJSON.address.cep,
+          "uf": formDataJSON.address.uf,
+          "city": formDataJSON.address.city,
+          "neighborhood": formDataJSON.address.neighborhood,
+          "street": formDataJSON.address.street,
+          "number": formDataJSON.address.number,
+          "complement": formDataJSON.address.complement
+        }
       };
       console.log('Dados enviados na requisição:', formDataWithPassword);
-      const response = await axios.post('http://192.168.0.16:5050/api/v1/user-registration', formDataWithPassword);
- 
+      const response = await axios.post('http://10.107.144.3:8080/api/v1/user-registration', formDataWithPassword);
+
       if (response.status === 200) {
-        // lógica de navegação ou manipulação de sucesso aqui
         console.log('Usuário cadastrado com sucesso:', response.data);
-        navigation.navigate('CadastroEndereco')
+        Alert.alert('Cadastro efetuado com sucesso', 'Você será redirecionado para a tela de login.');
+        navigation.navigate('Login');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao enviar dados:', error);
-      // lógica de manipulação de erro aqui
+
+      // Verifique se 'error' é do tipo AxiosError
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error('Error response:', error.response);
+        }
+      }
     }
   };
 
@@ -83,7 +103,10 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
 
         <TouchableOpacity
           style={[styles.button, styles.primaryButton]}
-          onPress={handleContinuar} // Adicionando o manipulador de eventos para o botão "Continuar"
+          onPress={async () => {
+            await handleContinuar();
+            navigation.navigate('Login');
+          }}
         >
           <Text style={[styles.buttonText, styles.buttonTextWhite]}>
             {getStrings().continuarButtonLabel}
