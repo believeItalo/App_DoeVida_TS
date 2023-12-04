@@ -83,7 +83,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
 
   useEffect(() => {
     // Fetch data from the API when the component mounts
-    axios.get(`http://${getStrings().url}:8080/api/v1/hospitals`)
+    axios.get(`http://192.168.0.16:5050/api/v1/hospitals`)
       .then(response => {
         if (response.data && response.data.hospitals) {
           setHemocentros(response.data.hospitals);
