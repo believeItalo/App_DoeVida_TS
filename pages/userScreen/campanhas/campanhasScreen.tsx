@@ -110,7 +110,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
 
         </View>
       </View>
-      <ScrollView style={{ marginTop: -30 }}>
+      <ScrollView style={{ marginTop: 10, marginBottom:30 }}>
         <View style={styles.containerPrincipal}>
           {campanhas.map((campanha) => (
             <View key={campanha.campaign_id} style={styles.cardContainer}>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 40,
-    backgroundColor:'rgba(78, 123, 242, 0.76)'
+    backgroundColor:'rgba(78, 123, 242, 0.76)',
   },
   title: {
     fontSize: 30,
@@ -236,6 +236,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    paddingTop:110
   },
   card: {
     width: 300,
