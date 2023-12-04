@@ -52,7 +52,7 @@ function CadastroSenhaScreen({ navigation, route }: CadastroSenhaScreenProps) {
         }
       };
       console.log('Dados enviados na requisição:', formDataWithPassword);
-      const response = await axios.post('http://10.107.144.3:8080/api/v1/user-registration', formDataWithPassword);
+      const response = await axios.post(`http://${getStrings().url}:8080/api/v1/user-registration`, formDataWithPassword);
 
       if (response.status === 200) {
         console.log('Usuário cadastrado com sucesso:', response.data);

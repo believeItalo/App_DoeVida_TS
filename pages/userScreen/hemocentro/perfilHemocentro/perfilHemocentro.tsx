@@ -10,7 +10,7 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { TextInput as PaperTextInput } from 'react-native-paper';
 import { WebSocketSubject } from 'rxjs/webSocket'; 
-
+import { getStrings } from '../../../../strings/arquivoDeStrings';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,7 +77,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
+                    fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -99,7 +99,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     }, [refresh]);
 
     useEffect(() => {
-        fetch(`http://10.107.144.3:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://${getStrings().url}:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -124,7 +124,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch('http://10.107.144.3:8080/api/v1/review-registration', {
+        fetch(`http://${getStrings().url}:8080/api/v1/review-registration`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

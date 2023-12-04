@@ -6,6 +6,7 @@ import { ImageBackground } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getStrings } from '../../../../strings/arquivoDeStrings';
 const Stack = createNativeStackNavigator();
 
 interface EditarPerfilScreen {
@@ -61,7 +62,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
                     // Realize a chamada à API com o userId recuperado
-                    fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
+                    fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -111,7 +112,7 @@ export default function EditarPerfilScreen({ navigation, route }: EditarPerfilSc
             }
         };
 
-        axios.put(`http:/10.107.144.3:8080/api/v1/user-update/`, updatedUserData)
+        axios.put(`http://${getStrings().url}:8080/api/v1/user-update/`, updatedUserData)
             .then(response => {
                 console.log('PUT request successful:', response.data);
                 alert('Os dados foram atualizados com sucesso')

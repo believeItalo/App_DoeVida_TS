@@ -71,7 +71,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
         const id = await AsyncStorage.getItem('userId');
         if (id !== null) {
           // Realize a chamada à API com o userId recuperado
-          fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
+          fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.status === 200) {
@@ -95,7 +95,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   }, []);
 
   useEffect(() => {
-    fetch(`http://10.107.144.3:8080/api/v1/hospital-data/${hospitalId}`)
+    fetch(`http://${getStrings().url}:8080/api/v1/hospital-data/${hospitalId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200) {
@@ -110,7 +110,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   }, []);
 
   useEffect(() => {
-    fetch(`http://10.107.144.3:8080/api/v1/hospital/${hospitalId}/book-schedules-mobile`)
+    fetch(`http://${getStrings().url}:8080/api/v1/hospital/${hospitalId}/book-schedules-mobile`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

@@ -56,7 +56,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
         const id = await AsyncStorage.getItem('userId');
         if (id !== null) {
           // Realize a chamada à API com o userId recuperado
-          fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
+          fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.status === 200) {
@@ -81,7 +81,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
   useEffect(() => {
     const getCampanhas = async () => {
       try {
-        const response = await fetch('http://10.107.144.3:8080/api/v1/campaigns');
+        const response = await fetch(`http://${getStrings().url}:8080/api/v1/campaigns`);
         const data = await response.json();
         if (data.status === 200) {
           setCampanhas(data.campaigns);

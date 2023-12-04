@@ -6,6 +6,7 @@ import { ImageBackground } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { getStrings } from '../../../../strings/arquivoDeStrings';
 const Stack = createNativeStackNavigator();
 
 interface MeuPerfilScreen {
@@ -51,7 +52,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
         const id = await AsyncStorage.getItem('userId');
         if (id !== null) {
           // Realize a chamada à API com o userId recuperado
-          fetch(`http://10.107.144.3:8080/api/v1/users/${id}`)
+          fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.status === 200) {
@@ -76,7 +77,7 @@ export default function MeuPerfilScreen({ navigation, route }: MeuPerfilScreen) 
   //excluir usuario
   const handleDeleteProfile = async () => {
     const id = await AsyncStorage.getItem('userId');
-    fetch(`http://10.107.144.3:8080/api/v1/delete-user/${id}`, {
+    fetch(`http://${getStrings().url}:8080/api/v1/delete-user/${id}`, {
       method: 'DELETE',
     })
       .then((response) => {
