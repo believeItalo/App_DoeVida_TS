@@ -75,13 +75,13 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
     const [refresh, setRefresh] = useState(false);
     const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null);
     const [selectedCardInfo, setSelectedCardInfo] = useState<AgendamentosDisponivel | null>(null);
-
+    
     useEffect(() => {
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
+                    fetch(`http://${getStrings().url}/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -102,46 +102,46 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
         getUserId();
     }, [refresh]);
 
-    // GET AGENDAMENTOS USUARIO:
-    useEffect(() => {
-        const getUserId = async () => {
-            try {
-                const id = await AsyncStorage.getItem('userId');
-                if (id !== null) {
-                    // Realize a chamada à API com o userId recuperado
-                    axios.get(`http://${getStrings().url}:8080/api/v1/users/${id}/schedules`)
-                        .then((response) => {
-                            const { status, schedules } = response.data;
-                            if (status === 200 && schedules.length > 0) {
-                                // Extrai o idHospital do primeiro agendamento do usuário
-                                const idHospital = schedules[0].hospitalId;
+// GET AGENDAMENTOS USUARIO:
+useEffect(() => {
+    const getUserId = async () => {
+        try {
+            const id = await AsyncStorage.getItem('userId');
+            if (id !== null) {
+                // Realize a chamada à API com o userId recuperado
+                axios.get(`http://${getStrings().url}/api/v1/users/${id}/schedules`)
+                    .then((response) => {
+                        const { status, schedules } = response.data;
+                        if (status === 200 && schedules.length > 0) {
+                            // Extrai o idHospital do primeiro agendamento do usuário
+                            const idHospital = schedules[0].hospitalId;
 
-                                // Realize a chamada à API de book schedules mobile com o idHospital
-                                fetch(`http://${getStrings().url}:8080/api/v1/hospital/${idHospital}/book-schedules-mobile`)
-                                    .then((response) => response.json())
-                                    .then((data) => {
-                                        if (data.status === 200) {
-                                            setBookSchedules(data.bookSchedules);
-                                        }
-                                    })
-                                    .catch((error) => {
-                                        console.error('Erro ao buscar os dados da API:', error);
-                                    });
+                            // Realize a chamada à API de book schedules mobile com o idHospital
+                            fetch(`http://${getStrings().url}/api/v1/hospital/${idHospital}/book-schedules-mobile`)
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    if (data.status === 200) {
+                                        setBookSchedules(data.bookSchedules);
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error('Erro ao buscar os dados da API:', error);
+                                });
 
-                                setSchedules(schedules);
-                                setDataUpdated(false);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Erro ao buscar dados da API:', error);
-                        });
-                }
-            } catch (e) {
-                console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+                            setSchedules(schedules);
+                            setDataUpdated(false); 
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao buscar dados da API:', error);
+                    });
             }
-        };
-        getUserId();
-    }, [dataUpdated]);
+        } catch (e) {
+            console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
+        }
+    };
+    getUserId();
+}, [dataUpdated]);
 
 
 
@@ -166,11 +166,11 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
             if (selectedScheduleId !== null) {
                 const cancelationData = {
                     id: selectedScheduleId,
-                    observation: cancelObservation || 'tive um imprevisto',
+                    observation: "Observation",
                 };
 
                 // Faz a requisição para cancelar o agendamento
-                const response = await axios.put(`http://${getStrings().url}:8080/api/v1/schedule-cancel`, cancelationData);
+                const response = await axios.put(`http://${getStrings().url}/api/v1/schedule-cancel`, cancelationData);
 
                 // Verifica a resposta da requisição
                 if (response.status === 200) {
@@ -210,10 +210,10 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                     hour: agendaSelecionada.hour,
                     siteId: agendaSelecionada.site_id,
                 };
-
+    
                 // Faz a requisição para reagendar o agendamento
-                const response = await axios.put(`http://${getStrings().url}:8080/api/v1/schedule-reschedule`, rescheduleData);
-
+                const response = await axios.put(`http:/${getStrings().url}/api/v1/schedule-reschedule`, rescheduleData);
+    
                 // Verifica a resposta da requisição
                 if (response.status === 200) {
                     console.log('Agendamento reagendado com sucesso!');
@@ -229,13 +229,13 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
             console.error('Erro ao processar a requisição de reagendamento:', error);
             // Lida com erros durante a requisição
         }
-
+    
         // Limpa o estado do agendamento selecionado após o reagendamento
         setAgendaSelecionada(null);
-
+    
         // Atualiza o estado para refletir a mudança
         setDataUpdated(true);
-
+    
         // Fecha o modal de reagendamento
         toggleRescheduleModal();
     };
@@ -254,7 +254,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
         <ScrollView style={{ height: '100%', backgroundColor: 'white', }}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                    <FontAwesome5 name="bars" size={40} color="black" />
+                    <FontAwesome5 name="bars" size={40} color="white" />
                 </TouchableOpacity>
                 <View style={styles.viewTextHeader}>
                     <Text style={styles.title}>Meus</Text>
@@ -271,7 +271,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                     <View style={styles.cardAgendamentosMy} key={schedule.scheduleId}>
                         <View style={styles.divImgHospital}>
                             <View style={styles.containerImg}>
-                                <Image style={{ width: 65, height: 65, borderRadius: 50 }} source={{ uri: schedule.photo }} />
+                            <Image style={{ width: 65, height: 65, borderRadius:50 }} source={{ uri: schedule.photo }}/>
                             </View>
                         </View>
                         <View style={styles.divTextHospital}>
@@ -288,8 +288,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
 
                         <View style={styles.divFinal}>
                             <View style={styles.divTextEstado}>
-                                <View style={styles.textEstado}>
-                                    {schedule.status === 'PENDING' ? (
+                            {schedule.status === 'PENDING' ? (
                                         <Text style={{ color: 'red', fontSize: 12, fontWeight: '500' }}>Cancelado</Text>
                                     ) : schedule.status === 'SCHEDULED' ? (
                                         <Text style={{ color: 'blue', fontSize: 14, fontWeight: '500' }}>Agendado</Text>
@@ -300,9 +299,6 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                                     ) : (
                                         <Text style={{ color: "#E5C05E", fontSize: 14, fontWeight: '500' }}>{schedule.status}</Text>
                                     )}
-
-
-                                </View>
                             </View>
 
                             <View style={styles.divIcons}>
@@ -584,11 +580,13 @@ const styles = StyleSheet.create({
         gap: 40,
         paddingLeft: 10,
         paddingTop: 20,
+        backgroundColor:'rgba(78, 123, 242, 0.76)',
+        color:'white'
     },
     title: {
         fontSize: 26,
         fontWeight: '300',
-        color: 'black',
+        color: 'white',
     },
     viewTextHeader: {
         flexDirection: 'column',

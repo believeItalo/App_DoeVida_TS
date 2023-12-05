@@ -2,7 +2,8 @@
 export function getStrings() {
     return ({
         //url:
-        url:'20.206.241.108',
+        //url:'20.206.241.108:8080',
+        url:'192.168.0.16:5050',
         //HOME SCREEN
         companyNameText: 'DOE VIDA',
         sloganLine1: 'Doando vida e',

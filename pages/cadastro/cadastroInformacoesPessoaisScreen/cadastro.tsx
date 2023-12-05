@@ -96,15 +96,6 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
     return value;
   };
 
-  const validatePhoneNumber = (input: string) => {
-    const phoneRegex = /^\d{10,11}$/; // Regex para verificar se o número tem entre 10 e 11 dígitos
-
-    if (!phoneRegex.test(input)) {
-      alert('Por favor, insira um número de telefone válido com 10 ou 11 dígitos numéricos.');
-      return false;
-    }
-    return true;
-  };
 
   const formatarCPF = (value: string) => {
     // Limpar caracteres não numéricos
@@ -115,13 +106,22 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
 
     return formattedValue;
   };
-  
+
+  const formatarTelefone = (value: string) => {
+    // Limpar caracteres não numéricos
+    const cleanedValue = value.replace(/\D/g, '');
+
+    // Adicionar a máscara de telefone
+    const formattedValue = cleanedValue.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+
+    return formattedValue;
+  };
+
   const navigateToCadastroTipoSanguineo = () => {
     if (
       nome.trim() === '' ||
       email.trim() === '' ||
       telefone.trim() === '' ||
-      !validatePhoneNumber(telefone) || // Validar o número de telefone
       cpf.trim() === '' ||
       parseFloat(peso) < 50 || // Verificando peso
       sexo.trim() === '' ||
@@ -185,7 +185,8 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
           <Text style={styles.label}>
             {getStrings().telefoneLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
-          <TextInput maxLength={15} style={styles.input} keyboardType="phone-pad" value={telefone} onChangeText={novoTelefone => setTelefone(novoTelefone)} />
+          <TextInput maxLength={15} style={styles.input} keyboardType="phone-pad" value={formatarTelefone(telefone)} onChangeText={novoTelefone => setTelefone(formatarTelefone(novoTelefone))} />
+
         </View>
 
         <View style={styles.section}>
@@ -193,12 +194,12 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
             {getStrings().cpfLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
           </Text>
           <TextInput
-          maxLength={14}
-          style={styles.input}
-          keyboardType="numeric"
-          value={formatarCPF(cpf)}
-          onChangeText={(novoCpf) => setCpf(formatarCPF(novoCpf))}
-        />
+            maxLength={14}
+            style={styles.input}
+            keyboardType="numeric"
+            value={formatarCPF(cpf)}
+            onChangeText={(novoCpf) => setCpf(formatarCPF(novoCpf))}
+          />
         </View>
 
         <View style={styles.section}>
@@ -207,6 +208,7 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
           </Text>
           <TextInput
             maxLength={10}
+            keyboardType="phone-pad"
             style={styles.input}
             value={dataNascimento}
             onChangeText={(novoDataNascimento) => {
@@ -233,14 +235,23 @@ const CadastroScreen: React.FC<CadastroScreenProps> = ({ navigation }) => {
             <Text style={styles.label}>
               {getStrings().sexoLabel} <Text style={styles.required}>{getStrings().requiredFieldIndicator}</Text>
             </Text>
-            <Picker
-              style={styles.pickerSex}
-              selectedValue={sexo}
-              onValueChange={(itemValue) => setSexo(itemValue)}
-            >
-              <Picker.Item label="Masculino" value="Masculine" />
-              <Picker.Item label="Feminino" value="Feminine" />
-            </Picker>
+            <View style={{
+              borderColor: '#7395F7',
+              borderRadius: 5,
+              borderWidth: 1,
+              height:42,
+              justifyContent:'center'
+            }}>
+              <Picker
+                style={styles.pickerSex}
+                selectedValue={sexo}
+                onValueChange={(itemValue) => setSexo(itemValue)}
+              >
+                <Picker.Item label="Sexo" value="" />
+                <Picker.Item label="Masculino" value="Masculine"/>
+                <Picker.Item label="Feminino" value="Feminine" />
+              </Picker>
+            </View>
           </View>
         </View>
       </View>
@@ -321,6 +332,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: '#7395F7',
     borderRadius: 5
+
   },
   doubleSection: {
     flexDirection: 'row',
@@ -332,9 +344,6 @@ const styles = StyleSheet.create({
     width: '48%'
   },
   pickerSex: {
-    borderColor: '#7395F7',
-    borderWidth: 1,
-    borderRadius: 5,
     overflow: 'hidden',
   },
   buttonContainer: {

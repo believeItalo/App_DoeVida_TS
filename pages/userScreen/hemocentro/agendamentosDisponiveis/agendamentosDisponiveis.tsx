@@ -71,7 +71,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
         const id = await AsyncStorage.getItem('userId');
         if (id !== null) {
           // Realize a chamada à API com o userId recuperado
-          fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
+          fetch(`http://${getStrings().url}/api/v1/users/${id}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.status === 200) {
@@ -95,7 +95,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   }, []);
 
   useEffect(() => {
-    fetch(`http://${getStrings().url}:8080/api/v1/hospital-data/${hospitalId}`)
+    fetch(`http://${getStrings().url}/api/v1/hospital-data/${hospitalId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 200) {
@@ -110,7 +110,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
   }, []);
 
   useEffect(() => {
-    fetch(`http://${getStrings().url}:8080/api/v1/hospital/${hospitalId}/book-schedules-mobile`)
+    fetch(`http://${getStrings().url}/api/v1/hospital/${hospitalId}/book-schedules-mobile`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -129,6 +129,11 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
       });
   }, []);
 
+  const removeScheduledAppointment = (scheduleIdToRemove: number | null | undefined) => {
+    setBookSchedules((prevSchedules) =>
+      prevSchedules.filter((schedule) => schedule.book_schedule_id !== scheduleIdToRemove)
+    );
+  };
   
 
   return (
@@ -203,7 +208,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
                 gap: 20,
               }}
               onPress={() => {
-                fetch(`http://${getStrings().url}:8080/api/v1/schedule`, {
+                fetch(`http://${getStrings().url}/api/v1/schedule`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -220,7 +225,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
                         prevSchedules.filter((schedule) => schedule.id !== selectedScheduleId)
                       );
 
-                      fetch(`http://${getStrings().url}:8080/api/v1/schedule-status`, {
+                      fetch(`http://${getStrings().url}/api/v1/schedule-status`, {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',
@@ -236,6 +241,7 @@ export default function AgendaDisponivelHemocentro({ navigation, route }: Agenda
                           if (statusData.status === 201) {
                             console.log('Agendamento realizado com sucesso!');
                             setModalVisible(false);
+                            removeScheduledAppointment(selectedScheduleId);
                             Alert.alert(
                               'Sucesso',
                               'Seu agendamento foi realizado com sucesso!',

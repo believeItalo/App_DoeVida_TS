@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { TextInput as PaperTextInput } from 'react-native-paper';
-import { WebSocketSubject } from 'rxjs/webSocket'; 
+import { WebSocketSubject } from 'rxjs/webSocket';
 import { getStrings } from '../../../../strings/arquivoDeStrings';
 
 const Stack = createNativeStackNavigator();
@@ -20,6 +20,7 @@ interface PerfilHemocentroScreenProps {
 }
 
 interface Hospital {
+    address: any;
     photo: string | undefined;
     hospitalId: number;
     name: string;
@@ -35,7 +36,7 @@ interface UserDate {
     bloodType: string;
     sex: string;
     cpf: string;
-  
+
 }
 
 interface Address {
@@ -50,7 +51,7 @@ interface Address {
 interface Hemocentro {
     hospital: Hospital;
     address: Address;
-    
+
 }
 
 export default function PerfilHemocentro({ navigation, route }: PerfilHemocentroScreenProps) {
@@ -82,18 +83,17 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         photo: string;
     } | null>(null);
     console.log(route.params.hemocentroData.hospital.hospitalId);
-    
+
     useEffect(() => {
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
+                    fetch(`http://${getStrings().url}/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
                                 const { user, address } = data;
-                                setEndereco(address);
                                 setUser(user);
                                 console.log(data);
                             }
@@ -110,7 +110,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     }, [refresh]);
 
     useEffect(() => {
-        fetch(`http://${getStrings().url}:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://${getStrings().url}/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -122,7 +122,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao buscar dados da API:', error);
             });
     }, []);
-    
+
     const postReview = () => {
         const currentDate = new Date();
         const ISODate = currentDate.toISOString();
@@ -135,7 +135,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch(`http://${getStrings().url}:8080/api/v1/review-registration`, {
+        fetch(`http://${getStrings().url}/api/v1/review-registration`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -153,12 +153,12 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                 console.error('Erro ao enviar avaliação:', error);
             });
     };
-    
+
     useEffect(() => {
         const fetchReviewsStatistics = async () => {
             try {
                 const response = await axios.get(
-                    `http://${getStrings().url}:8080/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
+                    `http://${getStrings().url}/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
                 );
 
                 if (response.status === 200) {
@@ -236,7 +236,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                 label="CEP"
                                 style={styles.inputNomeCompleto}
                                 placeholderTextColor={'black'}
-                                value={endereco ? endereco.cep : ''}
+                                value={endereco?.cep || ''}
                                 editable={false}
                             />
                         </View>
@@ -245,7 +245,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                 label="UF"
                                 style={styles.inputEmail}
                                 placeholderTextColor={'black'}
-                                value={endereco ? endereco.uf : ''}
+                                value={endereco?.uf || ' '}
                                 editable={false}
                             />
                         </View>
@@ -276,28 +276,28 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                             label="Estado"
                             style={styles.textField}
                             placeholderTextColor={'black'}
-                            value={endereco ? endereco.city : ''}
+                            value={endereco?.uf || ''}
                             editable={false}
                         />
                         <TextInput
                             style={styles.textField}
                             label="Cidade"
                             placeholderTextColor={'black'}
-                            value={endereco ? endereco.neighborhood : ''}
+                            value={endereco?.city || ''}
                             editable={false}
                         />
                         <TextInput
                             style={styles.textField}
                             label='Rua'
                             placeholderTextColor={'black'}
-                            value={endereco ? endereco.street : ''}
+                            value={endereco?.street || ''}
                             editable={false}
                         />
                         <TextInput
                             style={styles.textField}
                             label='Complemento'
                             placeholderTextColor={'black'}
-                            value={endereco ? endereco.complement : ''}
+                            value={endereco?.complement || ''}
                             editable={false}
                         />
                     </View>
@@ -318,7 +318,8 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
 
                 <ScrollView>
                     <View style={styles.columnCardsAvaliacao}>
-                        {reviewsStatistics.map((review: {starRating:any
+                        {reviewsStatistics.map((review: {
+                            starRating: any
                             photo: any; name: string | number | boolean | React.ReactElement<any, string |
                                 React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal |
                             null | undefined; date: string | number | boolean | React.ReactElement<any, string |
