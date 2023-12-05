@@ -71,13 +71,24 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
     const [isLottieVisible, setIsLottieVisible] = useState(false);
-
+    const [hospitalInfo, setHospitalInfo] = useState<{
+        name: string;
+        cnpj: string;
+        email: string;
+        phone: string;
+        website: string;
+        donationSite: string;
+        otherDonationSite: string;
+        photo: string;
+    } | null>(null);
+    console.log(route.params.hemocentroData.hospital.hospitalId);
+    
     useEffect(() => {
         const getUserId = async () => {
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://192.168.0.16:5050/api/v1/users/${id}`)
+                    fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -99,7 +110,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
     }, [refresh]);
 
     useEffect(() => {
-        fetch(`http://192.168.0.16:5050/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
+        fetch(`http://${getStrings().url}:8080/api/v1/hospital-data/${route.params.hemocentroData.hospital.hospitalId}`)
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 200) {
@@ -124,7 +135,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
             idStar: rating,
         };
 
-        fetch(`http://192.168.0.16:5050/api/v1/review-registration`, {
+        fetch(`http://${getStrings().url}:8080/api/v1/review-registration`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,7 +158,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
         const fetchReviewsStatistics = async () => {
             try {
                 const response = await axios.get(
-                    `http://192.168.0.16:5050/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
+                    `http://${getStrings().url}:8080/api/v1/hospital/${route.params.hemocentroData.hospital.hospitalId}/statistics/reviews`
                 );
 
                 if (response.status === 200) {
@@ -326,7 +337,7 @@ export default function PerfilHemocentro({ navigation, route }: PerfilHemocentro
                                                     <Text style={styles.titleCardAvaliacao}>{review.name}</Text>
                                                     <View style={{ flexDirection: 'row' }}>
                                                         {[...Array(review.starRating || 0)].map((_, i) => (
-                                                            <FontAwesome5 key={i} name="star" size={20} color="yellow" />
+                                                            <FontAwesome5 key={i} name="star" size={20} color="#FBE410" />
                                                         ))}
                                                     </View>
 
@@ -515,7 +526,7 @@ const styles = StyleSheet.create({
     viewTextInputCpf: {
         flexDirection: 'row',
         alignItems: 'flex-end',
-        gap: 28
+        gap: 31
     },
     inputNomeCompleto: {
         width: 100,

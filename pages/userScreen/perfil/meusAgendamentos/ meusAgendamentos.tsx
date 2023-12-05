@@ -81,7 +81,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
             try {
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
-                    fetch(`http://192.168.100.16:5050/api/v1/users/${id}`)
+                    fetch(`http://${getStrings().url}:8080/api/v1/users/${id}`)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.status === 200) {
@@ -109,7 +109,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                 const id = await AsyncStorage.getItem('userId');
                 if (id !== null) {
                     // Realize a chamada à API com o userId recuperado
-                    axios.get(`http://192.168.0.16:5050/api/v1/users/${id}/schedules`)
+                    axios.get(`http://${getStrings().url}:8080/api/v1/users/${id}/schedules`)
                         .then((response) => {
                             const { status, schedules } = response.data;
                             if (status === 200 && schedules.length > 0) {
@@ -117,7 +117,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                                 const idHospital = schedules[0].hospitalId;
 
                                 // Realize a chamada à API de book schedules mobile com o idHospital
-                                fetch(`http://192.168.0.16:5050/api/v1/hospital/${idHospital}/book-schedules-mobile`)
+                                fetch(`http://${getStrings().url}:8080/api/v1/hospital/${idHospital}/book-schedules-mobile`)
                                     .then((response) => response.json())
                                     .then((data) => {
                                         if (data.status === 200) {
@@ -170,7 +170,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                 };
 
                 // Faz a requisição para cancelar o agendamento
-                const response = await axios.put(`http://192.168.0.16:5050/api/v1/schedule-cancel`, cancelationData);
+                const response = await axios.put(`http://${getStrings().url}:8080/api/v1/schedule-cancel`, cancelationData);
 
                 // Verifica a resposta da requisição
                 if (response.status === 200) {
@@ -212,7 +212,7 @@ const MeusAgendamentosScreen: React.FC<MeusAgendamentosProps> = ({ navigation })
                 };
 
                 // Faz a requisição para reagendar o agendamento
-                const response = await axios.put(`http://192.168.0.16:5050/api/v1/schedule-reschedule`, rescheduleData);
+                const response = await axios.put(`http://${getStrings().url}:8080/api/v1/schedule-reschedule`, rescheduleData);
 
                 // Verifica a resposta da requisição
                 if (response.status === 200) {

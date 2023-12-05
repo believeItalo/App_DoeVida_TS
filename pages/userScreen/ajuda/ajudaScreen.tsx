@@ -114,8 +114,8 @@ export default function AjudaScreen({ navigation, route }: AjudaScreenProps) {
             maxLength={200}
             titleWhenClosed={getStrings().contactTitle}
             titleWhenOpen={getStrings().contactTitle}
-            phoneNumber="(11) 92765-2364" // Adicione o número de telefone aqui
-            email="doevida@gmail.com" // Adicione o endereço de email aqui
+            phoneNumber="(11) 92765-2364"
+            email="doevida@gmail.com"
           />
           <View style={styles.lineBetweenTextBox}></View>
         </View>
