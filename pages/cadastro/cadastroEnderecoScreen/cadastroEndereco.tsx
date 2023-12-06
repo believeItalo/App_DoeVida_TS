@@ -52,7 +52,7 @@ const EnderecoScreen: React.FC<CadastroEnderecoScreenProps> = ({ navigation, rou
             keyboardType="phone-pad"
             value={cep}
             onChangeText={novoCep => setCep(novoCep)}
-            onBlur={getCep} // Fetch data when the user leaves the CEP field
+            onBlur={getCep}
           />
         </View>
 

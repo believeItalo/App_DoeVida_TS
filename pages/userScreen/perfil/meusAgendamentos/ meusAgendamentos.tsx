@@ -289,7 +289,7 @@ useEffect(() => {
                         <View style={styles.divFinal}>
                             <View style={styles.divTextEstado}>
                             {schedule.status === 'PENDING' ? (
-                                        <Text style={{ color: 'red', fontSize: 12, fontWeight: '500' }}>Cancelado</Text>
+                                        <Text style={{ color: 'red', fontSize: 14, fontWeight: '500' }}>Cancelado</Text>
                                     ) : schedule.status === 'SCHEDULED' ? (
                                         <Text style={{ color: 'blue', fontSize: 14, fontWeight: '500' }}>Agendado</Text>
                                     ) : schedule.status === 'RESCHEDULED' ? (

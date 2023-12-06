@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getStrings } from '../../../strings/arquivoDeStrings';
 import { useEffect, useState } from 'react';
@@ -11,6 +11,14 @@ interface CampanhasScreenProps {
   route: any;
 }
 
+interface Address {
+  complement: string | undefined;
+  street: string | undefined;
+  cep: string | undefined;
+  uf: string;
+  city: string;
+  neighborhood: string;
+}
 interface UserDate {
   name: string;
   photo: string;
@@ -22,17 +30,9 @@ interface UserDate {
   sex: string;
   cpf: string;
 }
-
-interface Address {
-  complement: string | undefined;
-  street: string | undefined;
-  cep: string | undefined;
-  uf: string;
-  city: string;
-  neighborhood: string;
-}
-
 interface Campaign {
+  city: any;
+  uf: any;
   campaign_id: number;
   hospital_id: number;
   hospital_name: string;
@@ -42,20 +42,19 @@ interface Campaign {
   image: string;
   hospital_photo: string;
 }
-const Stack = createNativeStackNavigator();
 
-
-export default function BuscaHemocentroScreen({ navigation, route }: CampanhasScreenProps) {
+export default function BuscaCampanhaScreen({ navigation, route }: CampanhasScreenProps) {
   const [endereco, setEndereco] = useState<Address | null>(null);
-  const [user, setUser] = useState<UserDate | null>(null)
+  const [user, setUser] = useState<UserDate | null>(null);
   const [campanhas, setCampanhas] = useState<Campaign[]>([]);
+  const [searchText, setSearchText] = useState('');
+  const [filteredCampanhas, setFilteredCampanhas] = useState<Campaign[]>([]);
+
   useEffect(() => {
-    // Recupere o userId do AsyncStorage
     const getUserId = async () => {
       try {
         const id = await AsyncStorage.getItem('userId');
         if (id !== null) {
-          // Realize a chamada à API com o userId recuperado
           fetch(`http://${getStrings().url}/api/v1/users/${id}`)
             .then((response) => response.json())
             .then((data) => {
@@ -71,14 +70,13 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
             });
         }
       } catch (e) {
-
         console.error('Erro ao buscar o ID do usuário do AsyncStorage:', e);
       }
     };
     getUserId();
   }, []);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     const getCampanhas = async () => {
       try {
         const response = await fetch(`http://${getStrings().url}/api/v1/campaigns`);
@@ -92,27 +90,61 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
         console.error('Erro ao buscar campanhas:', error);
       }
     };
-
+  
     getCampanhas();
-  }, []);
-  return (
+  },);
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`http://${getStrings().url}/api/v1/campaigns?city=${searchText}`);
+      const data = await response.json();
+  
+      if (data.status === 200) {
+        const foundCampanhas = data.campaigns;
+        setFilteredCampanhas(foundCampanhas);
+  
+        if (foundCampanhas.length === 0) {
+          Alert.alert('Nenhuma campanha encontrada na região');
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao buscar campanhas por cidade:', error);
+    }
+  };
+  
 
+  return (
     <View style={{ flex: 1 }}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <FontAwesome5 name="bars" size={40} color="white" />
         </TouchableOpacity>
         <Text style={styles.title}>{"Campanhas"}</Text>
-
         <View>
-
           <Image source={{ uri: user?.photo }} style={styles.profileImage} />
-
         </View>
       </View>
-      <ScrollView style={{ marginTop: 10, marginBottom:30 }}>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+        <View style={styles.searchContainer}>
+          <FontAwesome5 name="search" size={18} color="#7395F7" />
+          <TextInput
+            placeholder="Digite sua cidade"
+            style={styles.searchBar}
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+        </View>
+        <TouchableOpacity
+          style={{ width: 80, height: 30, borderRadius: 10, backgroundColor: 'rgba(78, 123, 242, 0.76)', alignItems: 'center', justifyContent: 'center', marginTop: 27 }}
+          onPress={handleSearch}
+        >
+          <Text style={{ color: 'white' }}>Buscar</Text>
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView style={{ marginTop: -20, marginBottom: 40 }}>
         <View style={styles.containerPrincipal}>
-          {campanhas.map((campanha) => (
+        {filteredCampanhas.map((campanha) => 
             <View key={campanha.campaign_id} style={styles.cardContainer}>
               <View style={styles.card}>
                 <View style={styles.cardHeader}>
@@ -122,6 +154,7 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
                   <View style={styles.containerTexto}>
                     <Text style={styles.textHospital}>{campanha.hospital_name}</Text>
                     <Text style={styles.textHospital}>{campanha.date} - {campanha.hour}</Text>
+                    <Text>{`${campanha.uf} - ${campanha.city}`}</Text>
                   </View>
                 </View>
                 <View style={styles.linhaContainer}>
@@ -132,11 +165,10 @@ export default function BuscaHemocentroScreen({ navigation, route }: CampanhasSc
                 </View>
               </View>
             </View>
-          ))}
+          )}
         </View>
       </ScrollView>
     </View>
-
   );
 }
 
@@ -152,7 +184,7 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   header: {
-    height: '20%',
+    height: 120,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -286,6 +318,25 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50
+  },
+  searchBar: {
+    height: 40,
+    flex: 1,
+    paddingHorizontal: 10,
+
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#7395F7',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    width: 250,
+    height: 40,
+    gap: 20,
+    marginTop: 30,
+
   },
 
 
