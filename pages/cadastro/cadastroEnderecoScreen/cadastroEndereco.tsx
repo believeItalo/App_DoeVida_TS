@@ -103,7 +103,7 @@ const EnderecoScreen: React.FC<CadastroEnderecoScreenProps> = ({ navigation, rou
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.titleInput}>{"Numero"}</Text>
+            <Text style={styles.titleInput}>{"Número"}</Text>
             <TextInput
               style={[styles.input, styles.shortInput]}
               editable={true}

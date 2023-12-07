@@ -118,6 +118,10 @@ export default function BuscaHemocentroScreen({ navigation, route }: BuscaHemoce
     } catch (error) {
       console.error('Erro ao buscar hospitais por cidade:', error);
     }
+    finally {
+      // Limpar o texto da barra de pesquisa após a conclusão da busca
+      setSearchText('');
+    }
   };
 
   const filteredHemocentros = hemocentros.filter(hemocentro =>
